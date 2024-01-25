@@ -3,7 +3,7 @@
 require_relative "lib/gemconfig"
 
 Gem::Specification.new do |spec|
-  spec.name = "assemblyai_ruby"
+  spec.name = "assemblyai"
   spec.version = AssemblyAI::Gemconfig::VERSION
   spec.authors = AssemblyAI::Gemconfig::AUTHORS
   spec.email = AssemblyAI::Gemconfig::EMAIL
