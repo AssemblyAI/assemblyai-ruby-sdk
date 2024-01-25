@@ -1,5 +1,6 @@
 # AssemblyAI Ruby Library
 > _Build with AI models that can transcribe and understand audio_
+
 With a single API call, get access to AI models built on the latest AI breakthroughs to transcribe and understand audio and speech data securely at large scale.
 
 # Documentation
