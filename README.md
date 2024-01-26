@@ -11,6 +11,9 @@
 
 # AssemblyAI Ruby SDK
 
+The Ruby SDK provides classes and methods to serialize and deserialize the types for the AssemblyAI APIs.
+In the future the SDK will include clients to call the API too.
+
 # Documentation
 
 Visit our [AssemblyAI API Documentation](https://www.assemblyai.com/docs) to get an overview of our models!
