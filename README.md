@@ -1,7 +1,15 @@
-# AssemblyAI Ruby Library
-> _Build with AI models that can transcribe and understand audio_
+<img src="https://github.com/AssemblyAI/assemblyai-node-sdk/blob/main/assemblyai.png?raw=true" width="500"/>
 
-With a single API call, get access to AI models built on the latest AI breakthroughs to transcribe and understand audio and speech data securely at large scale.
+---
+
+![Gem Version](https://img.shields.io/gem/v/assemblyai)
+[![GitHub License](https://img.shields.io/github/license/AssemblyAI/assemblyai-ruby-sdk)](https://github.com/AssemblyAI/assemblyai-node-sdk/blob/main/LICENSE)
+[![AssemblyAI Twitter](https://img.shields.io/twitter/follow/AssemblyAI?label=%40AssemblyAI&style=social)](https://twitter.com/AssemblyAI)
+[![AssemblyAI YouTube](https://img.shields.io/youtube/channel/subscribers/UCtatfZMf-8EkIwASXM4ts0A)](https://www.youtube.com/@AssemblyAI)
+[![Discord](https://img.shields.io/discord/875120158014853141?logo=discord&label=Discord&link=https%3A%2F%2Fdiscord.com%2Fchannels%2F875120158014853141&style=social)
+](https://assemblyai.com/discord)
+
+# AssemblyAI Ruby SDK
 
 # Documentation
 
@@ -14,14 +22,13 @@ Visit our [AssemblyAI API Documentation](https://www.assemblyai.com/docs) to get
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
-
-    $ bundle add assemblyai_ruby
+bundle add assemblyai
 ```
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
 ```bash
-    $ gem install assemblyai_ruby
+gem install assemblyai
 ```
 
 ## Usage
