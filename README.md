@@ -3,7 +3,7 @@
 ---
 
 ![Gem Version](https://img.shields.io/gem/v/assemblyai)
-[![GitHub License](https://img.shields.io/github/license/AssemblyAI/assemblyai-ruby-sdk)](https://github.com/AssemblyAI/assemblyai-node-sdk/blob/main/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/AssemblyAI/assemblyai-ruby-sdk)](https://github.com/AssemblyAI/assemblyai-ruby-sdk/blob/main/LICENSE)
 [![AssemblyAI Twitter](https://img.shields.io/twitter/follow/AssemblyAI?label=%40AssemblyAI&style=social)](https://twitter.com/AssemblyAI)
 [![AssemblyAI YouTube](https://img.shields.io/youtube/channel/subscribers/UCtatfZMf-8EkIwASXM4ts0A)](https://www.youtube.com/@AssemblyAI)
 [![Discord](https://img.shields.io/discord/875120158014853141?logo=discord&label=Discord&link=https%3A%2F%2Fdiscord.com%2Fchannels%2F875120158014853141&style=social)
