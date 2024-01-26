@@ -2,13 +2,12 @@
 
 module AssemblyAI
   module Gemconfig
-    VERSION = ""
-    AUTHORS = [""].freeze
-    EMAIL = ""
-    SUMMARY = ""
-    DESCRIPTION = ""
-    HOMEPAGE = "https://github.com/REPO/URL"
-    SOURCE_CODE_URI = "https://github.com/REPO/URL"
-    CHANGELOG_URI = "https://github.com/REPO/URL/blob/master/CHANGELOG.md"
+    VERSION = "0.0.0"
+    AUTHORS = ["AssemblyAI"].freeze
+    EMAIL = "engineering.sdk@assemblyai.com"
+    SUMMARY = "AssemblyAI Ruby SDK"
+    DESCRIPTION = "AssemblyAI Ruby SDK"
+    HOMEPAGE = "https://github.com/AssemblyAI/assemblyai-ruby-sdk"
+    SOURCE_CODE_URI = "https://github.com/AssemblyAI/assemblyai-ruby-sdk"
   end
 end
