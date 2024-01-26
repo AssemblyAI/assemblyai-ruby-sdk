@@ -13,8 +13,9 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.7.0"
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = AssemblyAI::Gemconfig::SOURCE_CODE_URI
-  spec.files = Dir.glob("lib/**/*")
+  spec.files = Dir.glob("lib/**/*") << "LICENSE"
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+  spec.licenses = ["MIT"]
 end
