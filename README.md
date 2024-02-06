@@ -35,29 +35,91 @@ gem install assemblyai
 ```
 
 ## Usage
-
-### Serialization
+Import the AssemblyAI package and create an AssemblyAI object with your API key:
 
 ```ruby
-require "AssemblyAI/realtime/types/partial_transcript"
+require "assemblyai"
 
-...
-uri = URI(url)
-response = Net::HTTP.get(uri)
+client = AssemblyAI::Client.new(api_key: "YOUR_API_KEY")
+```
+You can now use the `client` object to interact with the AssemblyAI API.
 
-partial_transcript = AssemblyAI::Realtime::PartialTranscript.from_json(json_object: response)
-puts partial_transcript.message_type
+## Create a transcript
+
+When you create a transcript, you can either pass in a URL to an audio file or upload a file directly.
+
+```ruby
+# Transcribe file at remote URL
+transcript = client.transcripts.submit(
+  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a"
+)
 ```
 
-### Deserialization
+## Get a transcript
+
+This will return the transcript object in its current state. If the transcript is still processing, the `status` field will be `queued` or `processing`. Once the transcript is complete, the `status` field will be `completed`.
 
 ```ruby
-require "AssemblyAI/realtime/types/partial_transcript"
+transcript = client.transcripts.get(transcript_id: transcript.id)
+```
 
-...
-partial_transcript = AssemblyAI::Realtime::PartialTranscript.from_json(json_object: response)
+## List transcripts
 
-# All SDK objects natively support to_json calls for easy 
-# serialization, even of highly nested objects.
-response = Net::HTTP.post(uri, partial_transcript.to_json, headers)
+This will return a page of transcripts you created.
+
+```ruby
+page = client.transcripts.list
+```
+
+## Delete a transcript
+
+```ruby
+res = client.transcripts.delete(transcript_id: transcript.id)
+```
+
+## Use LeMUR
+
+Call [LeMUR endpoints](https://www.assemblyai.com/docs/API%20reference/lemur) to summarize, ask questions, generate action items, or run a custom task.
+
+Custom Summary:
+
+```ruby
+response = client.lemur.summary(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
+  answer_format: "one sentence",
+  context: {
+    "speakers": ["Alex", "Bob"]
+  }
+)
+```
+
+Question & Answer:
+
+```ruby
+response = client.lemur.question_answer(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
+  questions: [
+    {
+      question: "What are they discussing?",
+      answer_format: "text"
+    }
+  ]
+)
+```
+
+Action Items:
+
+```ruby
+response = client.lemur.action_items(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"]
+)
+```
+
+Custom Task:
+
+```ruby
+response = client.lemur.task(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
+  prompt: "Write a haiku about this conversation."
+)
 ```
