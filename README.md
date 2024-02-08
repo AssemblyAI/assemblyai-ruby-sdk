@@ -46,7 +46,28 @@ You can now use the `client` object to interact with the AssemblyAI API.
 
 ## Create a transcript
 
-When you create a transcript, you can either pass in a URL to an audio file or upload a file directly.
+```ruby
+transcript = client.transcripts.transcribe(
+  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a",
+);
+```
+
+`transcribe` queues a transcription job and polls it until the `status` is `completed` or `error`.
+You can configure the polling interval and polling timeout using these options:
+
+```ruby
+transcript = client.transcripts.transcribe(
+  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a",
+  AssemblyAI::Transcripts::PollingInterval.new(
+    // How frequently the transcript is polled in ms. Defaults to 3000.
+    interval: 1000,
+    // How long to wait in ms until the "Polling timeout" error is thrown. Defaults to infinite (-1).
+    timeout: 5000,
+  )
+);
+```
+
+If you don't want to wait until the transcript is ready, you can use `submit`:
 
 ```ruby
 # Transcribe file at remote URL
