@@ -35,29 +35,112 @@ gem install assemblyai
 ```
 
 ## Usage
-
-### Serialization
+Import the AssemblyAI package and create an AssemblyAI object with your API key:
 
 ```ruby
-require "AssemblyAI/realtime/types/partial_transcript"
+require "assemblyai"
 
-...
-uri = URI(url)
-response = Net::HTTP.get(uri)
+client = AssemblyAI::Client.new(api_key: "YOUR_API_KEY")
+```
+You can now use the `client` object to interact with the AssemblyAI API.
 
-partial_transcript = AssemblyAI::Realtime::PartialTranscript.from_json(json_object: response)
-puts partial_transcript.message_type
+## Create a transcript
+
+```ruby
+transcript = client.transcripts.transcribe(
+  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a",
+);
 ```
 
-### Deserialization
+`transcribe` queues a transcription job and polls it until the `status` is `completed` or `error`.
+You can configure the polling interval and polling timeout using these options:
 
 ```ruby
-require "AssemblyAI/realtime/types/partial_transcript"
+transcript = client.transcripts.transcribe(
+  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a",
+  AssemblyAI::Transcripts::PollingInterval.new(
+    // How frequently the transcript is polled in ms. Defaults to 3000.
+    interval: 1000,
+    // How long to wait in ms until the "Polling timeout" error is thrown. Defaults to infinite (-1).
+    timeout: 5000,
+  )
+);
+```
 
-...
-partial_transcript = AssemblyAI::Realtime::PartialTranscript.from_json(json_object: response)
+If you don't want to wait until the transcript is ready, you can use `submit`:
 
-# All SDK objects natively support to_json calls for easy 
-# serialization, even of highly nested objects.
-response = Net::HTTP.post(uri, partial_transcript.to_json, headers)
+```ruby
+# Transcribe file at remote URL
+transcript = client.transcripts.submit(
+  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a"
+)
+```
+
+## Get a transcript
+
+This will return the transcript object in its current state. If the transcript is still processing, the `status` field will be `queued` or `processing`. Once the transcript is complete, the `status` field will be `completed`.
+
+```ruby
+transcript = client.transcripts.get(transcript_id: transcript.id)
+```
+
+## List transcripts
+
+This will return a page of transcripts you created.
+
+```ruby
+page = client.transcripts.list
+```
+
+## Delete a transcript
+
+```ruby
+res = client.transcripts.delete(transcript_id: transcript.id)
+```
+
+## Use LeMUR
+
+Call [LeMUR endpoints](https://www.assemblyai.com/docs/API%20reference/lemur) to summarize, ask questions, generate action items, or run a custom task.
+
+Custom Summary:
+
+```ruby
+response = client.lemur.summary(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
+  answer_format: "one sentence",
+  context: {
+    "speakers": ["Alex", "Bob"]
+  }
+)
+```
+
+Question & Answer:
+
+```ruby
+response = client.lemur.question_answer(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
+  questions: [
+    {
+      question: "What are they discussing?",
+      answer_format: "text"
+    }
+  ]
+)
+```
+
+Action Items:
+
+```ruby
+response = client.lemur.action_items(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"]
+)
+```
+
+Custom Task:
+
+```ruby
+response = client.lemur.task(
+  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
+  prompt: "Write a haiku about this conversation."
+)
 ```
