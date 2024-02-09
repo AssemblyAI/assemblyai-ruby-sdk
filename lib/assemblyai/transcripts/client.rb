@@ -3,6 +3,7 @@
 require_relative "../../requests"
 require_relative "types/transcript_status"
 require_relative "types/transcript_list"
+require_relative "types/speech_model"
 require_relative "types/transcript_language_code"
 require_relative "types/transcript_boost_param"
 require_relative "types/redact_pii_audio_quality"
@@ -61,6 +62,7 @@ module AssemblyAI
 
     # Create a transcript from an audio or video file that is accessible via a URL.
     #
+    # @param speech_model [Transcripts::SPEECH_MODEL]
     # @param language_code [TRANSCRIPT_LANGUAGE_CODE]
     # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
     # @param format_text [Boolean] Enable Text Formatting, can be true or false
@@ -103,14 +105,15 @@ module AssemblyAI
     # @param audio_url [String] The URL of the audio or video file to transcribe.
     # @param request_options [RequestOptions]
     # @return [Transcripts::Transcript]
-    def submit(audio_url:, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil, webhook_url: nil,
-               webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil, request_options: nil)
+    def submit(audio_url:, speech_model: nil, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil,
+               webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil, request_options: nil)
       response = @request_client.conn.post("/v2/transcript") do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
         req.body = {
           **(request_options&.additional_body_parameters || {}),
+          speech_model: speech_model,
           language_code: language_code,
           punctuate: punctuate,
           format_text: format_text,
@@ -303,6 +306,7 @@ module AssemblyAI
 
     # Create a transcript from an audio or video file that is accessible via a URL.
     #
+    # @param speech_model [Transcripts::SPEECH_MODEL]
     # @param language_code [TRANSCRIPT_LANGUAGE_CODE]
     # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
     # @param format_text [Boolean] Enable Text Formatting, can be true or false
@@ -345,8 +349,8 @@ module AssemblyAI
     # @param audio_url [String] The URL of the audio or video file to transcribe.
     # @param request_options [RequestOptions]
     # @return [Transcripts::Transcript]
-    def submit(audio_url:, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil, webhook_url: nil,
-               webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil, request_options: nil)
+    def submit(audio_url:, speech_model: nil, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil,
+               webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil, request_options: nil)
       Async do
         response = @request_client.conn.post("/v2/transcript") do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -354,6 +358,7 @@ module AssemblyAI
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
           req.body = {
             **(request_options&.additional_body_parameters || {}),
+            speech_model: speech_model,
             language_code: language_code,
             punctuate: punctuate,
             format_text: format_text,

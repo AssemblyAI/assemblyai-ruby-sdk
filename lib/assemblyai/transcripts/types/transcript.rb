@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "speech_model"
 require_relative "transcript_status"
 require_relative "transcript_language_code"
 require_relative "transcript_word"
@@ -20,10 +21,11 @@ module AssemblyAI
   class Transcripts
     # A transcript object
     class Transcript
-      attr_reader :id, :language_model, :acoustic_model, :status, :language_code, :audio_url, :text, :words,
-                  :utterances, :confidence, :audio_duration, :punctuate, :format_text, :dual_channel, :webhook_url, :webhook_status_code, :webhook_auth, :webhook_auth_header_name, :speed_boost, :auto_highlights, :auto_highlights_result, :audio_start_from, :audio_end_at, :word_boost, :boost_param, :filter_profanity, :redact_pii, :redact_pii_audio, :redact_pii_audio_quality, :redact_pii_policies, :redact_pii_sub, :speaker_labels, :speakers_expected, :content_safety, :content_safety_labels, :iab_categories, :iab_categories_result, :language_detection, :custom_spelling, :auto_chapters, :chapters, :summarization, :summary_type, :summary_model, :summary, :custom_topics, :topics, :disfluencies, :sentiment_analysis, :sentiment_analysis_results, :entity_detection, :entities, :speech_threshold, :throttled, :error, :additional_properties
+      attr_reader :id, :speech_model, :language_model, :acoustic_model, :status, :language_code, :audio_url, :text,
+                  :words, :utterances, :confidence, :audio_duration, :punctuate, :format_text, :dual_channel, :webhook_url, :webhook_status_code, :webhook_auth, :webhook_auth_header_name, :speed_boost, :auto_highlights, :auto_highlights_result, :audio_start_from, :audio_end_at, :word_boost, :boost_param, :filter_profanity, :redact_pii, :redact_pii_audio, :redact_pii_audio_quality, :redact_pii_policies, :redact_pii_sub, :speaker_labels, :speakers_expected, :content_safety, :content_safety_labels, :iab_categories, :iab_categories_result, :language_detection, :custom_spelling, :auto_chapters, :chapters, :summarization, :summary_type, :summary_model, :summary, :custom_topics, :topics, :disfluencies, :sentiment_analysis, :sentiment_analysis_results, :entity_detection, :entities, :speech_threshold, :throttled, :error, :additional_properties
 
       # @param id [String] The unique identifier of your transcript
+      # @param speech_model [Transcripts::SPEECH_MODEL]
       # @param language_model [String] The language model that was used for the transcript
       # @param acoustic_model [String] The acoustic model that was used for the transcript
       # @param status [TRANSCRIPT_STATUS] The status of your transcript. Possible values are queued, processing, completed, or error.
@@ -90,10 +92,12 @@ module AssemblyAI
       # @param error [String] Error message of why the transcript failed
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::Transcript]
-      def initialize(id:, language_model:, acoustic_model:, status:, audio_url:, webhook_auth:, auto_highlights:, redact_pii:, summarization:, language_code: nil, text: nil,
-                     words: nil, utterances: nil, confidence: nil, audio_duration: nil, punctuate: nil, format_text: nil, dual_channel: nil, webhook_url: nil, webhook_status_code: nil, webhook_auth_header_name: nil, speed_boost: nil, auto_highlights_result: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_labels: nil, iab_categories: nil, iab_categories_result: nil, language_detection: nil, custom_spelling: nil, auto_chapters: nil, chapters: nil, summary_type: nil, summary_model: nil, summary: nil, custom_topics: nil, topics: nil, disfluencies: nil, sentiment_analysis: nil, sentiment_analysis_results: nil, entity_detection: nil, entities: nil, speech_threshold: nil, throttled: nil, error: nil, additional_properties: nil)
+      def initialize(id:, language_model:, acoustic_model:, status:, audio_url:, webhook_auth:, auto_highlights:, redact_pii:, summarization:, speech_model: nil, language_code: nil,
+                     text: nil, words: nil, utterances: nil, confidence: nil, audio_duration: nil, punctuate: nil, format_text: nil, dual_channel: nil, webhook_url: nil, webhook_status_code: nil, webhook_auth_header_name: nil, speed_boost: nil, auto_highlights_result: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_labels: nil, iab_categories: nil, iab_categories_result: nil, language_detection: nil, custom_spelling: nil, auto_chapters: nil, chapters: nil, summary_type: nil, summary_model: nil, summary: nil, custom_topics: nil, topics: nil, disfluencies: nil, sentiment_analysis: nil, sentiment_analysis_results: nil, entity_detection: nil, entities: nil, speech_threshold: nil, throttled: nil, error: nil, additional_properties: nil)
         # @type [String] The unique identifier of your transcript
         @id = id
+        # @type [Transcripts::SPEECH_MODEL]
+        @speech_model = speech_model
         # @type [String] The language model that was used for the transcript
         @language_model = language_model
         # @type [String] The acoustic model that was used for the transcript
@@ -224,6 +228,7 @@ module AssemblyAI
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
         id = struct.id
+        speech_model = struct.speech_model
         language_model = struct.language_model
         acoustic_model = struct.acoustic_model
         status = Transcripts::TRANSCRIPT_STATUS.key(parsed_json["status"]) || parsed_json["status"]
@@ -314,8 +319,8 @@ module AssemblyAI
         speech_threshold = struct.speech_threshold
         throttled = struct.throttled
         error = struct.error
-        new(id: id, language_model: language_model, acoustic_model: acoustic_model, status: status,
-            language_code: language_code, audio_url: audio_url, text: text, words: words, utterances: utterances, confidence: confidence, audio_duration: audio_duration, punctuate: punctuate, format_text: format_text, dual_channel: dual_channel, webhook_url: webhook_url, webhook_status_code: webhook_status_code, webhook_auth: webhook_auth, webhook_auth_header_name: webhook_auth_header_name, speed_boost: speed_boost, auto_highlights: auto_highlights, auto_highlights_result: auto_highlights_result, audio_start_from: audio_start_from, audio_end_at: audio_end_at, word_boost: word_boost, boost_param: boost_param, filter_profanity: filter_profanity, redact_pii: redact_pii, redact_pii_audio: redact_pii_audio, redact_pii_audio_quality: redact_pii_audio_quality, redact_pii_policies: redact_pii_policies, redact_pii_sub: redact_pii_sub, speaker_labels: speaker_labels, speakers_expected: speakers_expected, content_safety: content_safety, content_safety_labels: content_safety_labels, iab_categories: iab_categories, iab_categories_result: iab_categories_result, language_detection: language_detection, custom_spelling: custom_spelling, auto_chapters: auto_chapters, chapters: chapters, summarization: summarization, summary_type: summary_type, summary_model: summary_model, summary: summary, custom_topics: custom_topics, topics: topics, disfluencies: disfluencies, sentiment_analysis: sentiment_analysis, sentiment_analysis_results: sentiment_analysis_results, entity_detection: entity_detection, entities: entities, speech_threshold: speech_threshold, throttled: throttled, error: error, additional_properties: struct)
+        new(id: id, speech_model: speech_model, language_model: language_model, acoustic_model: acoustic_model,
+            status: status, language_code: language_code, audio_url: audio_url, text: text, words: words, utterances: utterances, confidence: confidence, audio_duration: audio_duration, punctuate: punctuate, format_text: format_text, dual_channel: dual_channel, webhook_url: webhook_url, webhook_status_code: webhook_status_code, webhook_auth: webhook_auth, webhook_auth_header_name: webhook_auth_header_name, speed_boost: speed_boost, auto_highlights: auto_highlights, auto_highlights_result: auto_highlights_result, audio_start_from: audio_start_from, audio_end_at: audio_end_at, word_boost: word_boost, boost_param: boost_param, filter_profanity: filter_profanity, redact_pii: redact_pii, redact_pii_audio: redact_pii_audio, redact_pii_audio_quality: redact_pii_audio_quality, redact_pii_policies: redact_pii_policies, redact_pii_sub: redact_pii_sub, speaker_labels: speaker_labels, speakers_expected: speakers_expected, content_safety: content_safety, content_safety_labels: content_safety_labels, iab_categories: iab_categories, iab_categories_result: iab_categories_result, language_detection: language_detection, custom_spelling: custom_spelling, auto_chapters: auto_chapters, chapters: chapters, summarization: summarization, summary_type: summary_type, summary_model: summary_model, summary: summary, custom_topics: custom_topics, topics: topics, disfluencies: disfluencies, sentiment_analysis: sentiment_analysis, sentiment_analysis_results: sentiment_analysis_results, entity_detection: entity_detection, entities: entities, speech_threshold: speech_threshold, throttled: throttled, error: error, additional_properties: struct)
       end
 
       # Serialize an instance of Transcript to a JSON object
@@ -324,6 +329,7 @@ module AssemblyAI
       def to_json(*_args)
         {
           "id": @id,
+          "speech_model": @speech_model,
           "language_model": @language_model,
           "acoustic_model": @acoustic_model,
           "status": Transcripts::TRANSCRIPT_STATUS[@status] || @status,
@@ -387,6 +393,7 @@ module AssemblyAI
       # @return [Void]
       def self.validate_raw(obj:)
         obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
+        obj.speech_model&.is_a?(String) != false || raise("Passed value for field obj.speech_model is not the expected type, validation failed.")
         obj.language_model.is_a?(String) != false || raise("Passed value for field obj.language_model is not the expected type, validation failed.")
         obj.acoustic_model.is_a?(String) != false || raise("Passed value for field obj.acoustic_model is not the expected type, validation failed.")
         obj.status.is_a?(Transcripts::TRANSCRIPT_STATUS) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")

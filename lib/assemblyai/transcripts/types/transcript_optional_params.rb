@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "speech_model"
 require_relative "transcript_language_code"
 require_relative "transcript_boost_param"
 require_relative "redact_pii_audio_quality"
@@ -14,9 +15,10 @@ module AssemblyAI
   class Transcripts
     # The parameters for creating a transcript
     class TranscriptOptionalParams
-      attr_reader :language_code, :punctuate, :format_text, :dual_channel, :webhook_url, :webhook_auth_header_name,
-                  :webhook_auth_header_value, :auto_highlights, :audio_start_from, :audio_end_at, :word_boost, :boost_param, :filter_profanity, :redact_pii, :redact_pii_audio, :redact_pii_audio_quality, :redact_pii_policies, :redact_pii_sub, :speaker_labels, :speakers_expected, :content_safety, :content_safety_confidence, :iab_categories, :language_detection, :custom_spelling, :disfluencies, :sentiment_analysis, :auto_chapters, :entity_detection, :speech_threshold, :summarization, :summary_model, :summary_type, :custom_topics, :topics, :additional_properties
+      attr_reader :speech_model, :language_code, :punctuate, :format_text, :dual_channel, :webhook_url,
+                  :webhook_auth_header_name, :webhook_auth_header_value, :auto_highlights, :audio_start_from, :audio_end_at, :word_boost, :boost_param, :filter_profanity, :redact_pii, :redact_pii_audio, :redact_pii_audio_quality, :redact_pii_policies, :redact_pii_sub, :speaker_labels, :speakers_expected, :content_safety, :content_safety_confidence, :iab_categories, :language_detection, :custom_spelling, :disfluencies, :sentiment_analysis, :auto_chapters, :entity_detection, :speech_threshold, :summarization, :summary_model, :summary_type, :custom_topics, :topics, :additional_properties
 
+      # @param speech_model [Transcripts::SPEECH_MODEL]
       # @param language_code [TRANSCRIPT_LANGUAGE_CODE]
       # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
       # @param format_text [Boolean] Enable Text Formatting, can be true or false
@@ -55,8 +57,10 @@ module AssemblyAI
       # @param topics [Array<String>] The list of custom topics provided, if custom topics is enabled
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::TranscriptOptionalParams]
-      def initialize(language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil, webhook_url: nil,
-                     webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil)
+      def initialize(speech_model: nil, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil,
+                     webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil)
+        # @type [Transcripts::SPEECH_MODEL]
+        @speech_model = speech_model
         # @type [TRANSCRIPT_LANGUAGE_CODE]
         @language_code = language_code
         # @type [Boolean] Enable Automatic Punctuation, can be true or false
@@ -139,6 +143,7 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
+        speech_model = struct.speech_model
         language_code = Transcripts::TRANSCRIPT_LANGUAGE_CODE.key(parsed_json["language_code"]) || parsed_json["language_code"]
         punctuate = struct.punctuate
         format_text = struct.format_text
@@ -180,8 +185,8 @@ module AssemblyAI
         summary_type = Transcripts::SUMMARY_TYPE.key(parsed_json["summary_type"]) || parsed_json["summary_type"]
         custom_topics = struct.custom_topics
         topics = struct.topics
-        new(language_code: language_code, punctuate: punctuate, format_text: format_text, dual_channel: dual_channel,
-            webhook_url: webhook_url, webhook_auth_header_name: webhook_auth_header_name, webhook_auth_header_value: webhook_auth_header_value, auto_highlights: auto_highlights, audio_start_from: audio_start_from, audio_end_at: audio_end_at, word_boost: word_boost, boost_param: boost_param, filter_profanity: filter_profanity, redact_pii: redact_pii, redact_pii_audio: redact_pii_audio, redact_pii_audio_quality: redact_pii_audio_quality, redact_pii_policies: redact_pii_policies, redact_pii_sub: redact_pii_sub, speaker_labels: speaker_labels, speakers_expected: speakers_expected, content_safety: content_safety, content_safety_confidence: content_safety_confidence, iab_categories: iab_categories, language_detection: language_detection, custom_spelling: custom_spelling, disfluencies: disfluencies, sentiment_analysis: sentiment_analysis, auto_chapters: auto_chapters, entity_detection: entity_detection, speech_threshold: speech_threshold, summarization: summarization, summary_model: summary_model, summary_type: summary_type, custom_topics: custom_topics, topics: topics, additional_properties: struct)
+        new(speech_model: speech_model, language_code: language_code, punctuate: punctuate, format_text: format_text,
+            dual_channel: dual_channel, webhook_url: webhook_url, webhook_auth_header_name: webhook_auth_header_name, webhook_auth_header_value: webhook_auth_header_value, auto_highlights: auto_highlights, audio_start_from: audio_start_from, audio_end_at: audio_end_at, word_boost: word_boost, boost_param: boost_param, filter_profanity: filter_profanity, redact_pii: redact_pii, redact_pii_audio: redact_pii_audio, redact_pii_audio_quality: redact_pii_audio_quality, redact_pii_policies: redact_pii_policies, redact_pii_sub: redact_pii_sub, speaker_labels: speaker_labels, speakers_expected: speakers_expected, content_safety: content_safety, content_safety_confidence: content_safety_confidence, iab_categories: iab_categories, language_detection: language_detection, custom_spelling: custom_spelling, disfluencies: disfluencies, sentiment_analysis: sentiment_analysis, auto_chapters: auto_chapters, entity_detection: entity_detection, speech_threshold: speech_threshold, summarization: summarization, summary_model: summary_model, summary_type: summary_type, custom_topics: custom_topics, topics: topics, additional_properties: struct)
       end
 
       # Serialize an instance of TranscriptOptionalParams to a JSON object
@@ -189,6 +194,7 @@ module AssemblyAI
       # @return [JSON]
       def to_json(*_args)
         {
+          "speech_model": @speech_model,
           "language_code": Transcripts::TRANSCRIPT_LANGUAGE_CODE[@language_code] || @language_code,
           "punctuate": @punctuate,
           "format_text": @format_text,
@@ -232,6 +238,7 @@ module AssemblyAI
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
+        obj.speech_model&.is_a?(String) != false || raise("Passed value for field obj.speech_model is not the expected type, validation failed.")
         obj.language_code&.is_a?(Transcripts::TRANSCRIPT_LANGUAGE_CODE) != false || raise("Passed value for field obj.language_code is not the expected type, validation failed.")
         obj.punctuate&.is_a?(Boolean) != false || raise("Passed value for field obj.punctuate is not the expected type, validation failed.")
         obj.format_text&.is_a?(Boolean) != false || raise("Passed value for field obj.format_text is not the expected type, validation failed.")

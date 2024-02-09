@@ -7,8 +7,8 @@ module AssemblyAI
     EMAIL = ""
     SUMMARY = ""
     DESCRIPTION = ""
-    HOMEPAGE = "https://github.com/REPO/URL"
-    SOURCE_CODE_URI = "https://github.com/REPO/URL"
-    CHANGELOG_URI = "https://github.com/REPO/URL/blob/master/CHANGELOG.md"
+    HOMEPAGE = "https://github.com/AssemblyAI/assemblyai-ruby-sdk"
+    SOURCE_CODE_URI = "https://github.com/AssemblyAI/assemblyai-ruby-sdk"
+    CHANGELOG_URI = "https://github.com/AssemblyAI/assemblyai-ruby-sdk/blob/master/CHANGELOG.md"
   end
 end
