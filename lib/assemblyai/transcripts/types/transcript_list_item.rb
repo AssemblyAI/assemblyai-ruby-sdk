@@ -17,7 +17,7 @@ module AssemblyAI
       # @param audio_url [String]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::TranscriptListItem]
-      def initialize(id:, resource_url:, status:, created:, audio_url:, completed: nil, additional_properties: nil)
+      def initialize(id:, resource_url:, status:, created:, completed:, audio_url:, additional_properties: nil)
         # @type [String]
         @id = id
         # @type [String]
@@ -74,7 +74,7 @@ module AssemblyAI
         obj.resource_url.is_a?(String) != false || raise("Passed value for field obj.resource_url is not the expected type, validation failed.")
         obj.status.is_a?(Transcripts::TRANSCRIPT_STATUS) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
         obj.created.is_a?(DateTime) != false || raise("Passed value for field obj.created is not the expected type, validation failed.")
-        obj.completed&.is_a?(DateTime) != false || raise("Passed value for field obj.completed is not the expected type, validation failed.")
+        obj.completed.is_a?(DateTime) != false || raise("Passed value for field obj.completed is not the expected type, validation failed.")
         obj.audio_url.is_a?(String) != false || raise("Passed value for field obj.audio_url is not the expected type, validation failed.")
       end
     end
