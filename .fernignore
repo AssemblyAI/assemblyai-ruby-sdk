@@ -1,7 +1,6 @@
 # Specify files that shouldn't be modified by Fern
 
 README.md
-.github/workflows/publish.yml
 test/
 
 <!-- Allow for the polling client -->

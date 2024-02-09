@@ -18,6 +18,7 @@ jobs:
     - name: Build and Push Gem
       env:
         GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_API_KEY }}
-      run: >-
+      run: |
         gem build assemblyai.gemspec
+        
         gem push assemblyai-*.gem --host https://rubygems.org
