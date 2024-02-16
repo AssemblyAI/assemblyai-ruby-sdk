@@ -7,7 +7,7 @@ module AssemblyAI
       default: "default",
       basic: "basic",
       assemblyai_mistral7b: "assemblyai/mistral-7b",
-      anthropic_claude21: "anthropic/claude-2-1"
+      anthropic_claude2_1: "anthropic/claude-2-1"
     }.freeze
   end
 end
