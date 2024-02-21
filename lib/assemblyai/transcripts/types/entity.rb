@@ -9,14 +9,14 @@ module AssemblyAI
     class Entity
       attr_reader :entity_type, :text, :start, :end_, :additional_properties
 
-      # @param entity_type [ENTITY_TYPE] The type of entity for the detected entity
+      # @param entity_type [Transcripts::EntityType] The type of entity for the detected entity
       # @param text [String] The text for the detected entity
       # @param start [Integer] The starting time, in milliseconds, at which the detected entity appears in the audio file
       # @param end_ [Integer] The ending time, in milliseconds, for the detected entity in the audio file
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::Entity]
       def initialize(entity_type:, text:, start:, end_:, additional_properties: nil)
-        # @type [ENTITY_TYPE] The type of entity for the detected entity
+        # @type [Transcripts::EntityType] The type of entity for the detected entity
         @entity_type = entity_type
         # @type [String] The text for the detected entity
         @text = text
@@ -34,8 +34,8 @@ module AssemblyAI
       # @return [Transcripts::Entity]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        parsed_json = JSON.parse(json_object)
-        entity_type = Transcripts::ENTITY_TYPE.key(parsed_json["entity_type"]) || parsed_json["entity_type"]
+        JSON.parse(json_object)
+        entity_type = struct.entity_type
         text = struct.text
         start = struct.start
         end_ = struct.end
@@ -46,12 +46,7 @@ module AssemblyAI
       #
       # @return [JSON]
       def to_json(*_args)
-        {
-          "entity_type": Transcripts::ENTITY_TYPE[@entity_type] || @entity_type,
-          "text": @text,
-          "start": @start,
-          "end": @end_
-        }.to_json
+        { "entity_type": @entity_type, "text": @text, "start": @start, "end": @end_ }.to_json
       end
 
       # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
@@ -59,7 +54,7 @@ module AssemblyAI
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.entity_type.is_a?(Transcripts::ENTITY_TYPE) != false || raise("Passed value for field obj.entity_type is not the expected type, validation failed.")
+        obj.entity_type.is_a?(Transcripts::EntityType) != false || raise("Passed value for field obj.entity_type is not the expected type, validation failed.")
         obj.text.is_a?(String) != false || raise("Passed value for field obj.text is not the expected type, validation failed.")
         obj.start.is_a?(Integer) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
         obj.end_.is_a?(Integer) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")

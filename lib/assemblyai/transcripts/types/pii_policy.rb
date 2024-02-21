@@ -2,35 +2,34 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [PII_POLICY]
-    PII_POLICY = {
-      medical_process: "medical_process",
-      medical_condition: "medical_condition",
-      blood_type: "blood_type",
-      drug: "drug",
-      injury: "injury",
-      number_sequence: "number_sequence",
-      email_address: "email_address",
-      date_of_birth: "date_of_birth",
-      phone_number: "phone_number",
-      us_social_security_number: "us_social_security_number",
-      credit_card_number: "credit_card_number",
-      credit_card_expiration: "credit_card_expiration",
-      credit_card_cvv: "credit_card_cvv",
-      date: "date",
-      nationality: "nationality",
-      event: "event",
-      language: "language",
-      location: "location",
-      money_amount: "money_amount",
-      person_name: "person_name",
-      person_age: "person_age",
-      organization: "organization",
-      political_affiliation: "political_affiliation",
-      occupation: "occupation",
-      religion: "religion",
-      drivers_license: "drivers_license",
-      banking_information: "banking_information"
-    }.freeze
+    class PiiPolicy
+      MEDICAL_PROCESS = "medical_process"
+      MEDICAL_CONDITION = "medical_condition"
+      BLOOD_TYPE = "blood_type"
+      DRUG = "drug"
+      INJURY = "injury"
+      NUMBER_SEQUENCE = "number_sequence"
+      EMAIL_ADDRESS = "email_address"
+      DATE_OF_BIRTH = "date_of_birth"
+      PHONE_NUMBER = "phone_number"
+      US_SOCIAL_SECURITY_NUMBER = "us_social_security_number"
+      CREDIT_CARD_NUMBER = "credit_card_number"
+      CREDIT_CARD_EXPIRATION = "credit_card_expiration"
+      CREDIT_CARD_CVV = "credit_card_cvv"
+      DATE = "date"
+      NATIONALITY = "nationality"
+      EVENT = "event"
+      LANGUAGE = "language"
+      LOCATION = "location"
+      MONEY_AMOUNT = "money_amount"
+      PERSON_NAME = "person_name"
+      PERSON_AGE = "person_age"
+      ORGANIZATION = "organization"
+      POLITICAL_AFFILIATION = "political_affiliation"
+      OCCUPATION = "occupation"
+      RELIGION = "religion"
+      DRIVERS_LICENSE = "drivers_license"
+      BANKING_INFORMATION = "banking_information"
+    end
   end
 end

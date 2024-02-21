@@ -2,28 +2,29 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [TRANSCRIPT_LANGUAGE_CODE]
-    TRANSCRIPT_LANGUAGE_CODE = {
-      en: "en",
-      en_au: "en_au",
-      en_uk: "en_uk",
-      en_us: "en_us",
-      es: "es",
-      fr: "fr",
-      de: "de",
-      it: "it",
-      pt: "pt",
-      nl: "nl",
-      hi: "hi",
-      ja: "ja",
-      zh: "zh",
-      fi: "fi",
-      ko: "ko",
-      pl: "pl",
-      ru: "ru",
-      tr: "tr",
-      uk: "uk",
-      vi: "vi"
-    }.freeze
+    # The language of your audio file. Possible values are found in [Supported Languages](https://www.assemblyai.com/docs/concepts/supported-languages).
+    # The default value is 'en_us'.
+    class TranscriptLanguageCode
+      EN = "en"
+      EN_AU = "en_au"
+      EN_UK = "en_uk"
+      EN_US = "en_us"
+      ES = "es"
+      FR = "fr"
+      DE = "de"
+      IT = "it"
+      PT = "pt"
+      NL = "nl"
+      HI = "hi"
+      JA = "ja"
+      ZH = "zh"
+      FI = "fi"
+      KO = "ko"
+      PL = "pl"
+      RU = "ru"
+      TR = "tr"
+      UK = "uk"
+      VI = "vi"
+    end
   end
 end

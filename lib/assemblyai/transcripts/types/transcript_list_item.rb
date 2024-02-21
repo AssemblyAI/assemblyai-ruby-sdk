@@ -11,7 +11,7 @@ module AssemblyAI
 
       # @param id [String]
       # @param resource_url [String]
-      # @param status [TRANSCRIPT_STATUS]
+      # @param status [Transcripts::TranscriptStatus]
       # @param created [DateTime]
       # @param completed [DateTime]
       # @param audio_url [String]
@@ -22,7 +22,7 @@ module AssemblyAI
         @id = id
         # @type [String]
         @resource_url = resource_url
-        # @type [TRANSCRIPT_STATUS]
+        # @type [Transcripts::TranscriptStatus]
         @status = status
         # @type [DateTime]
         @created = created
@@ -43,7 +43,7 @@ module AssemblyAI
         parsed_json = JSON.parse(json_object)
         id = struct.id
         resource_url = struct.resource_url
-        status = Transcripts::TRANSCRIPT_STATUS.key(parsed_json["status"]) || parsed_json["status"]
+        status = struct.status
         created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
         completed = (DateTime.parse(parsed_json["completed"]) unless parsed_json["completed"].nil?)
         audio_url = struct.audio_url
@@ -58,7 +58,7 @@ module AssemblyAI
         {
           "id": @id,
           "resource_url": @resource_url,
-          "status": Transcripts::TRANSCRIPT_STATUS[@status] || @status,
+          "status": @status,
           "created": @created,
           "completed": @completed,
           "audio_url": @audio_url
@@ -72,7 +72,7 @@ module AssemblyAI
       def self.validate_raw(obj:)
         obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
         obj.resource_url.is_a?(String) != false || raise("Passed value for field obj.resource_url is not the expected type, validation failed.")
-        obj.status.is_a?(Transcripts::TRANSCRIPT_STATUS) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
+        obj.status.is_a?(Transcripts::TranscriptStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
         obj.created.is_a?(DateTime) != false || raise("Passed value for field obj.created is not the expected type, validation failed.")
         obj.completed.is_a?(DateTime) != false || raise("Passed value for field obj.completed is not the expected type, validation failed.")
         obj.audio_url.is_a?(String) != false || raise("Passed value for field obj.audio_url is not the expected type, validation failed.")

@@ -11,13 +11,13 @@ module AssemblyAI
     class TopicDetectionModelResult
       attr_reader :status, :results, :summary, :additional_properties
 
-      # @param status [AUDIO_INTELLIGENCE_MODEL_STATUS] The status of the Topic Detection model. Either success, or unavailable in the rare case that the model failed.
+      # @param status [Transcripts::AudioIntelligenceModelStatus] The status of the Topic Detection model. Either success, or unavailable in the rare case that the model failed.
       # @param results [Array<Transcripts::TopicDetectionResult>] An array of results for the Topic Detection model
       # @param summary [Hash{String => String}] The overall relevance of topic to the entire audio file
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::TopicDetectionModelResult]
       def initialize(status:, results:, summary:, additional_properties: nil)
-        # @type [AUDIO_INTELLIGENCE_MODEL_STATUS] The status of the Topic Detection model. Either success, or unavailable in the rare case that the model failed.
+        # @type [Transcripts::AudioIntelligenceModelStatus] The status of the Topic Detection model. Either success, or unavailable in the rare case that the model failed.
         @status = status
         # @type [Array<Transcripts::TopicDetectionResult>] An array of results for the Topic Detection model
         @results = results
@@ -34,7 +34,7 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        status = Transcripts::AUDIO_INTELLIGENCE_MODEL_STATUS.key(parsed_json["status"]) || parsed_json["status"]
+        status = struct.status
         results = parsed_json["results"]&.map do |v|
           v = v.to_json
           Transcripts::TopicDetectionResult.from_json(json_object: v)
@@ -47,11 +47,7 @@ module AssemblyAI
       #
       # @return [JSON]
       def to_json(*_args)
-        {
-          "status": Transcripts::AUDIO_INTELLIGENCE_MODEL_STATUS[@status] || @status,
-          "results": @results,
-          "summary": @summary
-        }.to_json
+        { "status": @status, "results": @results, "summary": @summary }.to_json
       end
 
       # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
@@ -59,7 +55,7 @@ module AssemblyAI
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.status.is_a?(Transcripts::AUDIO_INTELLIGENCE_MODEL_STATUS) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
+        obj.status.is_a?(Transcripts::AudioIntelligenceModelStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
         obj.results.is_a?(Array) != false || raise("Passed value for field obj.results is not the expected type, validation failed.")
         obj.summary.is_a?(Hash) != false || raise("Passed value for field obj.summary is not the expected type, validation failed.")
       end

@@ -2,7 +2,10 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [SUBSTITUTION_POLICY]
-    SUBSTITUTION_POLICY = { entity_type: "entity_type", hash: "hash" }.freeze
+    # The replacement logic for detected PII, can be "entity_type" or "hash". See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+    class SubstitutionPolicy
+      ENTITY_TYPE = "entity_type"
+      HASH = "hash"
+    end
   end
 end

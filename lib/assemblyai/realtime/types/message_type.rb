@@ -2,12 +2,11 @@
 
 module AssemblyAI
   class Realtime
-    # @type [MESSAGE_TYPE]
-    MESSAGE_TYPE = {
-      session_begins: "SessionBegins",
-      partial_transcript: "PartialTranscript",
-      final_transcript: "FinalTranscript",
-      session_terminated: "SessionTerminated"
-    }.freeze
+    class MessageType
+      SESSION_BEGINS = "SessionBegins"
+      PARTIAL_TRANSCRIPT = "PartialTranscript"
+      FINAL_TRANSCRIPT = "FinalTranscript"
+      SESSION_TERMINATED = "SessionTerminated"
+    end
   end
 end

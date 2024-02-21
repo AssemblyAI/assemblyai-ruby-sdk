@@ -2,7 +2,10 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [SENTIMENT]
-    SENTIMENT = { positive: "POSITIVE", neutral: "NEUTRAL", negative: "NEGATIVE" }.freeze
+    class Sentiment
+      POSITIVE = "POSITIVE"
+      NEUTRAL = "NEUTRAL"
+      NEGATIVE = "NEGATIVE"
+    end
   end
 end

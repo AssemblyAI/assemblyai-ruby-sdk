@@ -2,7 +2,11 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [TRANSCRIPT_BOOST_PARAM]
-    TRANSCRIPT_BOOST_PARAM = { low: "low", default: "default", high: "high" }.freeze
+    # The word boost parameter value
+    class TranscriptBoostParam
+      LOW = "low"
+      DEFAULT = "default"
+      HIGH = "high"
+    end
   end
 end
