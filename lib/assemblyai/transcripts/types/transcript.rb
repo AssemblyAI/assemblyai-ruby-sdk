@@ -25,11 +25,11 @@ module AssemblyAI
                   :words, :utterances, :confidence, :audio_duration, :punctuate, :format_text, :dual_channel, :webhook_url, :webhook_status_code, :webhook_auth, :webhook_auth_header_name, :speed_boost, :auto_highlights, :auto_highlights_result, :audio_start_from, :audio_end_at, :word_boost, :boost_param, :filter_profanity, :redact_pii, :redact_pii_audio, :redact_pii_audio_quality, :redact_pii_policies, :redact_pii_sub, :speaker_labels, :speakers_expected, :content_safety, :content_safety_labels, :iab_categories, :iab_categories_result, :language_detection, :custom_spelling, :auto_chapters, :chapters, :summarization, :summary_type, :summary_model, :summary, :custom_topics, :topics, :disfluencies, :sentiment_analysis, :sentiment_analysis_results, :entity_detection, :entities, :speech_threshold, :throttled, :error, :additional_properties
 
       # @param id [String] The unique identifier of your transcript
-      # @param speech_model [Transcripts::SPEECH_MODEL]
+      # @param speech_model [Transcripts::SpeechModel]
       # @param language_model [String] The language model that was used for the transcript
       # @param acoustic_model [String] The acoustic model that was used for the transcript
-      # @param status [TRANSCRIPT_STATUS] The status of your transcript. Possible values are queued, processing, completed, or error.
-      # @param language_code [TRANSCRIPT_LANGUAGE_CODE] The language of your audio file.
+      # @param status [Transcripts::TranscriptStatus] The status of your transcript. Possible values are queued, processing, completed, or error.
+      # @param language_code [Transcripts::TranscriptLanguageCode] The language of your audio file.
       #   Possible values are found in [Supported Languages](https://www.assemblyai.com/docs/concepts/supported-languages).
       #   The default value is 'en_us'.
       # @param audio_url [String] The URL of the media that was transcribed
@@ -58,10 +58,10 @@ module AssemblyAI
       # @param redact_pii [Boolean] Whether [PII Redaction](https://www.assemblyai.com/docs/models/pii-redaction) is enabled, either true or false
       # @param redact_pii_audio [Boolean] Whether a redacted version of the audio file was generated,
       #   either true or false. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more information.
-      # @param redact_pii_audio_quality [REDACT_PII_AUDIO_QUALITY]
-      # @param redact_pii_policies [Array<Transcripts::PII_POLICY>] The list of PII Redaction policies that were enabled, if PII Redaction is enabled.
+      # @param redact_pii_audio_quality [Transcripts::RedactPiiAudioQuality]
+      # @param redact_pii_policies [Array<Transcripts::PiiPolicy>] The list of PII Redaction policies that were enabled, if PII Redaction is enabled.
       #   See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more information.
-      # @param redact_pii_sub [SUBSTITUTION_POLICY] The replacement logic for detected PII, can be "entity_type" or "hash". See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+      # @param redact_pii_sub [Transcripts::SubstitutionPolicy] The replacement logic for detected PII, can be "entity_type" or "hash". See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
       # @param speaker_labels [Boolean] Whether [Speaker diarization](https://www.assemblyai.com/docs/models/speaker-diarization) is enabled, can be true or false
       # @param speakers_expected [Integer] Tell the speaker label model how many speakers it should attempt to identify, up to 10. See [Speaker diarization](https://www.assemblyai.com/docs/models/speaker-diarization) for more details.
       # @param content_safety [Boolean] Whether [Content Moderation](https://www.assemblyai.com/docs/models/content-moderation) is enabled, can be true or false
@@ -96,15 +96,15 @@ module AssemblyAI
                      text: nil, words: nil, utterances: nil, confidence: nil, audio_duration: nil, punctuate: nil, format_text: nil, dual_channel: nil, webhook_url: nil, webhook_status_code: nil, webhook_auth_header_name: nil, speed_boost: nil, auto_highlights_result: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_labels: nil, iab_categories: nil, iab_categories_result: nil, language_detection: nil, custom_spelling: nil, auto_chapters: nil, chapters: nil, summary_type: nil, summary_model: nil, summary: nil, custom_topics: nil, topics: nil, disfluencies: nil, sentiment_analysis: nil, sentiment_analysis_results: nil, entity_detection: nil, entities: nil, speech_threshold: nil, throttled: nil, error: nil, additional_properties: nil)
         # @type [String] The unique identifier of your transcript
         @id = id
-        # @type [Transcripts::SPEECH_MODEL]
+        # @type [Transcripts::SpeechModel]
         @speech_model = speech_model
         # @type [String] The language model that was used for the transcript
         @language_model = language_model
         # @type [String] The acoustic model that was used for the transcript
         @acoustic_model = acoustic_model
-        # @type [TRANSCRIPT_STATUS] The status of your transcript. Possible values are queued, processing, completed, or error.
+        # @type [Transcripts::TranscriptStatus] The status of your transcript. Possible values are queued, processing, completed, or error.
         @status = status
-        # @type [TRANSCRIPT_LANGUAGE_CODE] The language of your audio file.
+        # @type [Transcripts::TranscriptLanguageCode] The language of your audio file.
         #   Possible values are found in [Supported Languages](https://www.assemblyai.com/docs/concepts/supported-languages).
         #   The default value is 'en_us'.
         @language_code = language_code
@@ -157,12 +157,12 @@ module AssemblyAI
         # @type [Boolean] Whether a redacted version of the audio file was generated,
         #   either true or false. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more information.
         @redact_pii_audio = redact_pii_audio
-        # @type [REDACT_PII_AUDIO_QUALITY]
+        # @type [Transcripts::RedactPiiAudioQuality]
         @redact_pii_audio_quality = redact_pii_audio_quality
-        # @type [Array<Transcripts::PII_POLICY>] The list of PII Redaction policies that were enabled, if PII Redaction is enabled.
+        # @type [Array<Transcripts::PiiPolicy>] The list of PII Redaction policies that were enabled, if PII Redaction is enabled.
         #   See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more information.
         @redact_pii_policies = redact_pii_policies
-        # @type [SUBSTITUTION_POLICY] The replacement logic for detected PII, can be "entity_type" or "hash". See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+        # @type [Transcripts::SubstitutionPolicy] The replacement logic for detected PII, can be "entity_type" or "hash". See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
         @redact_pii_sub = redact_pii_sub
         # @type [Boolean] Whether [Speaker diarization](https://www.assemblyai.com/docs/models/speaker-diarization) is enabled, can be true or false
         @speaker_labels = speaker_labels
@@ -231,8 +231,8 @@ module AssemblyAI
         speech_model = struct.speech_model
         language_model = struct.language_model
         acoustic_model = struct.acoustic_model
-        status = Transcripts::TRANSCRIPT_STATUS.key(parsed_json["status"]) || parsed_json["status"]
-        language_code = Transcripts::TRANSCRIPT_LANGUAGE_CODE.key(parsed_json["language_code"]) || parsed_json["language_code"]
+        status = struct.status
+        language_code = struct.language_code
         audio_url = struct.audio_url
         text = struct.text
         words = parsed_json["words"]&.map do |v|
@@ -267,12 +267,9 @@ module AssemblyAI
         filter_profanity = struct.filter_profanity
         redact_pii = struct.redact_pii
         redact_pii_audio = struct.redact_pii_audio
-        redact_pii_audio_quality = Transcripts::REDACT_PII_AUDIO_QUALITY.key(parsed_json["redact_pii_audio_quality"]) || parsed_json["redact_pii_audio_quality"]
-        redact_pii_policies = parsed_json["redact_pii_policies"]&.map do |v|
-          v = v.to_json
-          Transcripts::PII_POLICY.key(v) || v
-        end
-        redact_pii_sub = Transcripts::SUBSTITUTION_POLICY.key(parsed_json["redact_pii_sub"]) || parsed_json["redact_pii_sub"]
+        redact_pii_audio_quality = struct.redact_pii_audio_quality
+        redact_pii_policies = struct.redact_pii_policies
+        redact_pii_sub = struct.redact_pii_sub
         speaker_labels = struct.speaker_labels
         speakers_expected = struct.speakers_expected
         content_safety = struct.content_safety
@@ -332,8 +329,8 @@ module AssemblyAI
           "speech_model": @speech_model,
           "language_model": @language_model,
           "acoustic_model": @acoustic_model,
-          "status": Transcripts::TRANSCRIPT_STATUS[@status] || @status,
-          "language_code": Transcripts::TRANSCRIPT_LANGUAGE_CODE[@language_code] || @language_code,
+          "status": @status,
+          "language_code": @language_code,
           "audio_url": @audio_url,
           "text": @text,
           "words": @words,
@@ -357,9 +354,9 @@ module AssemblyAI
           "filter_profanity": @filter_profanity,
           "redact_pii": @redact_pii,
           "redact_pii_audio": @redact_pii_audio,
-          "redact_pii_audio_quality": Transcripts::REDACT_PII_AUDIO_QUALITY[@redact_pii_audio_quality] || @redact_pii_audio_quality,
+          "redact_pii_audio_quality": @redact_pii_audio_quality,
           "redact_pii_policies": @redact_pii_policies,
-          "redact_pii_sub": Transcripts::SUBSTITUTION_POLICY[@redact_pii_sub] || @redact_pii_sub,
+          "redact_pii_sub": @redact_pii_sub,
           "speaker_labels": @speaker_labels,
           "speakers_expected": @speakers_expected,
           "content_safety": @content_safety,
@@ -393,11 +390,11 @@ module AssemblyAI
       # @return [Void]
       def self.validate_raw(obj:)
         obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
-        obj.speech_model&.is_a?(String) != false || raise("Passed value for field obj.speech_model is not the expected type, validation failed.")
+        obj.speech_model&.is_a?(Transcripts::SpeechModel) != false || raise("Passed value for field obj.speech_model is not the expected type, validation failed.")
         obj.language_model.is_a?(String) != false || raise("Passed value for field obj.language_model is not the expected type, validation failed.")
         obj.acoustic_model.is_a?(String) != false || raise("Passed value for field obj.acoustic_model is not the expected type, validation failed.")
-        obj.status.is_a?(Transcripts::TRANSCRIPT_STATUS) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
-        obj.language_code&.is_a?(Transcripts::TRANSCRIPT_LANGUAGE_CODE) != false || raise("Passed value for field obj.language_code is not the expected type, validation failed.")
+        obj.status.is_a?(Transcripts::TranscriptStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
+        obj.language_code&.is_a?(Transcripts::TranscriptLanguageCode) != false || raise("Passed value for field obj.language_code is not the expected type, validation failed.")
         obj.audio_url.is_a?(String) != false || raise("Passed value for field obj.audio_url is not the expected type, validation failed.")
         obj.text&.is_a?(String) != false || raise("Passed value for field obj.text is not the expected type, validation failed.")
         obj.words&.is_a?(Array) != false || raise("Passed value for field obj.words is not the expected type, validation failed.")
@@ -421,9 +418,9 @@ module AssemblyAI
         obj.filter_profanity&.is_a?(Boolean) != false || raise("Passed value for field obj.filter_profanity is not the expected type, validation failed.")
         obj.redact_pii.is_a?(Boolean) != false || raise("Passed value for field obj.redact_pii is not the expected type, validation failed.")
         obj.redact_pii_audio&.is_a?(Boolean) != false || raise("Passed value for field obj.redact_pii_audio is not the expected type, validation failed.")
-        obj.redact_pii_audio_quality&.is_a?(Transcripts::REDACT_PII_AUDIO_QUALITY) != false || raise("Passed value for field obj.redact_pii_audio_quality is not the expected type, validation failed.")
+        obj.redact_pii_audio_quality&.is_a?(Transcripts::RedactPiiAudioQuality) != false || raise("Passed value for field obj.redact_pii_audio_quality is not the expected type, validation failed.")
         obj.redact_pii_policies&.is_a?(Array) != false || raise("Passed value for field obj.redact_pii_policies is not the expected type, validation failed.")
-        obj.redact_pii_sub&.is_a?(Transcripts::SUBSTITUTION_POLICY) != false || raise("Passed value for field obj.redact_pii_sub is not the expected type, validation failed.")
+        obj.redact_pii_sub&.is_a?(Transcripts::SubstitutionPolicy) != false || raise("Passed value for field obj.redact_pii_sub is not the expected type, validation failed.")
         obj.speaker_labels&.is_a?(Boolean) != false || raise("Passed value for field obj.speaker_labels is not the expected type, validation failed.")
         obj.speakers_expected&.is_a?(Integer) != false || raise("Passed value for field obj.speakers_expected is not the expected type, validation failed.")
         obj.content_safety&.is_a?(Boolean) != false || raise("Passed value for field obj.content_safety is not the expected type, validation failed.")

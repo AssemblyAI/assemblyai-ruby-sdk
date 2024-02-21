@@ -2,7 +2,10 @@
 
 module AssemblyAI
   class Realtime
-    # @type [AUDIO_ENCODING]
-    AUDIO_ENCODING = { pcm_s16le: "pcm_s16le", pcm_mulaw: "pcm_mulaw" }.freeze
+    # The encoding of the audio data
+    class AudioEncoding
+      PCM_S16LE = "pcm_s16le"
+      PCM_MULAW = "pcm_mulaw"
+    end
   end
 end

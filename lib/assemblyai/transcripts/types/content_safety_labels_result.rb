@@ -11,14 +11,14 @@ module AssemblyAI
     class ContentSafetyLabelsResult
       attr_reader :status, :results, :summary, :severity_score_summary, :additional_properties
 
-      # @param status [AUDIO_INTELLIGENCE_MODEL_STATUS] The status of the Content Moderation model. Either success, or unavailable in the rare case that the model failed.
+      # @param status [Transcripts::AudioIntelligenceModelStatus] The status of the Content Moderation model. Either success, or unavailable in the rare case that the model failed.
       # @param results [Array<Transcripts::ContentSafetyLabelResult>]
       # @param summary [Hash{String => String}] A summary of the Content Moderation confidence results for the entire audio file
       # @param severity_score_summary [Hash{String => String}] A summary of the Content Moderation severity results for the entire audio file
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::ContentSafetyLabelsResult]
       def initialize(status:, results:, summary:, severity_score_summary:, additional_properties: nil)
-        # @type [AUDIO_INTELLIGENCE_MODEL_STATUS] The status of the Content Moderation model. Either success, or unavailable in the rare case that the model failed.
+        # @type [Transcripts::AudioIntelligenceModelStatus] The status of the Content Moderation model. Either success, or unavailable in the rare case that the model failed.
         @status = status
         # @type [Array<Transcripts::ContentSafetyLabelResult>]
         @results = results
@@ -37,7 +37,7 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        status = Transcripts::AUDIO_INTELLIGENCE_MODEL_STATUS.key(parsed_json["status"]) || parsed_json["status"]
+        status = struct.status
         results = parsed_json["results"]&.map do |v|
           v = v.to_json
           Transcripts::ContentSafetyLabelResult.from_json(json_object: v)
@@ -53,7 +53,7 @@ module AssemblyAI
       # @return [JSON]
       def to_json(*_args)
         {
-          "status": Transcripts::AUDIO_INTELLIGENCE_MODEL_STATUS[@status] || @status,
+          "status": @status,
           "results": @results,
           "summary": @summary,
           "severity_score_summary": @severity_score_summary
@@ -65,7 +65,7 @@ module AssemblyAI
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
-        obj.status.is_a?(Transcripts::AUDIO_INTELLIGENCE_MODEL_STATUS) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
+        obj.status.is_a?(Transcripts::AudioIntelligenceModelStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
         obj.results.is_a?(Array) != false || raise("Passed value for field obj.results is not the expected type, validation failed.")
         obj.summary.is_a?(Hash) != false || raise("Passed value for field obj.summary is not the expected type, validation failed.")
         obj.severity_score_summary.is_a?(Hash) != false || raise("Passed value for field obj.severity_score_summary is not the expected type, validation failed.")

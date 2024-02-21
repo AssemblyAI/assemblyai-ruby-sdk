@@ -2,13 +2,13 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [SUMMARY_TYPE]
-    SUMMARY_TYPE = {
-      bullets: "bullets",
-      bullets_verbose: "bullets_verbose",
-      gist: "gist",
-      headline: "headline",
-      paragraph: "paragraph"
-    }.freeze
+    # The type of summary
+    class SummaryType
+      BULLETS = "bullets"
+      BULLETS_VERBOSE = "bullets_verbose"
+      GIST = "gist"
+      HEADLINE = "headline"
+      PARAGRAPH = "paragraph"
+    end
   end
 end

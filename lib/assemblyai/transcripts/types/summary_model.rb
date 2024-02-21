@@ -2,7 +2,11 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [SUMMARY_MODEL]
-    SUMMARY_MODEL = { informative: "informative", conversational: "conversational", catchy: "catchy" }.freeze
+    # The model to summarize the transcript
+    class SummaryModel
+      INFORMATIVE = "informative"
+      CONVERSATIONAL = "conversational"
+      CATCHY = "catchy"
+    end
   end
 end

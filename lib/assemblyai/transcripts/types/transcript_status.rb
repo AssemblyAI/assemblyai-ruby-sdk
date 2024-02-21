@@ -2,7 +2,12 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [TRANSCRIPT_STATUS]
-    TRANSCRIPT_STATUS = { queued: "queued", processing: "processing", completed: "completed", error: "error" }.freeze
+    # The status of your transcript. Possible values are queued, processing, completed, or error.
+    class TranscriptStatus
+      QUEUED = "queued"
+      PROCESSING = "processing"
+      COMPLETED = "completed"
+      ERROR = "error"
+    end
   end
 end

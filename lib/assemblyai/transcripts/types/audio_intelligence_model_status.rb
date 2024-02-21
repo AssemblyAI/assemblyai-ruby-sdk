@@ -2,7 +2,10 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [AUDIO_INTELLIGENCE_MODEL_STATUS]
-    AUDIO_INTELLIGENCE_MODEL_STATUS = { success: "success", unavailable: "unavailable" }.freeze
+    # Either success, or unavailable in the rare case that the model failed
+    class AudioIntelligenceModelStatus
+      SUCCESS = "success"
+      UNAVAILABLE = "unavailable"
+    end
   end
 end

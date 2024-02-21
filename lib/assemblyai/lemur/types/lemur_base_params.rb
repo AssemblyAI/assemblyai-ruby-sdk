@@ -15,7 +15,7 @@ module AssemblyAI
       # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
       #   Use either transcript_ids or input_text as input into LeMUR.
       # @param context [Lemur::LemurBaseParamsContext] Context to provide the model. This can be a string or a free-form JSON value.
-      # @param final_model [LEMUR_MODEL] The model that is used for the final prompt after compression is performed.
+      # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
       #   Defaults to "default".
       # @param max_output_size [Integer] Max output size in tokens, up to 4000
       # @param temperature [Float] The temperature to use for the model.
@@ -33,7 +33,7 @@ module AssemblyAI
         @input_text = input_text
         # @type [Lemur::LemurBaseParamsContext] Context to provide the model. This can be a string or a free-form JSON value.
         @context = context
-        # @type [LEMUR_MODEL] The model that is used for the final prompt after compression is performed.
+        # @type [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
         #   Defaults to "default".
         @final_model = final_model
         # @type [Integer] Max output size in tokens, up to 4000
@@ -61,7 +61,7 @@ module AssemblyAI
           context = parsed_json["context"].to_json
           context = Lemur::LemurBaseParamsContext.from_json(json_object: context)
         end
-        final_model = Lemur::LEMUR_MODEL.key(parsed_json["final_model"]) || parsed_json["final_model"]
+        final_model = struct.final_model
         max_output_size = struct.max_output_size
         temperature = struct.temperature
         new(transcript_ids: transcript_ids, input_text: input_text, context: context, final_model: final_model,
@@ -76,7 +76,7 @@ module AssemblyAI
           "transcript_ids": @transcript_ids,
           "input_text": @input_text,
           "context": @context,
-          "final_model": Lemur::LEMUR_MODEL[@final_model] || @final_model,
+          "final_model": @final_model,
           "max_output_size": @max_output_size,
           "temperature": @temperature
         }.to_json
@@ -90,7 +90,7 @@ module AssemblyAI
         obj.transcript_ids&.is_a?(Array) != false || raise("Passed value for field obj.transcript_ids is not the expected type, validation failed.")
         obj.input_text&.is_a?(String) != false || raise("Passed value for field obj.input_text is not the expected type, validation failed.")
         obj.context.nil? || Lemur::LemurBaseParamsContext.validate_raw(obj: obj.context)
-        obj.final_model&.is_a?(Lemur::LEMUR_MODEL) != false || raise("Passed value for field obj.final_model is not the expected type, validation failed.")
+        obj.final_model&.is_a?(Lemur::LemurModel) != false || raise("Passed value for field obj.final_model is not the expected type, validation failed.")
         obj.max_output_size&.is_a?(Integer) != false || raise("Passed value for field obj.max_output_size is not the expected type, validation failed.")
         obj.temperature&.is_a?(Float) != false || raise("Passed value for field obj.temperature is not the expected type, validation failed.")
       end

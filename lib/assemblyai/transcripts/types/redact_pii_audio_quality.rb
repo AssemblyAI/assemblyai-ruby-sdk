@@ -2,7 +2,10 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [REDACT_PII_AUDIO_QUALITY]
-    REDACT_PII_AUDIO_QUALITY = { mp3: "mp3", wav: "wav" }.freeze
+    # Controls the filetype of the audio created by redact_pii_audio. Currently supports mp3 (default) and wav. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+    class RedactPiiAudioQuality
+      MP3 = "mp3"
+      WAV = "wav"
+    end
   end
 end

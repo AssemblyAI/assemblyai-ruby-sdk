@@ -12,7 +12,7 @@ module AssemblyAI
       # @param text [String] The transcript of the sentence
       # @param start [Integer] The starting time, in milliseconds, of the sentence
       # @param end_ [Integer] The ending time, in milliseconds, of the sentence
-      # @param sentiment [SENTIMENT] The detected sentiment for the sentence, one of POSITIVE, NEUTRAL, NEGATIVE
+      # @param sentiment [Transcripts::Sentiment] The detected sentiment for the sentence, one of POSITIVE, NEUTRAL, NEGATIVE
       # @param confidence [Float] The confidence score for the detected sentiment of the sentence, from 0 to 1
       # @param speaker [String] The speaker of the sentence if [Speaker Diarization](https://www.assemblyai.com/docs/models/speaker-diarization) is enabled, else null
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
@@ -24,7 +24,7 @@ module AssemblyAI
         @start = start
         # @type [Integer] The ending time, in milliseconds, of the sentence
         @end_ = end_
-        # @type [SENTIMENT] The detected sentiment for the sentence, one of POSITIVE, NEUTRAL, NEGATIVE
+        # @type [Transcripts::Sentiment] The detected sentiment for the sentence, one of POSITIVE, NEUTRAL, NEGATIVE
         @sentiment = sentiment
         # @type [Float] The confidence score for the detected sentiment of the sentence, from 0 to 1
         @confidence = confidence
@@ -40,11 +40,11 @@ module AssemblyAI
       # @return [Transcripts::SentimentAnalysisResult]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        parsed_json = JSON.parse(json_object)
+        JSON.parse(json_object)
         text = struct.text
         start = struct.start
         end_ = struct.end
-        sentiment = Transcripts::SENTIMENT.key(parsed_json["sentiment"]) || parsed_json["sentiment"]
+        sentiment = struct.sentiment
         confidence = struct.confidence
         speaker = struct.speaker
         new(text: text, start: start, end_: end_, sentiment: sentiment, confidence: confidence, speaker: speaker,
@@ -59,7 +59,7 @@ module AssemblyAI
           "text": @text,
           "start": @start,
           "end": @end_,
-          "sentiment": Transcripts::SENTIMENT[@sentiment] || @sentiment,
+          "sentiment": @sentiment,
           "confidence": @confidence,
           "speaker": @speaker
         }.to_json
@@ -73,7 +73,7 @@ module AssemblyAI
         obj.text.is_a?(String) != false || raise("Passed value for field obj.text is not the expected type, validation failed.")
         obj.start.is_a?(Integer) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
         obj.end_.is_a?(Integer) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
-        obj.sentiment.is_a?(Transcripts::SENTIMENT) != false || raise("Passed value for field obj.sentiment is not the expected type, validation failed.")
+        obj.sentiment.is_a?(Transcripts::Sentiment) != false || raise("Passed value for field obj.sentiment is not the expected type, validation failed.")
         obj.confidence.is_a?(Float) != false || raise("Passed value for field obj.confidence is not the expected type, validation failed.")
         obj.speaker&.is_a?(String) != false || raise("Passed value for field obj.speaker is not the expected type, validation failed.")
       end

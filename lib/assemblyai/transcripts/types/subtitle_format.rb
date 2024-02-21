@@ -2,7 +2,10 @@
 
 module AssemblyAI
   class Transcripts
-    # @type [SUBTITLE_FORMAT]
-    SUBTITLE_FORMAT = { srt: "srt", vtt: "vtt" }.freeze
+    # Format of the subtitles
+    class SubtitleFormat
+      SRT = "srt"
+      VTT = "vtt"
+    end
   end
 end
