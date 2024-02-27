@@ -15,7 +15,6 @@ class TestAssemblyAI < Minitest::Test
       transcript_task = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
       assert transcript_task.is_a? Async::Task
       transcript = transcript_task.wait
-      puts transcript.status
       assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
     end
   end
