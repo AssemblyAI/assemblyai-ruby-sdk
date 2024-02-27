@@ -26,7 +26,8 @@ module AssemblyAI
     # Create a transcript from an audio or video file that is accessible via a URL.
     # .transcribe polls for completion of the transcription, while the .submit function does not.
     #
-    # @param language_code [TRANSCRIPT_LANGUAGE_CODE]
+    # @param speech_model [Transcripts::SpeechModel]
+    # @param language_code [Transcripts::TranscriptLanguageCode]
     # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
     # @param format_text [Boolean] Enable Text Formatting, can be true or false
     # @param dual_channel [Boolean] Enable [Dual Channel](https://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription) transcription, can be true or false.
@@ -37,13 +38,13 @@ module AssemblyAI
     # @param audio_start_from [Integer] The point in time, in milliseconds, to begin transcribing in your media file
     # @param audio_end_at [Integer] The point in time, in milliseconds, to stop transcribing in your media file
     # @param word_boost [Array<String>] The list of custom vocabulary to boost transcription probability for
-    # @param boost_param [TRANSCRIPT_BOOST_PARAM] The word boost parameter value
+    # @param boost_param [Transcripts::TranscriptBoostParam] The word boost parameter value
     # @param filter_profanity [Boolean] Filter profanity from the transcribed text, can be true or false
     # @param redact_pii [Boolean] Redact PII from the transcribed text using the Redact PII model, can be true or false
     # @param redact_pii_audio [Boolean] Generate a copy of the original media file with spoken PII "beeped" out, can be true or false. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
-    # @param redact_pii_audio_quality [REDACT_PII_AUDIO_QUALITY] Controls the filetype of the audio created by redact_pii_audio. Currently supports mp3 (default) and wav. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
-    # @param redact_pii_policies [Array<Transcripts::PII_POLICY>] The list of PII Redaction policies to enable. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
-    # @param redact_pii_sub [SUBSTITUTION_POLICY]
+    # @param redact_pii_audio_quality [Transcripts::RedactPiiAudioQuality] Controls the filetype of the audio created by redact_pii_audio. Currently supports mp3 (default) and wav. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+    # @param redact_pii_policies [Array<Transcripts::PiiPolicy>] The list of PII Redaction policies to enable. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+    # @param redact_pii_sub [Transcripts::SubstitutionPolicy]
     # @param speaker_labels [Boolean] Enable [Speaker diarization](https://www.assemblyai.com/docs/models/speaker-diarization), can be true or false
     # @param speakers_expected [Integer] Tells the speaker label model how many speakers it should attempt to identify, up to 10. See [Speaker diarization](https://www.assemblyai.com/docs/models/speaker-diarization) for more details.
     # @param content_safety [Boolean] Enable [Content Moderation](https://www.assemblyai.com/docs/models/content-moderation), can be true or false
@@ -60,8 +61,8 @@ module AssemblyAI
     # @param speech_threshold [Float] Reject audio files that contain less than this fraction of speech.
     #   Valid values are in the range [0, 1] inclusive.
     # @param summarization [Boolean] Enable [Summarization](https://www.assemblyai.com/docs/models/summarization), can be true or false
-    # @param summary_model [SUMMARY_MODEL] The model to summarize the transcript
-    # @param summary_type [SUMMARY_TYPE] The type of summary
+    # @param summary_model [Transcripts::SummaryModel] The model to summarize the transcript
+    # @param summary_type [Transcripts::SummaryType] The type of summary
     # @param custom_topics [Boolean] Whether custom topics is enabled, either true or false
     # @param topics [Array<String>] The list of custom topics provided, if custom topics is enabled
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
@@ -81,7 +82,7 @@ module AssemblyAI
       timeout_in_seconds = polling_options.timeout / 1000 if polling_options.timeout.positive?
       loop do
         transcript = get(transcript_id: transcript_id)
-        if transcript.status == :completed || transcript.status == :error
+        if transcript.status == Transcripts::TranscriptStatus::COMPLETED || transcript.status == Transcripts::TranscriptStatus::ERROR
           return transcript
         elsif polling_options.timeout.positive? && Time.now - start_time > timeout_in_seconds
           raise StandardError, "Polling timeout"
@@ -99,7 +100,8 @@ module AssemblyAI
     # Create a transcript from an audio or video file that is accessible via a URL.
     # .transcribe polls for completion of the transcription, while the .submit function does not.
     #
-    # @param language_code [TRANSCRIPT_LANGUAGE_CODE]
+    # @param speech_model [Transcripts::SpeechModel]
+    # @param language_code [Transcripts::TranscriptLanguageCode]
     # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
     # @param format_text [Boolean] Enable Text Formatting, can be true or false
     # @param dual_channel [Boolean] Enable [Dual Channel](https://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription) transcription, can be true or false.
@@ -110,13 +112,13 @@ module AssemblyAI
     # @param audio_start_from [Integer] The point in time, in milliseconds, to begin transcribing in your media file
     # @param audio_end_at [Integer] The point in time, in milliseconds, to stop transcribing in your media file
     # @param word_boost [Array<String>] The list of custom vocabulary to boost transcription probability for
-    # @param boost_param [TRANSCRIPT_BOOST_PARAM] The word boost parameter value
+    # @param boost_param [Transcripts::TranscriptBoostParam] The word boost parameter value
     # @param filter_profanity [Boolean] Filter profanity from the transcribed text, can be true or false
     # @param redact_pii [Boolean] Redact PII from the transcribed text using the Redact PII model, can be true or false
     # @param redact_pii_audio [Boolean] Generate a copy of the original media file with spoken PII "beeped" out, can be true or false. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
-    # @param redact_pii_audio_quality [REDACT_PII_AUDIO_QUALITY] Controls the filetype of the audio created by redact_pii_audio. Currently supports mp3 (default) and wav. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
-    # @param redact_pii_policies [Array<Transcripts::PII_POLICY>] The list of PII Redaction policies to enable. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
-    # @param redact_pii_sub [SUBSTITUTION_POLICY]
+    # @param redact_pii_audio_quality [Transcripts::RedactPiiAudioQuality] Controls the filetype of the audio created by redact_pii_audio. Currently supports mp3 (default) and wav. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+    # @param redact_pii_policies [Array<Transcripts::PiiPolicy>] The list of PII Redaction policies to enable. See [PII redaction](https://www.assemblyai.com/docs/models/pii-redaction) for more details.
+    # @param redact_pii_sub [Transcripts::SubstitutionPolicy]
     # @param speaker_labels [Boolean] Enable [Speaker diarization](https://www.assemblyai.com/docs/models/speaker-diarization), can be true or false
     # @param speakers_expected [Integer] Tells the speaker label model how many speakers it should attempt to identify, up to 10. See [Speaker diarization](https://www.assemblyai.com/docs/models/speaker-diarization) for more details.
     # @param content_safety [Boolean] Enable [Content Moderation](https://www.assemblyai.com/docs/models/content-moderation), can be true or false
@@ -133,14 +135,14 @@ module AssemblyAI
     # @param speech_threshold [Float] Reject audio files that contain less than this fraction of speech.
     #   Valid values are in the range [0, 1] inclusive.
     # @param summarization [Boolean] Enable [Summarization](https://www.assemblyai.com/docs/models/summarization), can be true or false
-    # @param summary_model [SUMMARY_MODEL] The model to summarize the transcript
-    # @param summary_type [SUMMARY_TYPE] The type of summary
+    # @param summary_model [Transcripts::SummaryModel] The model to summarize the transcript
+    # @param summary_type [Transcripts::SummaryType] The type of summary
     # @param custom_topics [Boolean] Whether custom topics is enabled, either true or false
     # @param topics [Array<String>] The list of custom topics provided, if custom topics is enabled
     # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
     # @param audio_url [String] The URL of the audio or video file to transcribe.
     # @param request_options [RequestOptions]
-    # @param polling_options [PollingOptions] Configuration options for polling requests.
+    # @param polling_options [Transcripts::PollingOptions] Configuration options for polling requests.
     # @return [Transcripts::Transcript]
     def transcribe(audio_url:, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil, webhook_url: nil,
                    webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil, request_options: nil, polling_options: Transcripts::PollingOptions.new)
@@ -157,7 +159,7 @@ module AssemblyAI
         timeout_in_seconds = polling_options.timeout / 1000 if polling_options.timeout.positive?
         loop do
           transcript = get(transcript_id: transcript_id).wait
-          if transcript.status == :completed || transcript.status == :error
+          if transcript.status == Transcripts::TranscriptStatus::COMPLETED || transcript.status == Transcripts::TranscriptStatus::ERROR
             break transcript
           elsif polling_options.timeout.positive? && Time.now - start_time > timeout_in_seconds
             raise StandardError, "Polling timeout"
