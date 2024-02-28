@@ -58,10 +58,10 @@ You can configure the polling interval and polling timeout using these options:
 ```ruby
 transcript = client.transcripts.transcribe(
   audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a",
-  AssemblyAI::Transcripts::PollingInterval.new(
-    // How frequently the transcript is polled in ms. Defaults to 3000.
+  AssemblyAI::Transcripts::PollingOptions.new(
+    # How frequently the transcript is polled in ms. Defaults to 3000.
     interval: 1000,
-    // How long to wait in ms until the "Polling timeout" error is thrown. Defaults to infinite (-1).
+    # How long to wait in ms until the "Polling timeout" error is thrown. Defaults to infinite (-1).
     timeout: 5000,
   )
 );
