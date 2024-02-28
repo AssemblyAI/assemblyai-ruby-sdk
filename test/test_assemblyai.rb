@@ -8,14 +8,14 @@ class TestAssemblyAI < Minitest::Test
   def test_polling
     client = AssemblyAI::Client.new(api_key: "YOUR_API_KEY")
     transcript = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
-    assert transcript.status == :completed
+    assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
 
     client = AssemblyAI::AsyncClient.new(api_key: "YOUR_API_KEY")
     Sync do
       transcript_task = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
       assert transcript_task.is_a? Async::Task
       transcript = transcript_task.wait
-      assert transcript.status == :completed
+      assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
     end
   end
 
