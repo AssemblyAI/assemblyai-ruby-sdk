@@ -38,9 +38,9 @@ gem install assemblyai
 Import the AssemblyAI package and create an AssemblyAI object with your API key:
 
 ```ruby
-require "assemblyai"
+require 'assemblyai'
 
-client = AssemblyAI::Client.new(api_key: "YOUR_API_KEY")
+client = AssemblyAI::Client.new(api_key: 'YOUR_API_KEY')
 ```
 You can now use the `client` object to interact with the AssemblyAI API.
 
@@ -48,8 +48,8 @@ You can now use the `client` object to interact with the AssemblyAI API.
 
 ```ruby
 transcript = client.transcripts.transcribe(
-  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a",
-);
+  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a',
+)
 ```
 
 `transcribe` queues a transcription job and polls it until the `status` is `completed` or `error`.
@@ -57,22 +57,21 @@ You can configure the polling interval and polling timeout using these options:
 
 ```ruby
 transcript = client.transcripts.transcribe(
-  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a",
-  AssemblyAI::Transcripts::PollingInterval.new(
-    // How frequently the transcript is polled in ms. Defaults to 3000.
+  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a',
+  polling_options: AssemblyAI::Transcripts::PollingOptions.new(
+    #  How frequently the transcript is polled in ms. Defaults to 3000.
     interval: 1000,
-    // How long to wait in ms until the "Polling timeout" error is thrown. Defaults to infinite (-1).
-    timeout: 5000,
+    #  How long to wait in ms until the 'Polling timeout' error is thrown. Defaults to infinite (-1).
+    timeout: 5000
   )
-);
+)
 ```
 
 If you don't want to wait until the transcript is ready, you can use `submit`:
 
 ```ruby
-# Transcribe file at remote URL
 transcript = client.transcripts.submit(
-  audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a"
+  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a'
 )
 ```
 
@@ -92,6 +91,17 @@ This will return a page of transcripts you created.
 page = client.transcripts.list
 ```
 
+You can also paginate over all pages.
+
+```ruby
+next_page_url = nil
+loop do
+  page = client.transcripts.list_by_url(url: next_page_url)
+  next_page_url = page.page_details.next_url
+  break if next_page_url.nil?
+end
+```
+
 ## Delete a transcript
 
 ```ruby
@@ -106,10 +116,10 @@ Custom Summary:
 
 ```ruby
 response = client.lemur.summary(
-  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
-  answer_format: "one sentence",
+  transcript_ids: ['0d295578-8c75-421a-885a-2c487f188927'],
+  answer_format: 'one sentence',
   context: {
-    "speakers": ["Alex", "Bob"]
+    'speakers': ['Alex', 'Bob']
   }
 )
 ```
@@ -118,11 +128,11 @@ Question & Answer:
 
 ```ruby
 response = client.lemur.question_answer(
-  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
+  transcript_ids: ['0d295578-8c75-421a-885a-2c487f188927'],
   questions: [
     {
-      question: "What are they discussing?",
-      answer_format: "text"
+      question: 'What are they discussing?',
+      answer_format: 'text'
     }
   ]
 )
@@ -132,7 +142,7 @@ Action Items:
 
 ```ruby
 response = client.lemur.action_items(
-  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"]
+  transcript_ids: ['0d295578-8c75-421a-885a-2c487f188927']
 )
 ```
 
@@ -140,7 +150,7 @@ Custom Task:
 
 ```ruby
 response = client.lemur.task(
-  transcript_ids: ["0d295578-8c75-421a-885a-2c487f188927"],
-  prompt: "Write a haiku about this conversation."
+  transcript_ids: ['0d295578-8c75-421a-885a-2c487f188927'],
+  prompt: 'Write a haiku about this conversation.'
 )
 ```
