@@ -6,5 +6,6 @@ test/
 <!-- Allow for the polling client -->
 lib/assemblyai.rb
 lib/assemblyai/transcripts/polling_client.rb
+lib/assemblyai/transcripts/listing_client.rb
 lib/assemblyai/transcripts/types/polling_options.rb
 
