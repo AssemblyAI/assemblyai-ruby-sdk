@@ -1,23 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "../../requests"
-require_relative "types/transcript_status"
 require_relative "types/transcript_list"
-require_relative "types/transcript_language_code"
-require_relative "types/transcript_boost_param"
-require_relative "types/redact_pii_audio_quality"
-require_relative "types/pii_policy"
-require_relative "types/substitution_policy"
-require_relative "types/transcript_custom_spelling"
-require_relative "types/summary_model"
-require_relative "types/summary_type"
-require_relative "types/transcript"
-require_relative "types/subtitle_format"
-require_relative "types/sentences_response"
-require_relative "types/paragraphs_response"
-require_relative "types/word_search_response"
-require_relative "types/redacted_audio_response"
-require_relative "types/polling_options"
 require "async"
 
 module AssemblyAI
