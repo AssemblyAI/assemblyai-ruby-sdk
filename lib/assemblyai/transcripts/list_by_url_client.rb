@@ -8,11 +8,16 @@ module AssemblyAI
 
   # :nodoc:
   class TranscriptsClient
-    # Retrieve a list of transcripts you created
+    # Retrieve a list of transcripts you created, this is used for pagination to easily retrieve the next page of transcripts
     #
     # @param url [String] The URL to retrieve the transcript list from
     # @param request_options [RequestOptions]
     # @return [Transcripts::TranscriptList]
+    #
+    # @example Retrieve the next page of results
+    #   client = AssemblyAI::Client.new(api_key: "YOUR_API_KEY")
+    #   transcript_list = client.transcripts.list(limit: 1)
+    #   client.transcripts.list_by_url(url: transcript_list.page_details.next_url)
     def list_by_url(url: nil, request_options: nil)
       if url.nil?
         url = "/v2/transcript"
@@ -34,6 +39,13 @@ module AssemblyAI
     # @param url [String] The URL to retrieve the transcript list from
     # @param request_options [RequestOptions]
     # @return [Transcripts::TranscriptList]
+    #
+    # @example Retrieve the next page of results
+    #   client = AssemblyAI::AsyncClient.new(api_key: "YOUR_API_KEY")
+    #   Sync do
+    #     transcript_list = client.transcripts.list(limit: 1).wait
+    #     client.transcripts.list_by_url(url: transcript_list.page_details.next_url)
+    #   end
     def list_by_url(url: nil, request_options: nil)
       Async do
         if url.nil?

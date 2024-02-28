@@ -6,6 +6,7 @@ require_relative "requests"
 require_relative "assemblyai/files/client"
 require_relative "assemblyai/transcripts/client"
 require_relative "assemblyai/transcripts/polling_client"
+require_relative "assemblyai/transcripts/list_by_url_client"
 require_relative "assemblyai/realtime/client"
 require_relative "assemblyai/lemur/client"
 
