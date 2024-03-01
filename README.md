@@ -48,31 +48,7 @@ You can now use the `client` object to interact with the AssemblyAI API.
 # Usage
 
 ## Speech-To-Text
-<details>
-  <summary>Transcribe a local audio file</summary>
-
-```ruby
-data = File.open('/path/to/your/file').read
-encoded = Base64.encode64(data)
-uploaded_file = client.files.upload(request: encoded)
-
-transcript = client.transcripts.transcribe(audio_url: uploaded_file.upload_url)
-puts transcript.text
-```
-
-`transcribe` queues a transcription job and polls it until the `status` is `completed` or `error`.
-
-If you don't want to wait until the transcript is ready, you can use `submit`:
-
-```ruby
-transcript = client.transcripts.submit(
-  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a'
-)
-```
-
-</details>
-
-<details>
+<details open>
   <summary>Transcribe an audio file with a public URL</summary>
 
 ```ruby
@@ -92,6 +68,28 @@ transcript = client.transcripts.submit(
 ```
 
 </details>
+<details>
+  <summary>Transcribe a local audio file</summary>
+
+```ruby
+data = File.open('/path/to/your/file').read
+encoded = Base64.encode64(data)
+uploaded_file = client.files.upload(request: encoded)
+
+transcript = client.transcripts.transcribe(audio_url: uploaded_file.upload_url)
+puts transcript.text
+```
+
+`transcribe` queues a transcription job and polls it until the `status` is `completed` or `error`.
+
+If you don't want to wait until the transcript is ready, you can use `submit`:
+
+```ruby
+transcript = client.transcripts.submit(audio_url: uploaded_file.upload_url)
+```
+
+</details>
+
 <details>
   <summary>Enable additional AI models</summary>
 
@@ -199,12 +197,17 @@ response = client.transcripts.delete(transcript_id: transcript.id)
 
 Call [LeMUR endpoints](https://www.assemblyai.com/docs/api-reference/lemur) to apply LLMs to your transcript.
 
+<details open>
+<summary>Prompt your audio with LeMUR</summary>
+
 ```ruby
 response = client.lemur.task(
   transcript_ids: ['0d295578-8c75-421a-885a-2c487f188927'],
   prompt: 'Write a haiku about this conversation.'
 )
 ```
+
+</details>
 
 <details>
 <summary>Summarize with LeMUR</summary>
