@@ -11,12 +11,13 @@
 
 # AssemblyAI Ruby SDK
 
-The AssemblyAI Ruby SDK provides an easy-to-use interface for interacting with the AssemblyAI API, which supports async, audio intelligence models, as well as the latest LeMUR models.
+The AssemblyAI Ruby SDK provides an easy-to-use interface for interacting with the AssemblyAI API, which supports async,
+audio intelligence models, as well as the latest LeMUR models.
 We're working on adding real-time transcription to the Ruby SDK.
 
 # Documentation
 
-Visit our [AssemblyAI API Documentation](https://www.assemblyai.com/docs) to get an overview of our models!
+Visit the [AssemblyAI documentation](https://www.assemblyai.com/docs) for step-by-step instructions and a lot more details about our AI models and API.
 
 # Quick Start
 
@@ -34,7 +35,6 @@ If bundler is not being used to manage dependencies, install the gem by executin
 gem install assemblyai
 ```
 
-## Usage
 Import the AssemblyAI package and create an AssemblyAI object with your API key:
 
 ```ruby
@@ -42,30 +42,25 @@ require 'assemblyai'
 
 client = AssemblyAI::Client.new(api_key: 'YOUR_API_KEY')
 ```
+
 You can now use the `client` object to interact with the AssemblyAI API.
 
-## Create a transcript
+# Usage
+
+## Speech-To-Text
+<details>
+  <summary>Transcribe a local audio file</summary>
 
 ```ruby
-transcript = client.transcripts.transcribe(
-  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a',
-)
+data = File.open('/path/to/your/file').read
+encoded = Base64.encode64(data)
+uploaded_file = client.files.upload(request: encoded)
+
+transcript = client.transcripts.transcribe(audio_url: uploaded_file.upload_url)
+puts transcript.text
 ```
 
 `transcribe` queues a transcription job and polls it until the `status` is `completed` or `error`.
-You can configure the polling interval and polling timeout using these options:
-
-```ruby
-transcript = client.transcripts.transcribe(
-  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a',
-  polling_options: AssemblyAI::Transcripts::PollingOptions.new(
-    #  How frequently the transcript is polled in ms. Defaults to 3000.
-    interval: 1000,
-    #  How long to wait in ms until the 'Polling timeout' error is thrown. Defaults to infinite (-1).
-    timeout: 5000
-  )
-)
-```
 
 If you don't want to wait until the transcript is ready, you can use `submit`:
 
@@ -75,44 +70,144 @@ transcript = client.transcripts.submit(
 )
 ```
 
-## Get a transcript
+</details>
 
-This will return the transcript object in its current state. If the transcript is still processing, the `status` field will be `queued` or `processing`. Once the transcript is complete, the `status` field will be `completed`.
+<details>
+  <summary>Transcribe an audio file with a public URL</summary>
+
+```ruby
+transcript = client.transcripts.transcribe(
+  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a',
+)
+```
+
+`transcribe` queues a transcription job and polls it until the `status` is `completed` or `error`.
+
+If you don't want to wait until the transcript is ready, you can use `submit`:
+
+```ruby
+transcript = client.transcripts.submit(
+  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a'
+)
+```
+
+</details>
+<details>
+  <summary>Enable additional AI models</summary>
+
+You can extract even more insights from the audio by enabling any of
+our [AI models](https://www.assemblyai.com/docs/audio-intelligence) using _transcription options_.
+For example, here's how to
+enable [Speaker diarization](https://www.assemblyai.com/docs/speech-to-text/speaker-diarization) model to detect who
+said what.
+
+```ruby
+transcript = client.transcripts.transcribe(
+  audio_url: audio_url,
+  speaker_labels: true
+)
+
+transcript.utterances.each do |utterance|
+  printf('Speaker %<speaker>s: %<text>s', speaker: utterance.speaker, text: utterance.text)
+end
+```
+
+</details>
+
+<details>
+  <summary>Get a transcript</summary>
+
+This will return the transcript object in its current state. If the transcript is still processing, the `status` field
+will be `queued` or `processing`. Once the transcript is complete, the `status` field will be `completed`.
 
 ```ruby
 transcript = client.transcripts.get(transcript_id: transcript.id)
 ```
 
-## List transcripts
+</details>
 
+<details>
+  <summary>Get sentences and paragraphs</summary>
+
+```ruby
+sentences = client.transcripts.get_sentences(transcript_id: transcript.id)
+p sentences
+
+paragraphs = client.transcripts.get_paragraphs(transcript_id: transcript.id)
+p paragraphs
+```
+
+</details>
+
+<details>
+  <summary>Get subtitles</summary>
+
+```ruby
+srt = client.transcripts.get_subtitles(
+  transcript_id: transcript.id,
+  subtitle_format: AssemblyAI::Transcripts::SubtitleFormat::SRT
+)
+srt = client.transcripts.get_subtitles(
+  transcript_id: transcript.id,
+  subtitle_format: AssemblyAI::Transcripts::SubtitleFormat::SRT,
+  chars_per_caption: 32
+)
+
+vtt = client.transcripts.get_subtitles(
+  transcript_id: transcript.id,
+  subtitle_format: AssemblyAI::Transcripts::SubtitleFormat::VTT
+)
+vtt = client.transcripts.get_subtitles(
+  transcript_id: transcript.id,
+  subtitle_format: AssemblyAI::Transcripts::SubtitleFormat::VTT,
+  chars_per_caption: 32
+)
+```
+
+</details>
+
+<details>
+<summary>List transcripts</summary>
 This will return a page of transcripts you created.
 
 ```ruby
 page = client.transcripts.list
 ```
 
-You can also paginate over all pages.
+You can pass parameters to `.list` to filter the transcripts.
+To paginate over all pages, use the `.list_by_url` method.
 
 ```ruby
-next_page_url = nil
 loop do
-  page = client.transcripts.list_by_url(url: next_page_url)
-  next_page_url = page.page_details.next_url
-  break if next_page_url.nil?
+  page = client.transcripts.list_by_url(url: page.page_details.next_url)
+  break if page.page_details.next_url.nil?
 end
 ```
 
-## Delete a transcript
+</details>
+
+<details>
+<summary>Delete a transcript</summary>
 
 ```ruby
-res = client.transcripts.delete(transcript_id: transcript.id)
+response = client.transcripts.delete(transcript_id: transcript.id)
 ```
 
-## Use LeMUR
+</details>
 
-Call [LeMUR endpoints](https://www.assemblyai.com/docs/API%20reference/lemur) to summarize, ask questions, generate action items, or run a custom task.
+## Apply LLMs to your audio with LeMUR
 
-Custom Summary:
+Call [LeMUR endpoints](https://www.assemblyai.com/docs/api-reference/lemur) to apply LLMs to your transcript.
+
+```ruby
+response = client.lemur.task(
+  transcript_ids: ['0d295578-8c75-421a-885a-2c487f188927'],
+  prompt: 'Write a haiku about this conversation.'
+)
+```
+
+<details>
+<summary>Summarize with LeMUR</summary>
 
 ```ruby
 response = client.lemur.summary(
@@ -124,7 +219,10 @@ response = client.lemur.summary(
 )
 ```
 
-Question & Answer:
+</details>
+
+<details>
+<summary>Ask questions</summary>
 
 ```ruby
 response = client.lemur.question_answer(
@@ -138,7 +236,9 @@ response = client.lemur.question_answer(
 )
 ```
 
-Action Items:
+</details>
+<details>
+<summary>Generate action items</summary>
 
 ```ruby
 response = client.lemur.action_items(
@@ -146,11 +246,13 @@ response = client.lemur.action_items(
 )
 ```
 
-Custom Task:
+</details>
+<details>
+<summary>Delete LeMUR request</summary>
 
 ```ruby
-response = client.lemur.task(
-  transcript_ids: ['0d295578-8c75-421a-885a-2c487f188927'],
-  prompt: 'Write a haiku about this conversation.'
-)
+response = client.lemur.task(...)
+deletion_response = client.lemur.purge_request_data(request_id: response.request_id)
 ```
+
+</details>
