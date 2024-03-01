@@ -21,8 +21,6 @@ Visit the [AssemblyAI documentation](https://www.assemblyai.com/docs) for step-b
 
 # Quick Start
 
-## Installation
-
 Install the gem and add to the application's Gemfile by executing:
 
 ```bash
