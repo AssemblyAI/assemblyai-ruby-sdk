@@ -5,7 +5,6 @@ require_relative "types/transcript_list"
 require "async"
 
 module AssemblyAI
-
   # :nodoc:
   class TranscriptsClient
     # Retrieve a list of transcripts you created, this is used for pagination to easily retrieve the next page of transcripts
@@ -19,9 +18,7 @@ module AssemblyAI
     #   transcript_list = client.transcripts.list(limit: 1)
     #   client.transcripts.list_by_url(url: transcript_list.page_details.next_url)
     def list_by_url(url: nil, request_options: nil)
-      if url.nil?
-        url = "/v2/transcript"
-      end
+      url = "/v2/transcript" if url.nil?
       response = @request_client.conn.get(url) do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
@@ -33,7 +30,6 @@ module AssemblyAI
 
   # :nodoc:
   class AsyncTranscriptsClient
-
     # Retrieve a list of transcripts you created
     #
     # @param url [String] The URL to retrieve the transcript list from
@@ -48,9 +44,7 @@ module AssemblyAI
     #   end
     def list_by_url(url: nil, request_options: nil)
       Async do
-        if url.nil?
-          url = "/v2/transcript"
-        end
+        url = "/v2/transcript" if url.nil?
         response = @request_client.conn.get(url) do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?

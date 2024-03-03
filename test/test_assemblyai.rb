@@ -18,7 +18,7 @@ class TestAssemblyAI < Minitest::Test
 
     while transcript_list.page_details.next_url
       transcript_list = client.transcripts.list_by_url(url: transcript_list.page_details.next_url)
-      
+
       count = 0
       client.transcripts.list.transcripts.each do |transcript|
         assert !transcript.id.nil?
@@ -63,8 +63,12 @@ class TestAssemblyAI < Minitest::Test
     client = AssemblyAI::Client.new(api_key: "YOUR API KEY")
     assert !client.lemur.summary(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"]).response.nil?
 
-    assert !client.lemur.question_answer(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"], questions: [{question: "What are they discussing?", answer_format: "text"}]).response.nil?
+    assert !client.lemur.question_answer(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"],
+                                         questions: [{
+                                           question: "What are they discussing?", answer_format: "text"
+                                         }]).response.nil?
 
-    assert !client.lemur.task(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"], prompt: "Write a haiku about this conversation").response.nil?
+    assert !client.lemur.task(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"],
+                              prompt: "Write a haiku about this conversation").response.nil?
   end
 end
