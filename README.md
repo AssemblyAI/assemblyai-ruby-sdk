@@ -15,11 +15,11 @@ The AssemblyAI Ruby SDK provides an easy-to-use interface for interacting with t
 audio intelligence models, as well as the latest LeMUR models.
 We're working on adding real-time transcription to the Ruby SDK.
 
-# Documentation
+## Documentation
 
 Visit the [AssemblyAI documentation](https://www.assemblyai.com/docs) for step-by-step instructions and a lot more details about our AI models and API.
 
-# Quick Start
+## Quickstart
 
 Install the gem and add to the application's Gemfile by executing:
 
@@ -42,8 +42,6 @@ client = AssemblyAI::Client.new(api_key: 'YOUR_API_KEY')
 ```
 
 You can now use the `client` object to interact with the AssemblyAI API.
-
-# Usage
 
 ## Speech-To-Text
 <details open>
