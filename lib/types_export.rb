@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "assemblyai/files/types/uploaded_file"
+require_relative "assemblyai/transcripts/types/transcript_ready_notification"
 require_relative "assemblyai/transcripts/types/redacted_audio_response"
 require_relative "assemblyai/transcripts/types/redacted_audio_status"
 require_relative "assemblyai/transcripts/types/subtitle_format"
@@ -20,6 +21,7 @@ require_relative "assemblyai/transcripts/types/pii_policy"
 require_relative "assemblyai/transcripts/types/speech_model"
 require_relative "assemblyai/transcripts/types/transcript_language_code"
 require_relative "assemblyai/transcripts/types/transcript_status"
+require_relative "assemblyai/transcripts/types/transcript_ready_status"
 require_relative "assemblyai/transcripts/types/transcript"
 require_relative "assemblyai/transcripts/types/topic_detection_model_result"
 require_relative "assemblyai/transcripts/types/content_safety_labels_result"
