@@ -1,11 +1,12 @@
 # Specify files that shouldn't be modified by Fern
 
 README.md
+.gitignore
 test/
 
 <!-- Allow for the polling client -->
 lib/assemblyai.rb
 lib/assemblyai/transcripts/polling_client.rb
-lib/assemblyai/transcripts/listing_client.rb
+lib/assemblyai/transcripts/list_by_url_client.rb
 lib/assemblyai/transcripts/types/polling_options.rb
 
