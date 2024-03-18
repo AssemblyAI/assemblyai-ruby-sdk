@@ -13,8 +13,8 @@ module AssemblyAI
 
       # @param status [Transcripts::AudioIntelligenceModelStatus] The status of the Content Moderation model. Either success, or unavailable in the rare case that the model failed.
       # @param results [Array<Transcripts::ContentSafetyLabelResult>]
-      # @param summary [Hash{String => String}] A summary of the Content Moderation confidence results for the entire audio file
-      # @param severity_score_summary [Hash{String => String}] A summary of the Content Moderation severity results for the entire audio file
+      # @param summary [Hash{String => Float}] A summary of the Content Moderation confidence results for the entire audio file
+      # @param severity_score_summary [Hash{String => Transcripts::SeverityScoreSummary}] A summary of the Content Moderation severity results for the entire audio file
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::ContentSafetyLabelsResult]
       def initialize(status:, results:, summary:, severity_score_summary:, additional_properties: nil)
@@ -22,9 +22,9 @@ module AssemblyAI
         @status = status
         # @type [Array<Transcripts::ContentSafetyLabelResult>]
         @results = results
-        # @type [Hash{String => String}] A summary of the Content Moderation confidence results for the entire audio file
+        # @type [Hash{String => Float}] A summary of the Content Moderation confidence results for the entire audio file
         @summary = summary
-        # @type [Hash{String => String}] A summary of the Content Moderation severity results for the entire audio file
+        # @type [Hash{String => Transcripts::SeverityScoreSummary}] A summary of the Content Moderation severity results for the entire audio file
         @severity_score_summary = severity_score_summary
         # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
@@ -43,7 +43,10 @@ module AssemblyAI
           Transcripts::ContentSafetyLabelResult.from_json(json_object: v)
         end
         summary = struct.summary
-        severity_score_summary = struct.severity_score_summary
+        severity_score_summary = parsed_json["severity_score_summary"]&.transform_values do |_k, v|
+          v = v.to_json
+          Transcripts::SeverityScoreSummary.from_json(json_object: v)
+        end
         new(status: status, results: results, summary: summary, severity_score_summary: severity_score_summary,
             additional_properties: struct)
       end

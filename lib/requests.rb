@@ -19,8 +19,8 @@ module AssemblyAI
       @base_url = environment
       @headers = {
         "X-Fern-Language": "Ruby",
-        "X-Fern-SDK-Name": "AssemblyAI",
-        "X-Fern-SDK-Version": "1.0.0-beta.3",
+        "X-Fern-SDK-Name": "assemblyai",
+        "X-Fern-SDK-Version": "1.0.0-beta.4",
         "Authorization": api_key.to_s
       }
       @conn = Faraday.new(@base_url, headers: @headers) do |faraday|
@@ -45,8 +45,8 @@ module AssemblyAI
       @base_url = environment
       @headers = {
         "X-Fern-Language": "Ruby",
-        "X-Fern-SDK-Name": "AssemblyAI",
-        "X-Fern-SDK-Version": "1.0.0-beta.3",
+        "X-Fern-SDK-Name": "assemblyai",
+        "X-Fern-SDK-Version": "1.0.0-beta.4",
         "Authorization": api_key.to_s
       }
       @conn = Faraday.new(@base_url, headers: @headers) do |faraday|
