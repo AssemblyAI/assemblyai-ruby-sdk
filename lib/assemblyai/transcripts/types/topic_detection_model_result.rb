@@ -13,7 +13,7 @@ module AssemblyAI
 
       # @param status [Transcripts::AudioIntelligenceModelStatus] The status of the Topic Detection model. Either success, or unavailable in the rare case that the model failed.
       # @param results [Array<Transcripts::TopicDetectionResult>] An array of results for the Topic Detection model
-      # @param summary [Hash{String => String}] The overall relevance of topic to the entire audio file
+      # @param summary [Hash{String => Float}] The overall relevance of topic to the entire audio file
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::TopicDetectionModelResult]
       def initialize(status:, results:, summary:, additional_properties: nil)
@@ -21,7 +21,7 @@ module AssemblyAI
         @status = status
         # @type [Array<Transcripts::TopicDetectionResult>] An array of results for the Topic Detection model
         @results = results
-        # @type [Hash{String => String}] The overall relevance of topic to the entire audio file
+        # @type [Hash{String => Float}] The overall relevance of topic to the entire audio file
         @summary = summary
         # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
