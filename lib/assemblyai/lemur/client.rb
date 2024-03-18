@@ -28,7 +28,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
@@ -66,7 +66,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
@@ -104,7 +104,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
@@ -146,7 +146,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
@@ -211,7 +211,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
@@ -251,7 +251,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
@@ -291,7 +291,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
@@ -335,7 +335,7 @@ module AssemblyAI
     #   Use either transcript_ids or input_text as input into LeMUR.
     # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
     #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param context [String, Hash{String => String}] Context to provide the model. This can be a string or a free-form JSON value.
+    # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
     #   Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
