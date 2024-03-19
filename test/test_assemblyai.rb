@@ -7,7 +7,7 @@ require "async"
 class TestAssemblyAI < Minitest::Test
   def test_init
     # this test verifies that the SDK can be imported/initialized
-    client = AssemblyAI::Client.new(api_key: "YOUR API KEY")
+    AssemblyAI::Client.new(api_key: "YOUR API KEY")
   end
 
   def test_pagination

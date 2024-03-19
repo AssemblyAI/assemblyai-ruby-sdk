@@ -16,7 +16,7 @@ jobs:
       - run: bundle install
 
       - name: Rubocop
-        run: rubocop
+        run: bundle exec rubocop
 
       - name: Test
         run: bundle exec ruby test/test_assemblyai.rb
