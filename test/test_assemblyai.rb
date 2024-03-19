@@ -5,7 +5,13 @@ require "async"
 
 # Basic AssemblyAI tests
 class TestAssemblyAI < Minitest::Test
+  def test_init
+    # this test verifies that the SDK can be imported/initialized
+    client = AssemblyAI::Client.new(api_key: "YOUR API KEY")
+  end
+
   def test_pagination
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: "YOUR API KEY")
     transcript_list = client.transcripts.list
 
@@ -29,6 +35,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_polling
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: "YOUR API KEY")
     transcript = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
     assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
@@ -43,6 +50,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_transcribe
+    skip("Integration tests not enabled")
     # Transcribe
     client = AssemblyAI::Client.new(api_key: "YOUR API KEY")
 
@@ -60,6 +68,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_lemur
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: "YOUR API KEY")
     assert !client.lemur.summary(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"]).response.nil?
 

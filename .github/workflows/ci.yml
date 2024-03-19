@@ -1,9 +1,8 @@
-name: Publish
+name: CI
 
 on: [ push ]
 jobs:
-  publish:
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -21,11 +20,3 @@ jobs:
 
       - name: Test
         run: bundle exec ruby test/test_assemblyai.rb
-
-      - name: Build and Push Gem
-        env:
-          GEM_HOST_API_KEY: ${{ secrets.RUBY_GEMS_API_KEY }}
-        run: |
-          gem build assemblyai.gemspec
-          
-          gem push assemblyai-*.gem --host https://rubygems.org/
