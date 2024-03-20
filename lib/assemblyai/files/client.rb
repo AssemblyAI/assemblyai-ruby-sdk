@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "faraday"
 require_relative "../../requests"
 require_relative "types/uploaded_file"
 require "async"
