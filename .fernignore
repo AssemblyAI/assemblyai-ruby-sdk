@@ -3,6 +3,8 @@
 README.md
 .gitignore
 test/
+.rubocop.yml
+.github
 
 <!-- Allow for the polling client -->
 lib/assemblyai.rb
