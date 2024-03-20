@@ -17,7 +17,7 @@ module AssemblyAI
 
     # Upload your media file directly to the AssemblyAI API if it isn't accessible via a URL already.
     #
-    # @param request [String] Base64 encoded bytes
+    # @param request [String, IO] Base64 encoded bytes, or an IO object (e.g. Faraday::UploadIO, etc.)
     # @param request_options [RequestOptions]
     # @return [Files::UploadedFile]
     def upload(request:, request_options: nil)
@@ -26,7 +26,7 @@ module AssemblyAI
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
         req.headers["Content-Type"] = "application/octet-stream"
-        req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
+        req.body = request
       end
       Files::UploadedFile.from_json(json_object: response.body)
     end
@@ -44,7 +44,7 @@ module AssemblyAI
 
     # Upload your media file directly to the AssemblyAI API if it isn't accessible via a URL already.
     #
-    # @param request [String] Base64 encoded bytes
+    # @param request [String, IO] Base64 encoded bytes, or an IO object (e.g. Faraday::UploadIO, etc.)
     # @param request_options [RequestOptions]
     # @return [Files::UploadedFile]
     def upload(request:, request_options: nil)
@@ -54,7 +54,7 @@ module AssemblyAI
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
           req.headers["Content-Type"] = "application/octet-stream"
-          req.body = { **(request || {}), **(request_options&.additional_body_parameters || {}) }.compact
+          req.body = request
         end
         Files::UploadedFile.from_json(json_object: response.body)
       end
