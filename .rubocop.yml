@@ -1,8 +1,6 @@
 AllCops:
   TargetRubyVersion: 2.7
-  NewCops: enable
-
-
+  
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
@@ -35,22 +33,4 @@ Metrics/CyclomaticComplexity:
   Enabled: false
 
 Metrics/PerceivedComplexity:
-  Enabled: false
-
-Layout/LineLength:
-  Enabled: false
-
-Style/Documentation:
-  Enabled: false
-
-Lint/SymbolConversion:
-  Enabled: false
-
-Style/OpenStructUse:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Gemspec/RequireMFA:
   Enabled: false
