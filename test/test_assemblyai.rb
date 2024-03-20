@@ -5,10 +5,9 @@ require "async"
 
 # Basic AssemblyAI tests
 class TestAssemblyAI < Minitest::Test
-
   # @return [String] ASSEMBLYAI API key
   def api_key
-    ENV["ASSEMBLYAI_API_KEY"]
+    ENV.fetch("ASSEMBLYAI_API_KEY", nil)
   end
 
   def test_upload_file_with_file
@@ -102,8 +101,8 @@ class TestAssemblyAI < Minitest::Test
 
     assert !client.lemur.question_answer(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"],
                                          questions: [{
-                                                       question: "What are they discussing?", answer_format: "text"
-                                                     }]).response.nil?
+                                           question: "What are they discussing?", answer_format: "text"
+                                         }]).response.nil?
 
     assert !client.lemur.task(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"],
                               prompt: "Write a haiku about this conversation").response.nil?
