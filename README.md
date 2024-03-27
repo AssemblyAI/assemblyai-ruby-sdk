@@ -169,12 +169,12 @@ page = client.transcripts.list
 ```
 
 You can pass parameters to `.list` to filter the transcripts.
-To paginate over all pages, use the `.list_by_url` method.
+To paginate over all pages, subsequently, use the `.list_by_url` method.
 
 ```ruby
 loop do
-  page = client.transcripts.list_by_url(url: page.page_details.next_url)
-  break if page.page_details.next_url.nil?
+  page = client.transcripts.list_by_url(url: page.page_details.prev_url)
+  break if page.page_details.prev_url.nil?
 end
 ```
 
