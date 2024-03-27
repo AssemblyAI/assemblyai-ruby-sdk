@@ -68,9 +68,9 @@ transcript = client.transcripts.submit(
   <summary>Transcribe a local audio file</summary>
 
 ```ruby
-data = File.open('/path/to/your/file').read
-encoded = Base64.encode64(data)
-uploaded_file = client.files.upload(request: encoded)
+uploaded_file = client.files.upload(file: '/path/to/your/file')
+# You can also pass an IO object or base64 string
+# uploaded_file = client.files.upload(file: File.new('/path/to/your/file')
 
 transcript = client.transcripts.transcribe(audio_url: uploaded_file.upload_url)
 puts transcript.text
