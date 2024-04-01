@@ -7,7 +7,7 @@ require "json"
 module AssemblyAI
   class Transcripts
     class TranscriptListItem
-      attr_reader :id, :resource_url, :status, :created, :completed, :audio_url, :additional_properties
+      attr_reader :id, :resource_url, :status, :created, :completed, :audio_url, :error, :additional_properties
 
       # @param id [String]
       # @param resource_url [String]
@@ -15,9 +15,11 @@ module AssemblyAI
       # @param created [DateTime]
       # @param completed [DateTime]
       # @param audio_url [String]
+      # @param error [String] Error message of why the transcript failed
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Transcripts::TranscriptListItem]
-      def initialize(id:, resource_url:, status:, created:, completed:, audio_url:, additional_properties: nil)
+      def initialize(id:, resource_url:, status:, created:, completed:, audio_url:, error: nil,
+                     additional_properties: nil)
         # @type [String]
         @id = id
         # @type [String]
@@ -30,6 +32,8 @@ module AssemblyAI
         @completed = completed
         # @type [String]
         @audio_url = audio_url
+        # @type [String] Error message of why the transcript failed
+        @error = error
         # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
       end
@@ -47,8 +51,9 @@ module AssemblyAI
         created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
         completed = (DateTime.parse(parsed_json["completed"]) unless parsed_json["completed"].nil?)
         audio_url = struct.audio_url
+        error = struct.error
         new(id: id, resource_url: resource_url, status: status, created: created, completed: completed,
-            audio_url: audio_url, additional_properties: struct)
+            audio_url: audio_url, error: error, additional_properties: struct)
       end
 
       # Serialize an instance of TranscriptListItem to a JSON object
@@ -61,7 +66,8 @@ module AssemblyAI
           "status": @status,
           "created": @created,
           "completed": @completed,
-          "audio_url": @audio_url
+          "audio_url": @audio_url,
+          "error": @error
         }.to_json
       end
 
@@ -76,6 +82,7 @@ module AssemblyAI
         obj.created.is_a?(DateTime) != false || raise("Passed value for field obj.created is not the expected type, validation failed.")
         obj.completed.is_a?(DateTime) != false || raise("Passed value for field obj.completed is not the expected type, validation failed.")
         obj.audio_url.is_a?(String) != false || raise("Passed value for field obj.audio_url is not the expected type, validation failed.")
+        obj.error&.is_a?(String) != false || raise("Passed value for field obj.error is not the expected type, validation failed.")
       end
     end
   end

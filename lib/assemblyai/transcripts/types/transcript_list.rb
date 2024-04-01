@@ -6,6 +6,7 @@ require "json"
 
 module AssemblyAI
   class Transcripts
+    # A list of transcripts. Transcripts are sorted from newest to oldest. The previous URL always points to a page with older transcripts.
     class TranscriptList
       attr_reader :page_details, :transcripts, :additional_properties
 

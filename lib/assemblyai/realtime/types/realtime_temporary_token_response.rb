@@ -7,11 +7,11 @@ module AssemblyAI
     class RealtimeTemporaryTokenResponse
       attr_reader :token, :additional_properties
 
-      # @param token [String] The temporary authentication token for real-time transcription
+      # @param token [String] The temporary authentication token for Streaming Speech-to-Text
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Realtime::RealtimeTemporaryTokenResponse]
       def initialize(token:, additional_properties: nil)
-        # @type [String] The temporary authentication token for real-time transcription
+        # @type [String] The temporary authentication token for Streaming Speech-to-Text
         @token = token
         # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
