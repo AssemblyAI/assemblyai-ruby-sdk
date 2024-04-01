@@ -7,11 +7,11 @@ module AssemblyAI
     class TerminateSession
       attr_reader :terminate_session, :additional_properties
 
-      # @param terminate_session [Boolean] Set to true to end your real-time session forever
+      # @param terminate_session [Boolean] Set to true to end your streaming session forever
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [Realtime::TerminateSession]
       def initialize(terminate_session:, additional_properties: nil)
-        # @type [Boolean] Set to true to end your real-time session forever
+        # @type [Boolean] Set to true to end your streaming session forever
         @terminate_session = terminate_session
         # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties

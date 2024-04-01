@@ -31,7 +31,8 @@ module AssemblyAI
       @request_client = request_client
     end
 
-    # Retrieve a list of transcripts you created
+    # Retrieve a list of transcripts you created.
+    # Transcripts are sorted from newest to oldest. The previous URL always points to a page with older transcripts.
     #
     # @param limit [Integer] Maximum amount of transcripts to retrieve
     # @param status [Transcripts::TranscriptStatus] Filter by transcript status
@@ -273,7 +274,8 @@ module AssemblyAI
       @request_client = request_client
     end
 
-    # Retrieve a list of transcripts you created
+    # Retrieve a list of transcripts you created.
+    # Transcripts are sorted from newest to oldest. The previous URL always points to a page with older transcripts.
     #
     # @param limit [Integer] Maximum amount of transcripts to retrieve
     # @param status [Transcripts::TranscriptStatus] Filter by transcript status

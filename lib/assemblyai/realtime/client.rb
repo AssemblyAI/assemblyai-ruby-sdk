@@ -15,7 +15,7 @@ module AssemblyAI
       @request_client = request_client
     end
 
-    # Create a temporary authentication token for real-time transcription
+    # Create a temporary authentication token for Streaming Speech-to-Text
     #
     # @param expires_in [Integer] The amount of time until the token expires in seconds
     # @param request_options [RequestOptions]
@@ -41,7 +41,7 @@ module AssemblyAI
       @request_client = request_client
     end
 
-    # Create a temporary authentication token for real-time transcription
+    # Create a temporary authentication token for Streaming Speech-to-Text
     #
     # @param expires_in [Integer] The amount of time until the token expires in seconds
     # @param request_options [RequestOptions]

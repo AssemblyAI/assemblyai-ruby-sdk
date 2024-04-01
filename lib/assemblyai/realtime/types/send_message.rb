@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "terminate_session"
-require_relative "force_end_utterance"
-require_relative "configure_end_utterance_silence_threshold"
+require_relative "../../realtime/types/terminate_session"
+require_relative "../../realtime/types/force_end_utterance"
+require_relative "../../realtime/types/configure_end_utterance_silence_threshold"
 
 module AssemblyAI
   class Realtime
