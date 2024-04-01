@@ -6,13 +6,13 @@ require_relative "../../realtime/types/force_end_utterance"
 require_relative "../../realtime/types/configure_end_utterance_silence_threshold"
 
 module AssemblyAI
-  class Streaming
+  class Realtime
     # Send messages to the WebSocket
     class SendMessage
       # Deserialize a JSON object to an instance of SendMessage
       #
       # @param json_object [JSON]
-      # @return [Streaming::SendMessage]
+      # @return [Realtime::SendMessage]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin

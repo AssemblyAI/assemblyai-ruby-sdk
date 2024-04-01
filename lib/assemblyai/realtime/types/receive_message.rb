@@ -8,13 +8,13 @@ require_relative "../../realtime/types/session_terminated"
 require_relative "../../realtime/types/realtime_error"
 
 module AssemblyAI
-  class Streaming
+  class Realtime
     # Receive messages from the WebSocket
     class ReceiveMessage
       # Deserialize a JSON object to an instance of ReceiveMessage
       #
       # @param json_object [JSON]
-      # @return [Streaming::ReceiveMessage]
+      # @return [Realtime::ReceiveMessage]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin
