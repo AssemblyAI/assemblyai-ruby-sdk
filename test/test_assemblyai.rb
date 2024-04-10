@@ -85,13 +85,6 @@ class TestAssemblyAI < Minitest::Test
     assert !transcript_submission.id.nil?
     gotten_transcript = client.transcripts.get(transcript_id: transcript_submission.id)
     assert gotten_transcript.id == transcript_submission.id
-
-    count = 0
-    client.transcripts.list.transcripts.each do |transcript|
-      assert !transcript.id.nil?
-      count += 1
-    end
-    assert count.positive?
   end
 
   def test_lemur

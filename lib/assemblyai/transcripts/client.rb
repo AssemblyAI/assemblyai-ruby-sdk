@@ -108,6 +108,7 @@ module AssemblyAI
     # @return [Transcripts::Transcript]
     def submit(audio_url:, speech_model: nil, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil,
                webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil, request_options: nil)
+      deprecate_conformer2(speech_model: speech_model)
       response = @request_client.conn.post("/v2/transcript") do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
@@ -262,6 +263,12 @@ module AssemblyAI
       end
       Transcripts::RedactedAudioResponse.from_json(json_object: response.body)
     end
+
+    # @param speech_model [Transcripts::SpeechModel]
+    def deprecate_conformer2(speech_model: nil)
+      warn "[DEPRECATION] `conformer-2` is deprecated.  Please use `best` or `nano` instead." if speech_model == "conformer-2"
+    end
+    private :deprecate_conformer2
   end
 
   class AsyncTranscriptsClient
@@ -353,6 +360,7 @@ module AssemblyAI
     # @return [Transcripts::Transcript]
     def submit(audio_url:, speech_model: nil, language_code: nil, punctuate: nil, format_text: nil, dual_channel: nil,
                webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, language_detection: nil, custom_spelling: nil, disfluencies: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, additional_properties: nil, request_options: nil)
+      deprecate_conformer2(speech_model: speech_model)
       Async do
         response = @request_client.conn.post("/v2/transcript") do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -523,5 +531,11 @@ module AssemblyAI
         Transcripts::RedactedAudioResponse.from_json(json_object: response.body)
       end
     end
+
+    # @param speech_model [Transcripts::SpeechModel]
+    def deprecate_conformer2(speech_model: nil)
+      warn "[DEPRECATION] `conformer-2` is deprecated.  Please use `best` or `nano` instead." if speech_model == "conformer-2"
+    end
+    private :deprecate_conformer2
   end
 end
