@@ -1,46 +1,61 @@
 # frozen_string_literal: true
 
+require "ostruct"
 require "json"
 
 module AssemblyAI
   class Transcripts
-    # Object containing words or phrases to replace, and the word or phrase to replace with
+    # Object containing words or phrases to replace, and the word or phrase to replace
+    #  with
     class TranscriptCustomSpelling
-      attr_reader :from, :to, :additional_properties
+      # @return [Array<String>] Words or phrases to replace
+      attr_reader :from
+      # @return [String] Word or phrase to replace with
+      attr_reader :to
+      # @return [OpenStruct] Additional properties unmapped to the current class definition
+      attr_reader :additional_properties
+      # @return [Object]
+      attr_reader :_field_set
+      protected :_field_set
+
+      OMIT = Object.new
 
       # @param from [Array<String>] Words or phrases to replace
       # @param to [String] Word or phrase to replace with
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Transcripts::TranscriptCustomSpelling]
+      # @return [AssemblyAI::Transcripts::TranscriptCustomSpelling]
       def initialize(from:, to:, additional_properties: nil)
-        # @type [Array<String>] Words or phrases to replace
         @from = from
-        # @type [String] Word or phrase to replace with
         @to = to
-        # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
+        @_field_set = { "from": from, "to": to }
       end
 
       # Deserialize a JSON object to an instance of TranscriptCustomSpelling
       #
-      # @param json_object [JSON]
-      # @return [Transcripts::TranscriptCustomSpelling]
+      # @param json_object [String]
+      # @return [AssemblyAI::Transcripts::TranscriptCustomSpelling]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        JSON.parse(json_object)
-        from = struct.from
-        to = struct.to
-        new(from: from, to: to, additional_properties: struct)
+        from = struct["from"]
+        to = struct["to"]
+        new(
+          from: from,
+          to: to,
+          additional_properties: struct
+        )
       end
 
       # Serialize an instance of TranscriptCustomSpelling to a JSON object
       #
-      # @return [JSON]
+      # @return [String]
       def to_json(*_args)
-        { "from": @from, "to": @to }.to_json
+        @_field_set&.to_json
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]

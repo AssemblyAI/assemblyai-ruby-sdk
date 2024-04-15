@@ -2,7 +2,6 @@ AllCops:
   TargetRubyVersion: 2.7
   NewCops: enable
 
-
 Style/StringLiterals:
   Enabled: true
   EnforcedStyle: double_quotes
@@ -53,4 +52,7 @@ Metrics/BlockLength:
   Enabled: false
 
 Gemspec/RequireMFA:
+  Enabled: false
+
+Style/IfUnlessModifier:
   Enabled: false

@@ -1,53 +1,72 @@
 # frozen_string_literal: true
 
 require_relative "word_search_match"
+require "ostruct"
 require "json"
 
 module AssemblyAI
   class Transcripts
     class WordSearchResponse
-      attr_reader :id, :total_count, :matches, :additional_properties
+      # @return [String] The ID of the transcript
+      attr_reader :id
+      # @return [Integer] The total count of all matched instances. For e.g., word 1 matched 2 times, and
+      #  word 2 matched 3 times, `total_count` will equal 5.
+      attr_reader :total_count
+      # @return [Array<AssemblyAI::Transcripts::WordSearchMatch>] The matches of the search
+      attr_reader :matches
+      # @return [OpenStruct] Additional properties unmapped to the current class definition
+      attr_reader :additional_properties
+      # @return [Object]
+      attr_reader :_field_set
+      protected :_field_set
+
+      OMIT = Object.new
 
       # @param id [String] The ID of the transcript
-      # @param total_count [Integer] The total count of all matched instances. For e.g., word 1 matched 2 times, and word 2 matched 3 times, `total_count` will equal 5.
-      # @param matches [Array<Transcripts::WordSearchMatch>] The matches of the search
+      # @param total_count [Integer] The total count of all matched instances. For e.g., word 1 matched 2 times, and
+      #  word 2 matched 3 times, `total_count` will equal 5.
+      # @param matches [Array<AssemblyAI::Transcripts::WordSearchMatch>] The matches of the search
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Transcripts::WordSearchResponse]
+      # @return [AssemblyAI::Transcripts::WordSearchResponse]
       def initialize(id:, total_count:, matches:, additional_properties: nil)
-        # @type [String] The ID of the transcript
         @id = id
-        # @type [Integer] The total count of all matched instances. For e.g., word 1 matched 2 times, and word 2 matched 3 times, `total_count` will equal 5.
         @total_count = total_count
-        # @type [Array<Transcripts::WordSearchMatch>] The matches of the search
         @matches = matches
-        # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
+        @_field_set = { "id": id, "total_count": total_count, "matches": matches }
       end
 
       # Deserialize a JSON object to an instance of WordSearchResponse
       #
-      # @param json_object [JSON]
-      # @return [Transcripts::WordSearchResponse]
+      # @param json_object [String]
+      # @return [AssemblyAI::Transcripts::WordSearchResponse]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        id = struct.id
-        total_count = struct.total_count
+        id = struct["id"]
+        total_count = struct["total_count"]
         matches = parsed_json["matches"]&.map do |v|
           v = v.to_json
-          Transcripts::WordSearchMatch.from_json(json_object: v)
+          AssemblyAI::Transcripts::WordSearchMatch.from_json(json_object: v)
         end
-        new(id: id, total_count: total_count, matches: matches, additional_properties: struct)
+        new(
+          id: id,
+          total_count: total_count,
+          matches: matches,
+          additional_properties: struct
+        )
       end
 
       # Serialize an instance of WordSearchResponse to a JSON object
       #
-      # @return [JSON]
+      # @return [String]
       def to_json(*_args)
-        { "id": @id, "total_count": @total_count, "matches": @matches }.to_json
+        @_field_set&.to_json
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]

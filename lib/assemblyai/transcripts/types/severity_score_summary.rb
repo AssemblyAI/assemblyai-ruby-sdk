@@ -1,49 +1,65 @@
 # frozen_string_literal: true
 
+require "ostruct"
 require "json"
 
 module AssemblyAI
   class Transcripts
     class SeverityScoreSummary
-      attr_reader :low, :medium, :high, :additional_properties
+      # @return [Float]
+      attr_reader :low
+      # @return [Float]
+      attr_reader :medium
+      # @return [Float]
+      attr_reader :high
+      # @return [OpenStruct] Additional properties unmapped to the current class definition
+      attr_reader :additional_properties
+      # @return [Object]
+      attr_reader :_field_set
+      protected :_field_set
+
+      OMIT = Object.new
 
       # @param low [Float]
       # @param medium [Float]
       # @param high [Float]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Transcripts::SeverityScoreSummary]
+      # @return [AssemblyAI::Transcripts::SeverityScoreSummary]
       def initialize(low:, medium:, high:, additional_properties: nil)
-        # @type [Float]
         @low = low
-        # @type [Float]
         @medium = medium
-        # @type [Float]
         @high = high
-        # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
+        @_field_set = { "low": low, "medium": medium, "high": high }
       end
 
       # Deserialize a JSON object to an instance of SeverityScoreSummary
       #
-      # @param json_object [JSON]
-      # @return [Transcripts::SeverityScoreSummary]
+      # @param json_object [String]
+      # @return [AssemblyAI::Transcripts::SeverityScoreSummary]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        JSON.parse(json_object)
-        low = struct.low
-        medium = struct.medium
-        high = struct.high
-        new(low: low, medium: medium, high: high, additional_properties: struct)
+        low = struct["low"]
+        medium = struct["medium"]
+        high = struct["high"]
+        new(
+          low: low,
+          medium: medium,
+          high: high,
+          additional_properties: struct
+        )
       end
 
       # Serialize an instance of SeverityScoreSummary to a JSON object
       #
-      # @return [JSON]
+      # @return [String]
       def to_json(*_args)
-        { "low": @low, "medium": @medium, "high": @high }.to_json
+        @_field_set&.to_json
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]

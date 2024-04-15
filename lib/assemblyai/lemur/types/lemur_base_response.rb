@@ -1,41 +1,50 @@
 # frozen_string_literal: true
 
+require "ostruct"
 require "json"
 
 module AssemblyAI
   class Lemur
     class LemurBaseResponse
-      attr_reader :request_id, :additional_properties
+      # @return [String] The ID of the LeMUR request
+      attr_reader :request_id
+      # @return [OpenStruct] Additional properties unmapped to the current class definition
+      attr_reader :additional_properties
+      # @return [Object]
+      attr_reader :_field_set
+      protected :_field_set
+
+      OMIT = Object.new
 
       # @param request_id [String] The ID of the LeMUR request
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Lemur::LemurBaseResponse]
+      # @return [AssemblyAI::Lemur::LemurBaseResponse]
       def initialize(request_id:, additional_properties: nil)
-        # @type [String] The ID of the LeMUR request
         @request_id = request_id
-        # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
+        @_field_set = { "request_id": request_id }
       end
 
       # Deserialize a JSON object to an instance of LemurBaseResponse
       #
-      # @param json_object [JSON]
-      # @return [Lemur::LemurBaseResponse]
+      # @param json_object [String]
+      # @return [AssemblyAI::Lemur::LemurBaseResponse]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        JSON.parse(json_object)
-        request_id = struct.request_id
+        request_id = struct["request_id"]
         new(request_id: request_id, additional_properties: struct)
       end
 
       # Serialize an instance of LemurBaseResponse to a JSON object
       #
-      # @return [JSON]
+      # @return [String]
       def to_json(*_args)
-        { "request_id": @request_id }.to_json
+        @_field_set&.to_json
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]
