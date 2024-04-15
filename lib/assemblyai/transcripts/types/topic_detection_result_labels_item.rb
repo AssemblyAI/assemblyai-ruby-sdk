@@ -1,45 +1,61 @@
 # frozen_string_literal: true
 
+require "ostruct"
 require "json"
 
 module AssemblyAI
   class Transcripts
     class TopicDetectionResultLabelsItem
-      attr_reader :relevance, :label, :additional_properties
+      # @return [Float] How relevant the detected topic is of a detected topic
+      attr_reader :relevance
+      # @return [String] The IAB taxonomical label for the label of the detected topic, where > denotes
+      #  supertopic/subtopic relationship
+      attr_reader :label
+      # @return [OpenStruct] Additional properties unmapped to the current class definition
+      attr_reader :additional_properties
+      # @return [Object]
+      attr_reader :_field_set
+      protected :_field_set
+
+      OMIT = Object.new
 
       # @param relevance [Float] How relevant the detected topic is of a detected topic
-      # @param label [String] The IAB taxonomical label for the label of the detected topic, where > denotes supertopic/subtopic relationship
+      # @param label [String] The IAB taxonomical label for the label of the detected topic, where > denotes
+      #  supertopic/subtopic relationship
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Transcripts::TopicDetectionResultLabelsItem]
+      # @return [AssemblyAI::Transcripts::TopicDetectionResultLabelsItem]
       def initialize(relevance:, label:, additional_properties: nil)
-        # @type [Float] How relevant the detected topic is of a detected topic
         @relevance = relevance
-        # @type [String] The IAB taxonomical label for the label of the detected topic, where > denotes supertopic/subtopic relationship
         @label = label
-        # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
+        @_field_set = { "relevance": relevance, "label": label }
       end
 
       # Deserialize a JSON object to an instance of TopicDetectionResultLabelsItem
       #
-      # @param json_object [JSON]
-      # @return [Transcripts::TopicDetectionResultLabelsItem]
+      # @param json_object [String]
+      # @return [AssemblyAI::Transcripts::TopicDetectionResultLabelsItem]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        JSON.parse(json_object)
-        relevance = struct.relevance
-        label = struct.label
-        new(relevance: relevance, label: label, additional_properties: struct)
+        relevance = struct["relevance"]
+        label = struct["label"]
+        new(
+          relevance: relevance,
+          label: label,
+          additional_properties: struct
+        )
       end
 
       # Serialize an instance of TopicDetectionResultLabelsItem to a JSON object
       #
-      # @return [JSON]
+      # @return [String]
       def to_json(*_args)
-        { "relevance": @relevance, "label": @label }.to_json
+        @_field_set&.to_json
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]

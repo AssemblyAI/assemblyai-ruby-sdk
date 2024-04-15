@@ -2,66 +2,85 @@
 
 require_relative "topic_detection_result_labels_item"
 require_relative "timestamp"
+require "ostruct"
 require "json"
 
 module AssemblyAI
   class Transcripts
     # The result of the topic detection model
     class TopicDetectionResult
-      attr_reader :text, :labels, :timestamp, :additional_properties
+      # @return [String] The text in the transcript in which a detected topic occurs
+      attr_reader :text
+      # @return [Array<AssemblyAI::Transcripts::TopicDetectionResultLabelsItem>]
+      attr_reader :labels
+      # @return [AssemblyAI::Transcripts::Timestamp]
+      attr_reader :timestamp
+      # @return [OpenStruct] Additional properties unmapped to the current class definition
+      attr_reader :additional_properties
+      # @return [Object]
+      attr_reader :_field_set
+      protected :_field_set
+
+      OMIT = Object.new
 
       # @param text [String] The text in the transcript in which a detected topic occurs
-      # @param labels [Array<Transcripts::TopicDetectionResultLabelsItem>]
-      # @param timestamp [Transcripts::Timestamp]
+      # @param labels [Array<AssemblyAI::Transcripts::TopicDetectionResultLabelsItem>]
+      # @param timestamp [AssemblyAI::Transcripts::Timestamp]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Transcripts::TopicDetectionResult]
-      def initialize(text:, labels: nil, timestamp: nil, additional_properties: nil)
-        # @type [String] The text in the transcript in which a detected topic occurs
+      # @return [AssemblyAI::Transcripts::TopicDetectionResult]
+      def initialize(text:, labels: OMIT, timestamp: OMIT, additional_properties: nil)
         @text = text
-        # @type [Array<Transcripts::TopicDetectionResultLabelsItem>]
-        @labels = labels
-        # @type [Transcripts::Timestamp]
-        @timestamp = timestamp
-        # @type [OpenStruct] Additional properties unmapped to the current class definition
+        @labels = labels if labels != OMIT
+        @timestamp = timestamp if timestamp != OMIT
         @additional_properties = additional_properties
+        @_field_set = { "text": text, "labels": labels, "timestamp": timestamp }.reject do |_k, v|
+          v == OMIT
+        end
       end
 
       # Deserialize a JSON object to an instance of TopicDetectionResult
       #
-      # @param json_object [JSON]
-      # @return [Transcripts::TopicDetectionResult]
+      # @param json_object [String]
+      # @return [AssemblyAI::Transcripts::TopicDetectionResult]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        text = struct.text
+        text = struct["text"]
         labels = parsed_json["labels"]&.map do |v|
           v = v.to_json
-          Transcripts::TopicDetectionResultLabelsItem.from_json(json_object: v)
+          AssemblyAI::Transcripts::TopicDetectionResultLabelsItem.from_json(json_object: v)
         end
         if parsed_json["timestamp"].nil?
           timestamp = nil
         else
           timestamp = parsed_json["timestamp"].to_json
-          timestamp = Transcripts::Timestamp.from_json(json_object: timestamp)
+          timestamp = AssemblyAI::Transcripts::Timestamp.from_json(json_object: timestamp)
         end
-        new(text: text, labels: labels, timestamp: timestamp, additional_properties: struct)
+        new(
+          text: text,
+          labels: labels,
+          timestamp: timestamp,
+          additional_properties: struct
+        )
       end
 
       # Serialize an instance of TopicDetectionResult to a JSON object
       #
-      # @return [JSON]
+      # @return [String]
       def to_json(*_args)
-        { "text": @text, "labels": @labels, "timestamp": @timestamp }.to_json
+        @_field_set&.to_json
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]
       def self.validate_raw(obj:)
         obj.text.is_a?(String) != false || raise("Passed value for field obj.text is not the expected type, validation failed.")
         obj.labels&.is_a?(Array) != false || raise("Passed value for field obj.labels is not the expected type, validation failed.")
-        obj.timestamp.nil? || Transcripts::Timestamp.validate_raw(obj: obj.timestamp)
+        obj.timestamp.nil? || AssemblyAI::Transcripts::Timestamp.validate_raw(obj: obj.timestamp)
       end
     end
   end

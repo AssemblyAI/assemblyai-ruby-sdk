@@ -8,26 +8,32 @@ module AssemblyAI
     class LemurBaseParamsContext
       # Deserialize a JSON object to an instance of LemurBaseParamsContext
       #
-      # @param json_object [JSON]
-      # @return [Lemur::LemurBaseParamsContext]
+      # @param json_object [String]
+      # @return [AssemblyAI::Lemur::LemurBaseParamsContext]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin
           struct.is_a?(String) != false || raise("Passed value for field struct is not the expected type, validation failed.")
-          return json_object
+          return json_object unless json_object.nil?
+
+          return nil
         rescue StandardError
           # noop
         end
         begin
           struct.is_a?(Hash) != false || raise("Passed value for field struct is not the expected type, validation failed.")
-          return json_object
+          return json_object unless json_object.nil?
+
+          return nil
         rescue StandardError
           # noop
         end
         struct
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]

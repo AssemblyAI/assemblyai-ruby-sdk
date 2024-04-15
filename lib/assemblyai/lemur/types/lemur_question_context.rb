@@ -4,30 +4,37 @@ require "json"
 
 module AssemblyAI
   class Lemur
-    # Any context about the transcripts you wish to provide. This can be a string or any object.
+    # Any context about the transcripts you wish to provide. This can be a string or
+    #  any object.
     class LemurQuestionContext
       # Deserialize a JSON object to an instance of LemurQuestionContext
       #
-      # @param json_object [JSON]
-      # @return [Lemur::LemurQuestionContext]
+      # @param json_object [String]
+      # @return [AssemblyAI::Lemur::LemurQuestionContext]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin
           struct.is_a?(String) != false || raise("Passed value for field struct is not the expected type, validation failed.")
-          return json_object
+          return json_object unless json_object.nil?
+
+          return nil
         rescue StandardError
           # noop
         end
         begin
           struct.is_a?(Hash) != false || raise("Passed value for field struct is not the expected type, validation failed.")
-          return json_object
+          return json_object unless json_object.nil?
+
+          return nil
         rescue StandardError
           # noop
         end
         struct
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]

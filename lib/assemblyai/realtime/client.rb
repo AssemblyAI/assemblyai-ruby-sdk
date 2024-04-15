@@ -6,55 +6,71 @@ require "async"
 
 module AssemblyAI
   class RealtimeClient
+    # @return [AssemblyAI::RequestClient]
     attr_reader :request_client
 
-    # @param request_client [RequestClient]
-    # @return [RealtimeClient]
+    # @param request_client [AssemblyAI::RequestClient]
+    # @return [AssemblyAI::RealtimeClient]
     def initialize(request_client:)
-      # @type [RequestClient]
       @request_client = request_client
     end
 
     # Create a temporary authentication token for Streaming Speech-to-Text
     #
     # @param expires_in [Integer] The amount of time until the token expires in seconds
-    # @param request_options [RequestOptions]
-    # @return [Realtime::RealtimeTemporaryTokenResponse]
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Realtime::RealtimeTemporaryTokenResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.create_temporary_token(expires_in: 480)
     def create_temporary_token(expires_in:, request_options: nil)
-      response = @request_client.conn.post("/v2/realtime/token") do |req|
+      response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
         req.body = { **(request_options&.additional_body_parameters || {}), expires_in: expires_in }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/v2/realtime/token"
       end
-      Realtime::RealtimeTemporaryTokenResponse.from_json(json_object: response.body)
+      AssemblyAI::Realtime::RealtimeTemporaryTokenResponse.from_json(json_object: response.body)
     end
   end
 
   class AsyncRealtimeClient
+    # @return [AssemblyAI::AsyncRequestClient]
     attr_reader :request_client
 
-    # @param request_client [AsyncRequestClient]
-    # @return [AsyncRealtimeClient]
+    # @param request_client [AssemblyAI::AsyncRequestClient]
+    # @return [AssemblyAI::AsyncRealtimeClient]
     def initialize(request_client:)
-      # @type [AsyncRequestClient]
       @request_client = request_client
     end
 
     # Create a temporary authentication token for Streaming Speech-to-Text
     #
     # @param expires_in [Integer] The amount of time until the token expires in seconds
-    # @param request_options [RequestOptions]
-    # @return [Realtime::RealtimeTemporaryTokenResponse]
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Realtime::RealtimeTemporaryTokenResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.create_temporary_token(expires_in: 480)
     def create_temporary_token(expires_in:, request_options: nil)
       Async do
-        response = @request_client.conn.post("/v2/realtime/token") do |req|
+        response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
           req.body = { **(request_options&.additional_body_parameters || {}), expires_in: expires_in }.compact
+          req.url "#{@request_client.get_url(request_options: request_options)}/v2/realtime/token"
         end
-        Realtime::RealtimeTemporaryTokenResponse.from_json(json_object: response.body)
+        AssemblyAI::Realtime::RealtimeTemporaryTokenResponse.from_json(json_object: response.body)
       end
     end
   end

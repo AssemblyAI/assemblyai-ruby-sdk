@@ -2,8 +2,9 @@
 
 module AssemblyAI
   class Transcripts
-    # The language of your audio file. Possible values are found in [Supported Languages](https://www.assemblyai.com/docs/concepts/supported-languages).
-    # The default value is 'en_us'.
+    # The language of your audio file. Possible values are found in [Supported
+    #  Languages](https://www.assemblyai.com/docs/concepts/supported-languages).
+    #  The default value is 'en_us'.
     class TranscriptLanguageCode
       EN = "en"
       EN_AU = "en_au"

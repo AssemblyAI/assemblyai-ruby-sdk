@@ -1,58 +1,76 @@
 # frozen_string_literal: true
 
 require_relative "transcript_sentence"
+require "ostruct"
 require "json"
 
 module AssemblyAI
   class Transcripts
     class SentencesResponse
-      attr_reader :id, :confidence, :audio_duration, :sentences, :additional_properties
+      # @return [String]
+      attr_reader :id
+      # @return [Float]
+      attr_reader :confidence
+      # @return [Float]
+      attr_reader :audio_duration
+      # @return [Array<AssemblyAI::Transcripts::TranscriptSentence>]
+      attr_reader :sentences
+      # @return [OpenStruct] Additional properties unmapped to the current class definition
+      attr_reader :additional_properties
+      # @return [Object]
+      attr_reader :_field_set
+      protected :_field_set
+
+      OMIT = Object.new
 
       # @param id [String]
       # @param confidence [Float]
       # @param audio_duration [Float]
-      # @param sentences [Array<Transcripts::TranscriptSentence>]
+      # @param sentences [Array<AssemblyAI::Transcripts::TranscriptSentence>]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [Transcripts::SentencesResponse]
+      # @return [AssemblyAI::Transcripts::SentencesResponse]
       def initialize(id:, confidence:, audio_duration:, sentences:, additional_properties: nil)
-        # @type [String]
         @id = id
-        # @type [Float]
         @confidence = confidence
-        # @type [Float]
         @audio_duration = audio_duration
-        # @type [Array<Transcripts::TranscriptSentence>]
         @sentences = sentences
-        # @type [OpenStruct] Additional properties unmapped to the current class definition
         @additional_properties = additional_properties
+        @_field_set = { "id": id, "confidence": confidence, "audio_duration": audio_duration, "sentences": sentences }
       end
 
       # Deserialize a JSON object to an instance of SentencesResponse
       #
-      # @param json_object [JSON]
-      # @return [Transcripts::SentencesResponse]
+      # @param json_object [String]
+      # @return [AssemblyAI::Transcripts::SentencesResponse]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        id = struct.id
-        confidence = struct.confidence
-        audio_duration = struct.audio_duration
+        id = struct["id"]
+        confidence = struct["confidence"]
+        audio_duration = struct["audio_duration"]
         sentences = parsed_json["sentences"]&.map do |v|
           v = v.to_json
-          Transcripts::TranscriptSentence.from_json(json_object: v)
+          AssemblyAI::Transcripts::TranscriptSentence.from_json(json_object: v)
         end
-        new(id: id, confidence: confidence, audio_duration: audio_duration, sentences: sentences,
-            additional_properties: struct)
+        new(
+          id: id,
+          confidence: confidence,
+          audio_duration: audio_duration,
+          sentences: sentences,
+          additional_properties: struct
+        )
       end
 
       # Serialize an instance of SentencesResponse to a JSON object
       #
-      # @return [JSON]
+      # @return [String]
       def to_json(*_args)
-        { "id": @id, "confidence": @confidence, "audio_duration": @audio_duration, "sentences": @sentences }.to_json
+        @_field_set&.to_json
       end
 
-      # Leveraged for Union-type generation, validate_raw attempts to parse the given hash and check each fields type against the current object's property definitions.
+      # Leveraged for Union-type generation, validate_raw attempts to parse the given
+      #  hash and check each fields type against the current object's property
+      #  definitions.
       #
       # @param obj [Object]
       # @return [Void]

@@ -13,35 +13,45 @@ require "async"
 
 module AssemblyAI
   class LemurClient
+    # @return [AssemblyAI::RequestClient]
     attr_reader :request_client
 
-    # @param request_client [RequestClient]
-    # @return [LemurClient]
+    # @param request_client [AssemblyAI::RequestClient]
+    # @return [AssemblyAI::LemurClient]
     def initialize(request_client:)
-      # @type [RequestClient]
       @request_client = request_client
     end
 
     # Use the LeMUR task endpoint to input your own LLM prompt.
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @param prompt [String] Your text to prompt the model to produce a desired output, including any context you want to pass into the model.
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurTaskResponse]
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param prompt [String] Your text to prompt the model to produce a desired output, including any context
+    #  you want to pass into the model.
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurTaskResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.task(prompt: "List all the locations affected by wildfires.")
     def task(prompt:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-             temperature: nil, additional_properties: nil, request_options: nil)
-      response = @request_client.conn.post("/lemur/v3/generate/task") do |req|
+             temperature: nil, request_options: nil)
+      response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -53,33 +63,45 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
-          additional_properties: additional_properties,
           prompt: prompt
         }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/task"
       end
-      Lemur::LemurTaskResponse.from_json(json_object: response.body)
+      AssemblyAI::Lemur::LemurTaskResponse.from_json(json_object: response.body)
     end
 
-    # Custom Summary allows you to distill a piece of audio into a few impactful sentences. You can give the model context to obtain more targeted results while outputting the results in a variety of formats described in human language.
+    # Custom Summary allows you to distill a piece of audio into a few impactful
+    #  sentences. You can give the model context to obtain more targeted results while
+    #  outputting the results in a variety of formats described in human language.
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @param answer_format [String] How you want the summary to be returned. This can be any text. Examples: "TLDR", "bullet points"
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurSummaryResponse]
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param answer_format [String] How you want the summary to be returned. This can be any text. Examples: "TLDR",
+    #  "bullet points"
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurSummaryResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.summary
     def summary(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                temperature: nil, additional_properties: nil, answer_format: nil, request_options: nil)
-      response = @request_client.conn.post("/lemur/v3/generate/summary") do |req|
+                temperature: nil, answer_format: nil, request_options: nil)
+      response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -91,37 +113,49 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
-          additional_properties: additional_properties,
           answer_format: answer_format
         }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/summary"
       end
-      Lemur::LemurSummaryResponse.from_json(json_object: response.body)
+      AssemblyAI::Lemur::LemurSummaryResponse.from_json(json_object: response.body)
     end
 
-    # Question & Answer allows you to ask free-form questions about a single transcript or a group of transcripts. The questions can be any whose answers you find useful, such as judging whether a caller is likely to become a customer or whether all items on a meeting's agenda were covered.
+    # Question & Answer allows you to ask free-form questions about a single
+    #  transcript or a group of transcripts. The questions can be any whose answers you
+    #  find useful, such as judging whether a caller is likely to become a customer or
+    #  whether all items on a meeting's agenda were covered.
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @param questions [Array<Hash>] A list of questions to askRequest of type Array<Lemur::LemurQuestion>, as a Hash
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param questions [Array<Hash>] A list of questions to askRequest of type Array<AssemblyAI::Lemur::LemurQuestion>, as a Hash
     #   * :question (String)
     #   * :context (Hash)
     #   * :answer_format (String)
     #   * :answer_options (Array<String>)
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurQuestionAnswerResponse]
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurQuestionAnswerResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.question_answer(questions: [{ question: "Where are there wildfires?", answer_format: "List of countries in ISO 3166-1 alpha-2 format", answer_options: ["US", "CA"] }, { question: "Is global warming affecting wildfires?", answer_options: ["yes", "no"] }])
     def question_answer(questions:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                        temperature: nil, additional_properties: nil, request_options: nil)
-      response = @request_client.conn.post("/lemur/v3/generate/question-answer") do |req|
+                        temperature: nil, request_options: nil)
+      response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -133,34 +167,43 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
-          additional_properties: additional_properties,
           questions: questions
         }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/question-answer"
       end
-      Lemur::LemurQuestionAnswerResponse.from_json(json_object: response.body)
+      AssemblyAI::Lemur::LemurQuestionAnswerResponse.from_json(json_object: response.body)
     end
 
     # Use LeMUR to generate a list of action items from a transcript
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
     # @param answer_format [String] How you want the action items to be returned. This can be any text.
-    #   Defaults to "Bullet Points".
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurActionItemsResponse]
+    #  Defaults to "Bullet Points".
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurActionItemsResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.action_items(answer_format: "Bullet Points")
     def action_items(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                     temperature: nil, additional_properties: nil, answer_format: nil, request_options: nil)
-      response = @request_client.conn.post("/lemur/v3/generate/action-items") do |req|
+                     temperature: nil, answer_format: nil, request_options: nil)
+      response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -172,60 +215,80 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
-          additional_properties: additional_properties,
           answer_format: answer_format
         }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/action-items"
       end
-      Lemur::LemurActionItemsResponse.from_json(json_object: response.body)
+      AssemblyAI::Lemur::LemurActionItemsResponse.from_json(json_object: response.body)
     end
 
     # Delete the data for a previously submitted LeMUR request.
-    # The LLM response data, as well as any context provided in the original request will be removed.
+    #  The LLM response data, as well as any context provided in the original request
+    #  will be removed.
     #
-    # @param request_id [String] The ID of the LeMUR request whose data you want to delete. This would be found in the response of the original request.
-    # @param request_options [RequestOptions]
-    # @return [Lemur::PurgeLemurRequestDataResponse]
+    # @param request_id [String] The ID of the LeMUR request whose data you want to delete. This would be found
+    #  in the response of the original request.
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::PurgeLemurRequestDataResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.purge_request_data(request_id: "request_id")
     def purge_request_data(request_id:, request_options: nil)
-      response = @request_client.conn.delete("/lemur/v3/#{request_id}") do |req|
+      response = @request_client.conn.delete do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
         req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
       end
-      Lemur::PurgeLemurRequestDataResponse.from_json(json_object: response.body)
+      AssemblyAI::Lemur::PurgeLemurRequestDataResponse.from_json(json_object: response.body)
     end
   end
 
   class AsyncLemurClient
+    # @return [AssemblyAI::AsyncRequestClient]
     attr_reader :request_client
 
-    # @param request_client [AsyncRequestClient]
-    # @return [AsyncLemurClient]
+    # @param request_client [AssemblyAI::AsyncRequestClient]
+    # @return [AssemblyAI::AsyncLemurClient]
     def initialize(request_client:)
-      # @type [AsyncRequestClient]
       @request_client = request_client
     end
 
     # Use the LeMUR task endpoint to input your own LLM prompt.
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @param prompt [String] Your text to prompt the model to produce a desired output, including any context you want to pass into the model.
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurTaskResponse]
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param prompt [String] Your text to prompt the model to produce a desired output, including any context
+    #  you want to pass into the model.
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurTaskResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.task(prompt: "List all the locations affected by wildfires.")
     def task(prompt:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-             temperature: nil, additional_properties: nil, request_options: nil)
+             temperature: nil, request_options: nil)
       Async do
-        response = @request_client.conn.post("/lemur/v3/generate/task") do |req|
+        response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -237,35 +300,47 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
-            additional_properties: additional_properties,
             prompt: prompt
           }.compact
+          req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/task"
         end
-        Lemur::LemurTaskResponse.from_json(json_object: response.body)
+        AssemblyAI::Lemur::LemurTaskResponse.from_json(json_object: response.body)
       end
     end
 
-    # Custom Summary allows you to distill a piece of audio into a few impactful sentences. You can give the model context to obtain more targeted results while outputting the results in a variety of formats described in human language.
+    # Custom Summary allows you to distill a piece of audio into a few impactful
+    #  sentences. You can give the model context to obtain more targeted results while
+    #  outputting the results in a variety of formats described in human language.
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @param answer_format [String] How you want the summary to be returned. This can be any text. Examples: "TLDR", "bullet points"
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurSummaryResponse]
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param answer_format [String] How you want the summary to be returned. This can be any text. Examples: "TLDR",
+    #  "bullet points"
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurSummaryResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.summary
     def summary(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                temperature: nil, additional_properties: nil, answer_format: nil, request_options: nil)
+                temperature: nil, answer_format: nil, request_options: nil)
       Async do
-        response = @request_client.conn.post("/lemur/v3/generate/summary") do |req|
+        response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -277,39 +352,51 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
-            additional_properties: additional_properties,
             answer_format: answer_format
           }.compact
+          req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/summary"
         end
-        Lemur::LemurSummaryResponse.from_json(json_object: response.body)
+        AssemblyAI::Lemur::LemurSummaryResponse.from_json(json_object: response.body)
       end
     end
 
-    # Question & Answer allows you to ask free-form questions about a single transcript or a group of transcripts. The questions can be any whose answers you find useful, such as judging whether a caller is likely to become a customer or whether all items on a meeting's agenda were covered.
+    # Question & Answer allows you to ask free-form questions about a single
+    #  transcript or a group of transcripts. The questions can be any whose answers you
+    #  find useful, such as judging whether a caller is likely to become a customer or
+    #  whether all items on a meeting's agenda were covered.
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-    # @param questions [Array<Hash>] A list of questions to askRequest of type Array<Lemur::LemurQuestion>, as a Hash
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param questions [Array<Hash>] A list of questions to askRequest of type Array<AssemblyAI::Lemur::LemurQuestion>, as a Hash
     #   * :question (String)
     #   * :context (Hash)
     #   * :answer_format (String)
     #   * :answer_options (Array<String>)
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurQuestionAnswerResponse]
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurQuestionAnswerResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.question_answer(questions: [{ question: "Where are there wildfires?", answer_format: "List of countries in ISO 3166-1 alpha-2 format", answer_options: ["US", "CA"] }, { question: "Is global warming affecting wildfires?", answer_options: ["yes", "no"] }])
     def question_answer(questions:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                        temperature: nil, additional_properties: nil, request_options: nil)
+                        temperature: nil, request_options: nil)
       Async do
-        response = @request_client.conn.post("/lemur/v3/generate/question-answer") do |req|
+        response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -321,36 +408,45 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
-            additional_properties: additional_properties,
             questions: questions
           }.compact
+          req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/question-answer"
         end
-        Lemur::LemurQuestionAnswerResponse.from_json(json_object: response.body)
+        AssemblyAI::Lemur::LemurQuestionAnswerResponse.from_json(json_object: response.body)
       end
     end
 
     # Use LeMUR to generate a list of action items from a transcript
     #
-    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100 hours, whichever is lower.
-    #   Use either transcript_ids or input_text as input into LeMUR.
-    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the selected model, which defaults to 100000.
-    #   Use either transcript_ids or input_text as input into LeMUR.
+    # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
+    #  hours, whichever is lower.
+    #  Use either transcript_ids or input_text as input into LeMUR.
+    # @param input_text [String] Custom formatted transcript data. Maximum size is the context limit of the
+    #  selected model, which defaults to 100000.
+    #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
-    # @param final_model [Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #   Defaults to "default".
+    # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
+    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
-    #   Higher values result in answers that are more creative, lower values are more conservative.
-    #   Can be any value between 0.0 and 1.0 inclusive.
-    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    #  Higher values result in answers that are more creative, lower values are more
+    #  conservative.
+    #  Can be any value between 0.0 and 1.0 inclusive.
     # @param answer_format [String] How you want the action items to be returned. This can be any text.
-    #   Defaults to "Bullet Points".
-    # @param request_options [RequestOptions]
-    # @return [Lemur::LemurActionItemsResponse]
+    #  Defaults to "Bullet Points".
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurActionItemsResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.action_items(answer_format: "Bullet Points")
     def action_items(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                     temperature: nil, additional_properties: nil, answer_format: nil, request_options: nil)
+                     temperature: nil, answer_format: nil, request_options: nil)
       Async do
-        response = @request_client.conn.post("/lemur/v3/generate/action-items") do |req|
+        response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
@@ -362,28 +458,38 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
-            additional_properties: additional_properties,
             answer_format: answer_format
           }.compact
+          req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/action-items"
         end
-        Lemur::LemurActionItemsResponse.from_json(json_object: response.body)
+        AssemblyAI::Lemur::LemurActionItemsResponse.from_json(json_object: response.body)
       end
     end
 
     # Delete the data for a previously submitted LeMUR request.
-    # The LLM response data, as well as any context provided in the original request will be removed.
+    #  The LLM response data, as well as any context provided in the original request
+    #  will be removed.
     #
-    # @param request_id [String] The ID of the LeMUR request whose data you want to delete. This would be found in the response of the original request.
-    # @param request_options [RequestOptions]
-    # @return [Lemur::PurgeLemurRequestDataResponse]
+    # @param request_id [String] The ID of the LeMUR request whose data you want to delete. This would be found
+    #  in the response of the original request.
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::PurgeLemurRequestDataResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.purge_request_data(request_id: "request_id")
     def purge_request_data(request_id:, request_options: nil)
       Async do
-        response = @request_client.conn.delete("/lemur/v3/#{request_id}") do |req|
+        response = @request_client.conn.delete do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
           req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
         end
-        Lemur::PurgeLemurRequestDataResponse.from_json(json_object: response.body)
+        AssemblyAI::Lemur::PurgeLemurRequestDataResponse.from_json(json_object: response.body)
       end
     end
   end

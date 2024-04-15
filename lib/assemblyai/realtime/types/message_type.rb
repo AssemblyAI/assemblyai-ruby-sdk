@@ -6,6 +6,7 @@ module AssemblyAI
       SESSION_BEGINS = "SessionBegins"
       PARTIAL_TRANSCRIPT = "PartialTranscript"
       FINAL_TRANSCRIPT = "FinalTranscript"
+      SESSION_INFORMATION = "SessionInformation"
       SESSION_TERMINATED = "SessionTerminated"
     end
   end

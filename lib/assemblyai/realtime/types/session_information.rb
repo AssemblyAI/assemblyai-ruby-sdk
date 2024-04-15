@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require "date"
 require "ostruct"
 require "json"
 
 module AssemblyAI
   class Realtime
-    class SessionBegins
+    # Information about the session that is concluding.
+    #  This message is sent at the end of the session, before the SessionTerminated
+    #  message.
+    class SessionInformation
       # @return [String]
       attr_reader :message_type
-      # @return [String] Unique identifier for the established session
-      attr_reader :session_id
-      # @return [DateTime] Timestamp when this session will expire
-      attr_reader :expires_at
+      # @return [Float] The total duration of the audio in seconds
+      attr_reader :audio_duration_seconds
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
       # @return [Object]
@@ -22,37 +22,32 @@ module AssemblyAI
       OMIT = Object.new
 
       # @param message_type [String]
-      # @param session_id [String] Unique identifier for the established session
-      # @param expires_at [DateTime] Timestamp when this session will expire
+      # @param audio_duration_seconds [Float] The total duration of the audio in seconds
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
-      # @return [AssemblyAI::Realtime::SessionBegins]
-      def initialize(message_type:, session_id:, expires_at:, additional_properties: nil)
+      # @return [AssemblyAI::Realtime::SessionInformation]
+      def initialize(message_type:, audio_duration_seconds:, additional_properties: nil)
         @message_type = message_type
-        @session_id = session_id
-        @expires_at = expires_at
+        @audio_duration_seconds = audio_duration_seconds
         @additional_properties = additional_properties
-        @_field_set = { "message_type": message_type, "session_id": session_id, "expires_at": expires_at }
+        @_field_set = { "message_type": message_type, "audio_duration_seconds": audio_duration_seconds }
       end
 
-      # Deserialize a JSON object to an instance of SessionBegins
+      # Deserialize a JSON object to an instance of SessionInformation
       #
       # @param json_object [String]
-      # @return [AssemblyAI::Realtime::SessionBegins]
+      # @return [AssemblyAI::Realtime::SessionInformation]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        parsed_json = JSON.parse(json_object)
         message_type = struct["message_type"]
-        session_id = struct["session_id"]
-        expires_at = (DateTime.parse(parsed_json["expires_at"]) unless parsed_json["expires_at"].nil?)
+        audio_duration_seconds = struct["audio_duration_seconds"]
         new(
           message_type: message_type,
-          session_id: session_id,
-          expires_at: expires_at,
+          audio_duration_seconds: audio_duration_seconds,
           additional_properties: struct
         )
       end
 
-      # Serialize an instance of SessionBegins to a JSON object
+      # Serialize an instance of SessionInformation to a JSON object
       #
       # @return [String]
       def to_json(*_args)
@@ -67,8 +62,7 @@ module AssemblyAI
       # @return [Void]
       def self.validate_raw(obj:)
         obj.message_type.is_a?(String) != false || raise("Passed value for field obj.message_type is not the expected type, validation failed.")
-        obj.session_id.is_a?(String) != false || raise("Passed value for field obj.session_id is not the expected type, validation failed.")
-        obj.expires_at.is_a?(DateTime) != false || raise("Passed value for field obj.expires_at is not the expected type, validation failed.")
+        obj.audio_duration_seconds.is_a?(Float) != false || raise("Passed value for field obj.audio_duration_seconds is not the expected type, validation failed.")
       end
     end
   end
