@@ -46,6 +46,7 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::TopicDetectionModelResult]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
+        parsed_json = JSON.parse(json_object)
         status = struct["status"]
         results = parsed_json["results"]&.map do |v|
           v = v.to_json

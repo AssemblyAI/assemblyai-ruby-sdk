@@ -21,7 +21,7 @@ module AssemblyAI
     # @param request_options [RequestOptions]
     # @return [Files::UploadedFile]
     def upload(file:, request_options: nil)
-      response = @request_client.conn.post("/v2/upload") do |req|
+      response = @request_client.conn.post do |req|
         if file.is_a? String
           begin
             path = Pathname.new(file)
@@ -50,6 +50,7 @@ module AssemblyAI
           req.headers["Transfer-Encoding"] = "chunked"
         end
         req.body = file_data
+        req.url "#{@request_client.get_url(request_options: request_options)}/v2/upload"
       end
       Files::UploadedFile.from_json(json_object: response.body)
     end
@@ -72,7 +73,7 @@ module AssemblyAI
     # @return [Files::UploadedFile]
     def upload(file:, request_options: nil)
       Async do
-        response = @request_client.conn.post("/v2/upload") do |req|
+        response = @request_client.conn.post do |req|
           if file.is_a? String
             begin
               path = Pathname.new(file)
@@ -101,6 +102,7 @@ module AssemblyAI
             req.headers["Transfer-Encoding"] = "chunked"
           end
           req.body = file_data
+          req.url "#{@request_client.get_url(request_options: request_options)}/v2/upload"
         end
         Files::UploadedFile.from_json(json_object: response.body)
       end
