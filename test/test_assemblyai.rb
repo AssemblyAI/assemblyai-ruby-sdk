@@ -11,7 +11,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_upload_file_with_file
-    # skip("Integration tests not enabled")
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: api_key)
     file = File.new("./test/gore-short.wav")
     uploaded_file = client.files.upload(file: file)
@@ -19,14 +19,14 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_upload_file_with_path
-    # skip("Integration tests not enabled")
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: api_key)
     uploaded_file = client.files.upload(file: "./test/gore-short.wav")
     assert !uploaded_file.upload_url.nil?
   end
 
   def test_upload_file_with_base64_string
-    # skip("Integration tests not enabled")
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: api_key)
     uploaded_file = client.files.upload(file: File.read("./test/gore-short.wav"))
     assert !uploaded_file.upload_url.nil?
@@ -38,7 +38,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_pagination
-    # skip("Integration tests not enabled")
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: api_key)
     transcript_list = client.transcripts.list
 
@@ -62,7 +62,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_polling
-    # skip("Integration tests not enabled")
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: api_key)
     transcript = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
     assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
@@ -77,7 +77,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_transcribe
-    # skip("Integration tests not enabled")
+    skip("Integration tests not enabled")
     # Transcribe
     client = AssemblyAI::Client.new(api_key: api_key)
 
@@ -88,7 +88,7 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_lemur
-    # skip("Integration tests not enabled")
+    skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: api_key)
     assert !client.lemur.summary(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"]).response.nil?
 
