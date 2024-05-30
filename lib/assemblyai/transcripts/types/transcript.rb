@@ -67,7 +67,7 @@ module AssemblyAI
       attr_reader :dual_channel
       # @return [AssemblyAI::Transcripts::SpeechModel]
       attr_reader :speech_model
-      # @return [String] The URL to which we send webhooks upon trancription completion
+      # @return [String] The URL to which we send webhooks upon transcription completion
       attr_reader :webhook_url
       # @return [Integer] The status code we received from your server when delivering your webhook, if a
       #  webhook URL was provided
@@ -172,7 +172,7 @@ module AssemblyAI
       attr_reader :sentiment_analysis
       # @return [Array<AssemblyAI::Transcripts::SentimentAnalysisResult>] An array of results for the Sentiment Analysis model, if it is enabled.
       #  See [Sentiment
-      #  analysis](https://www.assemblyai.com/docs/models/sentiment-analysis) for more
+      #  Analysis](https://www.assemblyai.com/docs/models/sentiment-analysis) for more
       #  information.
       attr_reader :sentiment_analysis_results
       # @return [Boolean] Whether [Entity
@@ -230,7 +230,7 @@ module AssemblyAI
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  was enabled in the transcription request, either true or false
       # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
-      # @param webhook_url [String] The URL to which we send webhooks upon trancription completion
+      # @param webhook_url [String] The URL to which we send webhooks upon transcription completion
       # @param webhook_status_code [Integer] The status code we received from your server when delivering your webhook, if a
       #  webhook URL was provided
       # @param webhook_auth [Boolean] Whether webhook authentication details were provided
@@ -300,7 +300,7 @@ module AssemblyAI
       #  can be true or false
       # @param sentiment_analysis_results [Array<AssemblyAI::Transcripts::SentimentAnalysisResult>] An array of results for the Sentiment Analysis model, if it is enabled.
       #  See [Sentiment
-      #  analysis](https://www.assemblyai.com/docs/models/sentiment-analysis) for more
+      #  Analysis](https://www.assemblyai.com/docs/models/sentiment-analysis) for more
       #  information.
       # @param entity_detection [Boolean] Whether [Entity
       #  Detection](https://www.assemblyai.com/docs/models/entity-detection) is enabled,
@@ -443,7 +443,6 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::Transcript]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        parsed_json = JSON.parse(json_object)
         id = struct["id"]
         language_model = struct["language_model"]
         acoustic_model = struct["acoustic_model"]

@@ -71,8 +71,9 @@ module AssemblyAI
     end
 
     # Custom Summary allows you to distill a piece of audio into a few impactful
-    #  sentences. You can give the model context to obtain more targeted results while
-    #  outputting the results in a variety of formats described in human language.
+    #  sentences.
+    #  You can give the model context to obtain more targeted results while outputting
+    #  the results in a variety of formats described in human language.
     #
     # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
     #  hours, whichever is lower.
@@ -121,9 +122,10 @@ module AssemblyAI
     end
 
     # Question & Answer allows you to ask free-form questions about a single
-    #  transcript or a group of transcripts. The questions can be any whose answers you
-    #  find useful, such as judging whether a caller is likely to become a customer or
-    #  whether all items on a meeting's agenda were covered.
+    #  transcript or a group of transcripts.
+    #  The questions can be any whose answers you find useful, such as judging whether
+    #  a caller is likely to become a customer or whether all items on a meeting's
+    #  agenda were covered.
     #
     # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
     #  hours, whichever is lower.
@@ -309,8 +311,9 @@ module AssemblyAI
     end
 
     # Custom Summary allows you to distill a piece of audio into a few impactful
-    #  sentences. You can give the model context to obtain more targeted results while
-    #  outputting the results in a variety of formats described in human language.
+    #  sentences.
+    #  You can give the model context to obtain more targeted results while outputting
+    #  the results in a variety of formats described in human language.
     #
     # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
     #  hours, whichever is lower.
@@ -361,9 +364,10 @@ module AssemblyAI
     end
 
     # Question & Answer allows you to ask free-form questions about a single
-    #  transcript or a group of transcripts. The questions can be any whose answers you
-    #  find useful, such as judging whether a caller is likely to become a customer or
-    #  whether all items on a meeting's agenda were covered.
+    #  transcript or a group of transcripts.
+    #  The questions can be any whose answers you find useful, such as judging whether
+    #  a caller is likely to become a customer or whether all items on a meeting's
+    #  agenda were covered.
     #
     # @param transcript_ids [Array<String>] A list of completed transcripts with text. Up to a maximum of 100 files or 100
     #  hours, whichever is lower.

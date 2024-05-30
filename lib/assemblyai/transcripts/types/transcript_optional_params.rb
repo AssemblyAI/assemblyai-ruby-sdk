@@ -28,14 +28,14 @@ module AssemblyAI
       attr_reader :dual_channel
       # @return [AssemblyAI::Transcripts::SpeechModel]
       attr_reader :speech_model
-      # @return [String] The URL to which AssemblyAI send webhooks upon trancription completion
+      # @return [String] The URL to which AssemblyAI send webhooks upon transcription completion
       attr_reader :webhook_url
       # @return [String] The header name which should be sent back with webhook calls
       attr_reader :webhook_auth_header_name
       # @return [String] Specify a header name and value to send back with a webhook call for added
       #  security
       attr_reader :webhook_auth_header_value
-      # @return [Boolean] Whether Key Phrases is enabled, either true or false
+      # @return [Boolean] Enable Key Phrases, either true or false
       attr_reader :auto_highlights
       # @return [Integer] The point in time, in milliseconds, to begin transcribing in your media file
       attr_reader :audio_start_from
@@ -79,16 +79,16 @@ module AssemblyAI
       #  Moderation](https://www.assemblyai.com/docs/models/content-moderation), can be
       #  true or false
       attr_reader :content_safety
-      # @return [Integer] The confidence threshold for content moderation. Values must be between 25 and
-      #  100.
+      # @return [Integer] The confidence threshold for the Content Moderation model. Values must be
+      #  between 25 and 100.
       attr_reader :content_safety_confidence
       # @return [Boolean] Enable [Topic
       #  Detection](https://www.assemblyai.com/docs/models/topic-detection), can be true
       #  or false
       attr_reader :iab_categories
-      # @return [Boolean] Whether [Automatic language
-      #  /www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection)
-      #  was enabled in the transcription request, either true or false.
+      # @return [Boolean] Enable [Automatic language
+      #  www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection),
+      #  either true or false.
       attr_reader :language_detection
       # @return [Array<AssemblyAI::Transcripts::TranscriptCustomSpelling>] Customize how words are spelled and formatted using to and from values
       attr_reader :custom_spelling
@@ -115,9 +115,9 @@ module AssemblyAI
       attr_reader :summary_model
       # @return [AssemblyAI::Transcripts::SummaryType] The type of summary
       attr_reader :summary_type
-      # @return [Boolean] Whether custom topics is enabled, either true or false
+      # @return [Boolean] Enable custom topics, either true or false
       attr_reader :custom_topics
-      # @return [Array<String>] The list of custom topics provided, if custom topics is enabled
+      # @return [Array<String>] The list of custom topics
       attr_reader :topics
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
@@ -134,11 +134,11 @@ module AssemblyAI
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  transcription, can be true or false.
       # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
-      # @param webhook_url [String] The URL to which AssemblyAI send webhooks upon trancription completion
+      # @param webhook_url [String] The URL to which AssemblyAI send webhooks upon transcription completion
       # @param webhook_auth_header_name [String] The header name which should be sent back with webhook calls
       # @param webhook_auth_header_value [String] Specify a header name and value to send back with a webhook call for added
       #  security
-      # @param auto_highlights [Boolean] Whether Key Phrases is enabled, either true or false
+      # @param auto_highlights [Boolean] Enable Key Phrases, either true or false
       # @param audio_start_from [Integer] The point in time, in milliseconds, to begin transcribing in your media file
       # @param audio_end_at [Integer] The point in time, in milliseconds, to stop transcribing in your media file
       # @param word_boost [Array<String>] The list of custom vocabulary to boost transcription probability for
@@ -168,14 +168,14 @@ module AssemblyAI
       # @param content_safety [Boolean] Enable [Content
       #  Moderation](https://www.assemblyai.com/docs/models/content-moderation), can be
       #  true or false
-      # @param content_safety_confidence [Integer] The confidence threshold for content moderation. Values must be between 25 and
-      #  100.
+      # @param content_safety_confidence [Integer] The confidence threshold for the Content Moderation model. Values must be
+      #  between 25 and 100.
       # @param iab_categories [Boolean] Enable [Topic
       #  Detection](https://www.assemblyai.com/docs/models/topic-detection), can be true
       #  or false
-      # @param language_detection [Boolean] Whether [Automatic language
-      #  /www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection)
-      #  was enabled in the transcription request, either true or false.
+      # @param language_detection [Boolean] Enable [Automatic language
+      #  www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection),
+      #  either true or false.
       # @param custom_spelling [Array<AssemblyAI::Transcripts::TranscriptCustomSpelling>] Customize how words are spelled and formatted using to and from values
       # @param disfluencies [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
       # @param sentiment_analysis [Boolean] Enable [Sentiment
@@ -192,8 +192,8 @@ module AssemblyAI
       #  can be true or false
       # @param summary_model [AssemblyAI::Transcripts::SummaryModel] The model to summarize the transcript
       # @param summary_type [AssemblyAI::Transcripts::SummaryType] The type of summary
-      # @param custom_topics [Boolean] Whether custom topics is enabled, either true or false
-      # @param topics [Array<String>] The list of custom topics provided, if custom topics is enabled
+      # @param custom_topics [Boolean] Enable custom topics, either true or false
+      # @param topics [Array<String>] The list of custom topics
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::TranscriptOptionalParams]
       def initialize(language_code: OMIT, punctuate: OMIT, format_text: OMIT, dual_channel: OMIT, speech_model: OMIT,
@@ -283,7 +283,6 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::TranscriptOptionalParams]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        parsed_json = JSON.parse(json_object)
         language_code = struct["language_code"]
         punctuate = struct["punctuate"]
         format_text = struct["format_text"]

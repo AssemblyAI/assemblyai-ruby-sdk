@@ -9,7 +9,7 @@ module AssemblyAI
     #  This message is sent at the end of the session, before the SessionTerminated
     #  message.
     class SessionInformation
-      # @return [String]
+      # @return [String] Describes the type of the message
       attr_reader :message_type
       # @return [Float] The total duration of the audio in seconds
       attr_reader :audio_duration_seconds
@@ -21,7 +21,7 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param message_type [String]
+      # @param message_type [String] Describes the type of the message
       # @param audio_duration_seconds [Float] The total duration of the audio in seconds
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Realtime::SessionInformation]

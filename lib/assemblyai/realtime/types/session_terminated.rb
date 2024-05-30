@@ -6,7 +6,7 @@ require "json"
 module AssemblyAI
   class Realtime
     class SessionTerminated
-      # @return [String]
+      # @return [String] Describes the type of the message
       attr_reader :message_type
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
@@ -16,7 +16,7 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param message_type [String]
+      # @param message_type [String] Describes the type of the message
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Realtime::SessionTerminated]
       def initialize(message_type:, additional_properties: nil)

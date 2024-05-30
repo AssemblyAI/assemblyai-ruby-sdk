@@ -7,7 +7,7 @@ require "json"
 module AssemblyAI
   class Realtime
     class SessionBegins
-      # @return [String]
+      # @return [String] Describes the type of the message
       attr_reader :message_type
       # @return [String] Unique identifier for the established session
       attr_reader :session_id
@@ -21,7 +21,7 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param message_type [String]
+      # @param message_type [String] Describes the type of the message
       # @param session_id [String] Unique identifier for the established session
       # @param expires_at [DateTime] Timestamp when this session will expire
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
