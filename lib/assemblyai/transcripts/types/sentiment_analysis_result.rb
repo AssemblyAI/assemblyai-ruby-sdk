@@ -6,7 +6,7 @@ require "json"
 
 module AssemblyAI
   class Transcripts
-    # The result of the sentiment analysis model
+    # The result of the Sentiment Analysis model
     class SentimentAnalysisResult
       # @return [String] The transcript of the sentence
       attr_reader :text

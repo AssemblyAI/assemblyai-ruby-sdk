@@ -8,7 +8,7 @@ require "json"
 module AssemblyAI
   class Realtime
     class PartialTranscript
-      # @return [String]
+      # @return [String] Describes the type of message
       attr_reader :message_type
       # @return [Integer] Start time of audio sample relative to session start, in milliseconds
       attr_reader :audio_start
@@ -33,7 +33,7 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param message_type [String]
+      # @param message_type [String] Describes the type of message
       # @param audio_start [Integer] Start time of audio sample relative to session start, in milliseconds
       # @param audio_end [Integer] End time of audio sample relative to session start, in milliseconds
       # @param confidence [Float] The confidence score of the entire transcription, between 0 and 1

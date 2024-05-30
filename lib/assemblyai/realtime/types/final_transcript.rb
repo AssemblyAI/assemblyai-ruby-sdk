@@ -8,7 +8,7 @@ require "json"
 module AssemblyAI
   class Realtime
     class FinalTranscript
-      # @return [String]
+      # @return [String] Describes the type of message
       attr_reader :message_type
       # @return [Boolean] Whether the text is punctuated and cased
       attr_reader :punctuated
@@ -37,7 +37,7 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param message_type [String]
+      # @param message_type [String] Describes the type of message
       # @param punctuated [Boolean] Whether the text is punctuated and cased
       # @param text_formatted [Boolean] Whether the text is formatted, for example Dollar -> $
       # @param audio_start [Integer] Start time of audio sample relative to session start, in milliseconds

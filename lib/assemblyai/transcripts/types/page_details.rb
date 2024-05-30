@@ -8,11 +8,11 @@ module AssemblyAI
     # Details of the transcript page. Transcripts are sorted from newest to oldest.
     #  The previous URL always points to a page with older transcripts.
     class PageDetails
-      # @return [Integer]
+      # @return [Integer] The number of results this page is limited to
       attr_reader :limit
-      # @return [Integer]
+      # @return [Integer] The actual number of results in the page
       attr_reader :result_count
-      # @return [String]
+      # @return [String] The URL used to retrieve the current page of transcripts
       attr_reader :current_url
       # @return [String] The URL to the next page of transcripts. The previous URL always points to a
       #  page with older transcripts.
@@ -28,9 +28,9 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param limit [Integer]
-      # @param result_count [Integer]
-      # @param current_url [String]
+      # @param limit [Integer] The number of results this page is limited to
+      # @param result_count [Integer] The actual number of results in the page
+      # @param current_url [String] The URL used to retrieve the current page of transcripts
       # @param prev_url [String] The URL to the next page of transcripts. The previous URL always points to a
       #  page with older transcripts.
       # @param next_url [String] The URL to the next page of transcripts. The next URL always points to a page
