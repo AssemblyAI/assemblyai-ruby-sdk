@@ -22,14 +22,14 @@ module AssemblyAI
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
     # @return [AssemblyAI::RequestClient]
-    def initialize(api_key:, environment: Environment::DEFAULT, base_url: nil, max_retries: nil,
+    def initialize(api_key:, environment: AssemblyAI::Environment::DEFAULT, base_url: nil, max_retries: nil,
                    timeout_in_seconds: nil)
       @default_environment = environment
       @base_url = environment || base_url
       @headers = {
         "X-Fern-Language": "Ruby",
         "X-Fern-SDK-Name": "assemblyai",
-        "X-Fern-SDK-Version": "1.0.0-beta.9",
+        "X-Fern-SDK-Version": "1.0.0-beta.10",
         "Authorization": api_key.to_s
       }
       @conn = Faraday.new(headers: @headers) do |faraday|
@@ -63,14 +63,14 @@ module AssemblyAI
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
     # @return [AssemblyAI::AsyncRequestClient]
-    def initialize(api_key:, environment: Environment::DEFAULT, base_url: nil, max_retries: nil,
+    def initialize(api_key:, environment: AssemblyAI::Environment::DEFAULT, base_url: nil, max_retries: nil,
                    timeout_in_seconds: nil)
       @default_environment = environment
       @base_url = environment || base_url
       @headers = {
         "X-Fern-Language": "Ruby",
         "X-Fern-SDK-Name": "assemblyai",
-        "X-Fern-SDK-Version": "1.0.0-beta.9",
+        "X-Fern-SDK-Version": "1.0.0-beta.10",
         "Authorization": api_key.to_s
       }
       @conn = Faraday.new(headers: @headers) do |faraday|

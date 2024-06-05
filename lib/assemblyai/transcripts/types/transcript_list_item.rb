@@ -68,6 +68,7 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::TranscriptListItem]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
+        parsed_json = JSON.parse(json_object)
         id = struct["id"]
         resource_url = struct["resource_url"]
         status = struct["status"]
