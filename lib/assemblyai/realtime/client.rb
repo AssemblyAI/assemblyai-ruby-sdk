@@ -22,11 +22,11 @@ module AssemblyAI
     # @return [AssemblyAI::Realtime::RealtimeTemporaryTokenResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: Environment::DEFAULT,
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.create_temporary_token(expires_in: 480)
+    #  api.realtime.create_temporary_token(expires_in: 480)
     def create_temporary_token(expires_in:, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -56,11 +56,11 @@ module AssemblyAI
     # @return [AssemblyAI::Realtime::RealtimeTemporaryTokenResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: Environment::DEFAULT,
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.create_temporary_token(expires_in: 480)
+    #  api.realtime.create_temporary_token(expires_in: 480)
     def create_temporary_token(expires_in:, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
