@@ -97,7 +97,12 @@ class TestAssemblyAI < Minitest::Test
                                            question: "What are they discussing?", answer_format: "text"
                                          }]).response.nil?
 
-    assert !client.lemur.task(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"],
-                              prompt: "Write a haiku about this conversation").response.nil?
+    lemur_task = client.lemur.task(transcript_ids: ["369849ed-b5a1-4add-9dde-ac936d3e7b99"],
+                                   prompt: "Write a haiku about this conversation")
+    assert !lemur_task.response.nil?
+
+    lemur_task2 = client.lemur.get_response(request_id: lemur_task.request_id)
+
+    assert Marshal.dump(lemur_task) == Marshal.dump(lemur_task2)
   end
 end

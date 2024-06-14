@@ -8,6 +8,7 @@ require_relative "types/lemur_summary_response"
 require_relative "types/lemur_question"
 require_relative "types/lemur_question_answer_response"
 require_relative "types/lemur_action_items_response"
+require_relative "types/lemur_response"
 require_relative "types/purge_lemur_request_data_response"
 require "async"
 
@@ -222,6 +223,29 @@ module AssemblyAI
         req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/action-items"
       end
       AssemblyAI::Lemur::LemurActionItemsResponse.from_json(json_object: response.body)
+    end
+
+    # Retrieve a LeMUR response that was previously generated.
+    #
+    # @param request_id [String] The ID of the LeMUR request you previously made.
+    #  This would be found in the response of the original request.
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurTaskResponse, AssemblyAI::Lemur::LemurSummaryResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse, AssemblyAI::Lemur::LemurActionItemsResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: AssemblyAI::Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.lemur.get_response(request_id: "request_id")
+    def get_response(request_id:, request_options: nil)
+      response = @request_client.conn.get do |req|
+        req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+        req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
+        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
+      end
+      AssemblyAI::Lemur::LemurResponse.from_json(json_object: response.body)
     end
 
     # Delete the data for a previously submitted LeMUR request.
@@ -467,6 +491,31 @@ module AssemblyAI
           req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/action-items"
         end
         AssemblyAI::Lemur::LemurActionItemsResponse.from_json(json_object: response.body)
+      end
+    end
+
+    # Retrieve a LeMUR response that was previously generated.
+    #
+    # @param request_id [String] The ID of the LeMUR request you previously made.
+    #  This would be found in the response of the original request.
+    # @param request_options [AssemblyAI::RequestOptions]
+    # @return [AssemblyAI::Lemur::LemurTaskResponse, AssemblyAI::Lemur::LemurSummaryResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse, AssemblyAI::Lemur::LemurActionItemsResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    environment: AssemblyAI::Environment::DEFAULT,
+    #    base_url: "https://api.example.com",
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.lemur.get_response(request_id: "request_id")
+    def get_response(request_id:, request_options: nil)
+      Async do
+        response = @request_client.conn.get do |req|
+          req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
+          req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
+          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
+        end
+        AssemblyAI::Lemur::LemurResponse.from_json(json_object: response.body)
       end
     end
 
