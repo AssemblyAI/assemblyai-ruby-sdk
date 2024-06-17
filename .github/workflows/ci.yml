@@ -20,3 +20,7 @@ jobs:
 
       - name: Test
         run: bundle exec ruby test/test_assemblyai.rb
+        env:
+          ASSEMBLYAI_API_KEY: ${{ secrets.ASSEMBLYAI_API_KEY }}
+          TEST_TRANSCRIPT_ID: ${{ secrets.TEST_TRANSCRIPT_ID }}
+          TEST_TRANSCRIPT_IDS: ${{ secrets.TEST_TRANSCRIPT_IDS }}
