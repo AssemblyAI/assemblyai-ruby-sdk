@@ -2,7 +2,7 @@
 
 require_relative "test_helper"
 require "async"
-require 'dotenv/load'
+require "dotenv/load"
 
 # Basic AssemblyAI tests
 class TestAssemblyAI < Minitest::Test
@@ -101,8 +101,8 @@ class TestAssemblyAI < Minitest::Test
     assert !client.lemur.question_answer(
       transcript_ids: transcript_ids,
       questions: [{
-                    question: "What are they discussing?", answer_format: "text"
-                  }]
+        question: "What are they discussing?", answer_format: "text"
+      }]
     ).response.nil?
 
     lemur_task = client.lemur.task(
