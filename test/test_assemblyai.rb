@@ -61,22 +61,14 @@ class TestAssemblyAI < Minitest::Test
     end
   end
 
-  def test_polling
-    skip("Integration tests not enabled")
+  def test_transcribe
+    # skip("Integration tests not enabled")
     client = AssemblyAI::Client.new(api_key: api_key)
     transcript = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
     assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
-
-    client = AssemblyAI::AsyncClient.new(api_key: api_key)
-    Sync do
-      transcript_task = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
-      assert transcript_task.is_a? Async::Task
-      transcript = transcript_task.wait
-      assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
-    end
   end
 
-  def test_transcribe
+  def test_submit
     skip("Integration tests not enabled")
     # Transcribe
     client = AssemblyAI::Client.new(api_key: api_key)
@@ -85,6 +77,17 @@ class TestAssemblyAI < Minitest::Test
     assert !transcript_submission.id.nil?
     gotten_transcript = client.transcripts.get(transcript_id: transcript_submission.id)
     assert gotten_transcript.id == transcript_submission.id
+  end
+
+  def test_polling
+    # skip("Integration tests not enabled")
+    client = AssemblyAI::Client.new(api_key: api_key)
+
+    transcript = client.transcripts.submit(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
+    assert !transcript.id.nil?
+
+    transcript = client.transcripts.wait_until_ready(transcript_id: transcript.id)
+    assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
   end
 
   def test_lemur
