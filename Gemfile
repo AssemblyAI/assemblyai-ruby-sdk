@@ -7,3 +7,4 @@ gemspec
 gem "minitest", "~> 5.0"
 gem "rake", "~> 13.0"
 gem "rubocop", "~> 1.21"
+gem 'dotenv', groups: [:development, :test]
