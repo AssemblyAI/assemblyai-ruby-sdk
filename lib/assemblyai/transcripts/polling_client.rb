@@ -75,10 +75,15 @@ module AssemblyAI
       deprecate_conformer2(speech_model: speech_model)
       transcript = submit(audio_url: audio_url, speech_model: speech_model, language_code: language_code, punctuate: punctuate, format_text: format_text, dual_channel: dual_channel,
                           webhook_url: webhook_url, webhook_auth_header_name: webhook_auth_header_name, webhook_auth_header_value: webhook_auth_header_value, auto_highlights: auto_highlights, audio_start_from: audio_start_from, audio_end_at: audio_end_at, word_boost: word_boost, boost_param: boost_param, filter_profanity: filter_profanity, redact_pii: redact_pii, redact_pii_audio: redact_pii_audio, redact_pii_audio_quality: redact_pii_audio_quality, redact_pii_policies: redact_pii_policies, redact_pii_sub: redact_pii_sub, speaker_labels: speaker_labels, speakers_expected: speakers_expected, content_safety: content_safety, content_safety_confidence: content_safety_confidence, iab_categories: iab_categories, language_detection: language_detection, custom_spelling: custom_spelling, disfluencies: disfluencies, sentiment_analysis: sentiment_analysis, auto_chapters: auto_chapters, entity_detection: entity_detection, speech_threshold: speech_threshold, summarization: summarization, summary_model: summary_model, summary_type: summary_type, custom_topics: custom_topics, topics: topics, additional_properties: additional_properties, request_options: request_options)
-      poll_transcript(transcript_id: transcript.id, polling_options: polling_options)
+      wait_until_ready(transcript_id: transcript.id, polling_options: polling_options)
     end
 
-    def poll_transcript(transcript_id:, polling_options:)
+    # Wait until the transcript is ready. The transcript is ready when the "status" is "completed".
+    #
+    # @param transcript_id [String] ID of the transcript
+    # @param polling_options [PollingOptions]
+    # @return [Transcripts::Transcript]
+    def wait_until_ready(transcript_id:, polling_options: Transcripts::PollingOptions.new)
       start_time = Time.now
       timeout_in_seconds = polling_options.timeout / 1000 if polling_options.timeout.positive?
       loop do
@@ -97,7 +102,8 @@ module AssemblyAI
     def deprecate_conformer2(speech_model: nil)
       warn "[DEPRECATION] `conformer-2` is deprecated.  Please use `best` or `nano` instead." if speech_model == "conformer-2"
     end
-    private :poll_transcript, :deprecate_conformer2
+
+    private :deprecate_conformer2
   end
 
   # :nodoc:
@@ -155,18 +161,23 @@ module AssemblyAI
       Async do
         transcript = submit(audio_url: audio_url, speech_model: speech_model, language_code: language_code, punctuate: punctuate, format_text: format_text, dual_channel: dual_channel,
                             webhook_url: webhook_url, webhook_auth_header_name: webhook_auth_header_name, webhook_auth_header_value: webhook_auth_header_value, auto_highlights: auto_highlights, audio_start_from: audio_start_from, audio_end_at: audio_end_at, word_boost: word_boost, boost_param: boost_param, filter_profanity: filter_profanity, redact_pii: redact_pii, redact_pii_audio: redact_pii_audio, redact_pii_audio_quality: redact_pii_audio_quality, redact_pii_policies: redact_pii_policies, redact_pii_sub: redact_pii_sub, speaker_labels: speaker_labels, speakers_expected: speakers_expected, content_safety: content_safety, content_safety_confidence: content_safety_confidence, iab_categories: iab_categories, language_detection: language_detection, custom_spelling: custom_spelling, disfluencies: disfluencies, sentiment_analysis: sentiment_analysis, auto_chapters: auto_chapters, entity_detection: entity_detection, speech_threshold: speech_threshold, summarization: summarization, summary_model: summary_model, summary_type: summary_type, custom_topics: custom_topics, topics: topics, additional_properties: additional_properties, request_options: request_options).wait
-        poll_transcript(transcript_id: transcript.id, polling_options: polling_options).wait
+        wait_until_ready(transcript_id: transcript.id, polling_options: polling_options).wait
       end
     end
 
-    def poll_transcript(transcript_id:, polling_options:)
+    # Wait until the transcript is ready. The transcript is ready when the "status" is "completed".
+    #
+    # @param transcript_id [String] ID of the transcript
+    # @param polling_options [PollingOptions]
+    # @return [Transcripts::Transcript]
+    def wait_until_ready(transcript_id:, polling_options: Transcripts::PollingOptions.new)
       Async do
         start_time = Time.now
         timeout_in_seconds = polling_options.timeout / 1000 if polling_options.timeout.positive?
         loop do
-          transcript = get(transcript_id: transcript_id).wait
+          transcript = get(transcript_id: transcript_id)
           if transcript.status == Transcripts::TranscriptStatus::COMPLETED || transcript.status == Transcripts::TranscriptStatus::ERROR
-            break transcript
+            return transcript
           elsif polling_options.timeout.positive? && Time.now - start_time > timeout_in_seconds
             raise StandardError, "Polling timeout"
           end
@@ -180,6 +191,7 @@ module AssemblyAI
     def deprecate_conformer2(speech_model:)
       warn "[DEPRECATION] `conformer-2` is deprecated.  Please use `best` or `nano` instead." if speech_model == "conformer-2"
     end
-    private :poll_transcript, :deprecate_conformer2
+
+    private :deprecate_conformer2
   end
 end

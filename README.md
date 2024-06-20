@@ -13,7 +13,8 @@
 
 The AssemblyAI Ruby SDK provides an easy-to-use interface for interacting with the AssemblyAI API, which supports async,
 audio intelligence models, as well as the latest LeMUR models.
-We're working on adding real-time transcription to the Ruby SDK.
+
+The Ruby SDK does not support Streaming STT at this time.
 
 ## Documentation
 
