@@ -2,11 +2,12 @@
 
 module AssemblyAI
   module Gemconfig
-    VERSION = ""
+    VERSION = "1.0.0"
     AUTHORS = [""].freeze
-    EMAIL = ""
-    SUMMARY = ""
-    DESCRIPTION = ""
+    EMAIL = "support@assemblyai.com"
+    SUMMARY = "AssemblyAI Ruby SDK"
+    DESCRIPTION = "The AssemblyAI Ruby SDK provides an easy-to-use interface for interacting with the AssemblyAI API, which supports async, audio intelligence models, as well as the latest LeMUR models.
+The Ruby SDK does not support Streaming STT at this time."
     HOMEPAGE = "https://github.com/AssemblyAI/assemblyai-ruby-sdk"
     SOURCE_CODE_URI = "https://github.com/AssemblyAI/assemblyai-ruby-sdk"
     CHANGELOG_URI = "https://github.com/AssemblyAI/assemblyai-ruby-sdk/blob/master/CHANGELOG.md"
