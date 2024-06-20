@@ -31,7 +31,7 @@ module AssemblyAI
       @headers = {
         "X-Fern-Language": "Ruby",
         "X-Fern-SDK-Name": "assemblyai",
-        "X-Fern-SDK-Version": "1.0.0",
+        "X-Fern-SDK-Version": AssemblyAI::Gemconfig::VERSION,
         "Authorization": api_key.to_s,
         "User-Agent": AssemblyAI::UserAgent.merge(AssemblyAI::DefaultUserAgent.instance.user_agent, user_agent).serialize
       }
@@ -74,7 +74,7 @@ module AssemblyAI
       @headers = {
         "X-Fern-Language": "Ruby",
         "X-Fern-SDK-Name": "assemblyai",
-        "X-Fern-SDK-Version": "1.0.0",
+        "X-Fern-SDK-Version": AssemblyAI::Gemconfig::VERSION,
         "Authorization": api_key.to_s,
         "User-Agent": AssemblyAI::UserAgent.merge(AssemblyAI::DefaultUserAgent.instance.user_agent, user_agent).serialize
       }
