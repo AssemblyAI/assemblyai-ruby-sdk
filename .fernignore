@@ -6,6 +6,12 @@ test/
 .rubocop.yml
 .github
 Gemfile
+assemblyai.gemspec
+
+lib/gemconfig.rb
+lib/requests.rb
+lib/user_agent.rb
+lib/assemblyai.rb
 
 <!-- Manual customized files client -->
 lib/assemblyai/files/client.rb

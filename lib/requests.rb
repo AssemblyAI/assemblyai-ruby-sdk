@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "environment"
+require_relative "user_agent"
 require "faraday"
 require "faraday/retry"
 require "async/http/faraday"
@@ -16,21 +17,23 @@ module AssemblyAI
     # @return [String]
     attr_reader :default_environment
 
+    # @param api_key [String]
     # @param environment [AssemblyAI::Environment]
     # @param base_url [String]
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
-    # @param api_key [String]
+    # @param user_agent [AssemblyAI::UserAgent]
     # @return [AssemblyAI::RequestClient]
     def initialize(api_key:, environment: AssemblyAI::Environment::DEFAULT, base_url: nil, max_retries: nil,
-                   timeout_in_seconds: nil)
+                   timeout_in_seconds: nil, user_agent: nil)
       @default_environment = environment
       @base_url = environment || base_url
       @headers = {
         "X-Fern-Language": "Ruby",
         "X-Fern-SDK-Name": "assemblyai",
-        "X-Fern-SDK-Version": "1.0.0",
-        "Authorization": api_key.to_s
+        "X-Fern-SDK-Version": AssemblyAI::Gemconfig::VERSION,
+        "Authorization": api_key.to_s,
+        "User-Agent": AssemblyAI::UserAgent.merge(AssemblyAI::DefaultUserAgent.instance.user_agent, user_agent).serialize
       }
       @conn = Faraday.new(headers: @headers) do |faraday|
         faraday.request :json
@@ -62,16 +65,18 @@ module AssemblyAI
     # @param max_retries [Long] The number of times to retry a failed request, defaults to 2.
     # @param timeout_in_seconds [Long]
     # @param api_key [String]
+    # @param user_agent [AssemblyAI::UserAgent]
     # @return [AssemblyAI::AsyncRequestClient]
     def initialize(api_key:, environment: AssemblyAI::Environment::DEFAULT, base_url: nil, max_retries: nil,
-                   timeout_in_seconds: nil)
+                   timeout_in_seconds: nil, user_agent: nil)
       @default_environment = environment
       @base_url = environment || base_url
       @headers = {
         "X-Fern-Language": "Ruby",
         "X-Fern-SDK-Name": "assemblyai",
-        "X-Fern-SDK-Version": "1.0.0",
-        "Authorization": api_key.to_s
+        "X-Fern-SDK-Version": AssemblyAI::Gemconfig::VERSION,
+        "Authorization": api_key.to_s,
+        "User-Agent": AssemblyAI::UserAgent.merge(AssemblyAI::DefaultUserAgent.instance.user_agent, user_agent).serialize
       }
       @conn = Faraday.new(headers: @headers) do |faraday|
         faraday.request :json
