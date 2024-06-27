@@ -11,7 +11,7 @@ module AssemblyAI
       attr_reader :id
       # @return [Float]
       attr_reader :confidence
-      # @return [Float]
+      # @return [Integer]
       attr_reader :audio_duration
       # @return [Array<AssemblyAI::Transcripts::TranscriptSentence>]
       attr_reader :sentences
@@ -25,7 +25,7 @@ module AssemblyAI
 
       # @param id [String]
       # @param confidence [Float]
-      # @param audio_duration [Float]
+      # @param audio_duration [Integer]
       # @param sentences [Array<AssemblyAI::Transcripts::TranscriptSentence>]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::SentencesResponse]
@@ -77,7 +77,7 @@ module AssemblyAI
       def self.validate_raw(obj:)
         obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
         obj.confidence.is_a?(Float) != false || raise("Passed value for field obj.confidence is not the expected type, validation failed.")
-        obj.audio_duration.is_a?(Float) != false || raise("Passed value for field obj.audio_duration is not the expected type, validation failed.")
+        obj.audio_duration.is_a?(Integer) != false || raise("Passed value for field obj.audio_duration is not the expected type, validation failed.")
         obj.sentences.is_a?(Array) != false || raise("Passed value for field obj.sentences is not the expected type, validation failed.")
       end
     end
