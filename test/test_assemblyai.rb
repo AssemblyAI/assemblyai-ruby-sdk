@@ -98,12 +98,17 @@ class TestAssemblyAI < Minitest::Test
     client = AssemblyAI::Client.new(api_key: api_key)
     assert !client.lemur.summary(transcript_ids: transcript_ids).response.nil?
 
-    assert !client.lemur.question_answer(
+    qa_response = client.lemur.question_answer(
       transcript_ids: transcript_ids,
       questions: [{
-        question: "What are they discussing?", answer_format: "text"
-      }]
-    ).response.nil?
+                    question: "What are they discussing?", answer_format: "text"
+                  }]
+    )
+    assert !qa_response.response.nil?
+
+    qa_response2 = client.lemur.get_response(request_id: qa_response.request_id)
+
+    assert qa_response.to_json == qa_response2.to_json
 
     lemur_task = client.lemur.task(
       transcript_ids: transcript_ids,
@@ -113,6 +118,6 @@ class TestAssemblyAI < Minitest::Test
 
     lemur_task2 = client.lemur.get_response(request_id: lemur_task.request_id)
 
-    assert Marshal.dump(lemur_task) == Marshal.dump(lemur_task2)
+    assert lemur_task.to_json == lemur_task2.to_json
   end
 end
