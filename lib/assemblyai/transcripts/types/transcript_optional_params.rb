@@ -28,12 +28,13 @@ module AssemblyAI
       attr_reader :dual_channel
       # @return [AssemblyAI::Transcripts::SpeechModel]
       attr_reader :speech_model
-      # @return [String] The URL to which AssemblyAI send webhooks upon transcription completion
+      # @return [String]
       attr_reader :webhook_url
-      # @return [String] The header name which should be sent back with webhook calls
+      # @return [String] The header name to be sent with the transcript completed or failed webhook
+      #  requests
       attr_reader :webhook_auth_header_name
-      # @return [String] Specify a header name and value to send back with a webhook call for added
-      #  security
+      # @return [String] The header value to send back with the transcript completed or failed webhook
+      #  requests for added security
       attr_reader :webhook_auth_header_value
       # @return [Boolean] Enable Key Phrases, either true or false
       attr_reader :auto_highlights
@@ -134,10 +135,11 @@ module AssemblyAI
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  transcription, can be true or false.
       # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
-      # @param webhook_url [String] The URL to which AssemblyAI send webhooks upon transcription completion
-      # @param webhook_auth_header_name [String] The header name which should be sent back with webhook calls
-      # @param webhook_auth_header_value [String] Specify a header name and value to send back with a webhook call for added
-      #  security
+      # @param webhook_url [String]
+      # @param webhook_auth_header_name [String] The header name to be sent with the transcript completed or failed webhook
+      #  requests
+      # @param webhook_auth_header_value [String] The header value to send back with the transcript completed or failed webhook
+      #  requests for added security
       # @param auto_highlights [Boolean] Enable Key Phrases, either true or false
       # @param audio_start_from [Integer] The point in time, in milliseconds, to begin transcribing in your media file
       # @param audio_end_at [Integer] The point in time, in milliseconds, to stop transcribing in your media file

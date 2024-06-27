@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "../../realtime/types/terminate_session"
-require_relative "../../realtime/types/force_end_utterance"
-require_relative "../../realtime/types/configure_end_utterance_silence_threshold"
+require_relative "terminate_session"
+require_relative "force_end_utterance"
+require_relative "configure_end_utterance_silence_threshold"
 
 module AssemblyAI
-  class Streaming
+  class Realtime
     # Send messages to the WebSocket
     class SendMessage
       # Deserialize a JSON object to an instance of SendMessage
       #
       # @param json_object [String]
-      # @return [AssemblyAI::Streaming::SendMessage]
+      # @return [AssemblyAI::Realtime::SendMessage]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin

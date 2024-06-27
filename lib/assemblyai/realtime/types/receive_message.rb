@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
 require "json"
-require_relative "../../realtime/types/session_begins"
-require_relative "../../realtime/types/partial_transcript"
-require_relative "../../realtime/types/final_transcript"
-require_relative "../../realtime/types/session_information"
-require_relative "../../realtime/types/session_terminated"
-require_relative "../../realtime/types/realtime_error"
+require_relative "session_begins"
+require_relative "partial_transcript"
+require_relative "final_transcript"
+require_relative "session_information"
+require_relative "session_terminated"
+require_relative "realtime_error"
 
 module AssemblyAI
-  class Streaming
+  class Realtime
     # Receive messages from the WebSocket
     class ReceiveMessage
       # Deserialize a JSON object to an instance of ReceiveMessage
       #
       # @param json_object [String]
-      # @return [AssemblyAI::Streaming::ReceiveMessage]
+      # @return [AssemblyAI::Realtime::ReceiveMessage]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin

@@ -55,7 +55,7 @@ module AssemblyAI
       # @return [Float] The confidence score for the transcript, between 0.0 (low confidence) and 1.0
       #  (high confidence)
       attr_reader :confidence
-      # @return [Float] The duration of this transcript object's media file, in seconds
+      # @return [Integer] The duration of this transcript object's media file, in seconds
       attr_reader :audio_duration
       # @return [Boolean] Whether Automatic Punctuation is enabled, either true or false
       attr_reader :punctuate
@@ -67,14 +67,18 @@ module AssemblyAI
       attr_reader :dual_channel
       # @return [AssemblyAI::Transcripts::SpeechModel]
       attr_reader :speech_model
-      # @return [String] The URL to which we send webhooks upon transcription completion
+      # @return [String] The URL to which we send webhook requests.
+      #  We sends two different types of webhook requests.
+      #  One request when a transcript is completed or failed, and one request when the
+      #  redacted audio is ready if redact_pii_audio is enabled.
       attr_reader :webhook_url
-      # @return [Integer] The status code we received from your server when delivering your webhook, if a
-      #  webhook URL was provided
+      # @return [Integer] The status code we received from your server when delivering the transcript
+      #  completed or failed webhook request, if a webhook URL was provided
       attr_reader :webhook_status_code
       # @return [Boolean] Whether webhook authentication details were provided
       attr_reader :webhook_auth
-      # @return [String] The header name which should be sent back with webhook calls
+      # @return [String] The header name to be sent with the transcript completed or failed webhook
+      #  requests
       attr_reader :webhook_auth_header_name
       # @return [Boolean] Whether speed boost is enabled
       attr_reader :speed_boost
@@ -223,18 +227,22 @@ module AssemblyAI
       #  more information.
       # @param confidence [Float] The confidence score for the transcript, between 0.0 (low confidence) and 1.0
       #  (high confidence)
-      # @param audio_duration [Float] The duration of this transcript object's media file, in seconds
+      # @param audio_duration [Integer] The duration of this transcript object's media file, in seconds
       # @param punctuate [Boolean] Whether Automatic Punctuation is enabled, either true or false
       # @param format_text [Boolean] Whether Text Formatting is enabled, either true or false
       # @param dual_channel [Boolean] Whether [Dual channel
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  was enabled in the transcription request, either true or false
       # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
-      # @param webhook_url [String] The URL to which we send webhooks upon transcription completion
-      # @param webhook_status_code [Integer] The status code we received from your server when delivering your webhook, if a
-      #  webhook URL was provided
+      # @param webhook_url [String] The URL to which we send webhook requests.
+      #  We sends two different types of webhook requests.
+      #  One request when a transcript is completed or failed, and one request when the
+      #  redacted audio is ready if redact_pii_audio is enabled.
+      # @param webhook_status_code [Integer] The status code we received from your server when delivering the transcript
+      #  completed or failed webhook request, if a webhook URL was provided
       # @param webhook_auth [Boolean] Whether webhook authentication details were provided
-      # @param webhook_auth_header_name [String] The header name which should be sent back with webhook calls
+      # @param webhook_auth_header_name [String] The header name to be sent with the transcript completed or failed webhook
+      #  requests
       # @param speed_boost [Boolean] Whether speed boost is enabled
       # @param auto_highlights [Boolean] Whether Key Phrases is enabled, either true or false
       # @param auto_highlights_result [AssemblyAI::Transcripts::AutoHighlightsResult]
@@ -618,7 +626,7 @@ module AssemblyAI
         obj.words&.is_a?(Array) != false || raise("Passed value for field obj.words is not the expected type, validation failed.")
         obj.utterances&.is_a?(Array) != false || raise("Passed value for field obj.utterances is not the expected type, validation failed.")
         obj.confidence&.is_a?(Float) != false || raise("Passed value for field obj.confidence is not the expected type, validation failed.")
-        obj.audio_duration&.is_a?(Float) != false || raise("Passed value for field obj.audio_duration is not the expected type, validation failed.")
+        obj.audio_duration&.is_a?(Integer) != false || raise("Passed value for field obj.audio_duration is not the expected type, validation failed.")
         obj.punctuate&.is_a?(Boolean) != false || raise("Passed value for field obj.punctuate is not the expected type, validation failed.")
         obj.format_text&.is_a?(Boolean) != false || raise("Passed value for field obj.format_text is not the expected type, validation failed.")
         obj.dual_channel&.is_a?(Boolean) != false || raise("Passed value for field obj.dual_channel is not the expected type, validation failed.")
