@@ -101,8 +101,8 @@ class TestAssemblyAI < Minitest::Test
     qa_response = client.lemur.question_answer(
       transcript_ids: transcript_ids,
       questions: [{
-                    question: "What are they discussing?", answer_format: "text"
-                  }]
+        question: "What are they discussing?", answer_format: "text"
+      }]
     )
     assert !qa_response.response.nil?
 
