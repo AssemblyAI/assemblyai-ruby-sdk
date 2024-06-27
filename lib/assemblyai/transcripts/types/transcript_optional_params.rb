@@ -28,7 +28,9 @@ module AssemblyAI
       attr_reader :dual_channel
       # @return [AssemblyAI::Transcripts::SpeechModel]
       attr_reader :speech_model
-      # @return [String]
+      # @return [String] The URL to which we send webhook requests. We sends two different types of
+      #  webhook requests. One request when a transcript is completed or failed, and one
+      #  request when the redacted audio is ready if redact_pii_audio is enabled.
       attr_reader :webhook_url
       # @return [String] The header name to be sent with the transcript completed or failed webhook
       #  requests
@@ -135,7 +137,9 @@ module AssemblyAI
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  transcription, can be true or false.
       # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
-      # @param webhook_url [String]
+      # @param webhook_url [String] The URL to which we send webhook requests. We sends two different types of
+      #  webhook requests. One request when a transcript is completed or failed, and one
+      #  request when the redacted audio is ready if redact_pii_audio is enabled.
       # @param webhook_auth_header_name [String] The header name to be sent with the transcript completed or failed webhook
       #  requests
       # @param webhook_auth_header_value [String] The header value to send back with the transcript completed or failed webhook

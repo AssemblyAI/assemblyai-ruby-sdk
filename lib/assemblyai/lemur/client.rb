@@ -230,7 +230,7 @@ module AssemblyAI
     # @param request_id [String] The ID of the LeMUR request you previously made.
     #  This would be found in the response of the original request.
     # @param request_options [AssemblyAI::RequestOptions]
-    # @return [AssemblyAI::Lemur::LemurTaskResponse, AssemblyAI::Lemur::LemurSummaryResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse, AssemblyAI::Lemur::LemurActionItemsResponse]
+    # @return [AssemblyAI::Lemur::LemurStringResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse]
     # @example
     #  api = AssemblyAI::Client.new(
     #    environment: AssemblyAI::Environment::DEFAULT,
@@ -499,7 +499,7 @@ module AssemblyAI
     # @param request_id [String] The ID of the LeMUR request you previously made.
     #  This would be found in the response of the original request.
     # @param request_options [AssemblyAI::RequestOptions]
-    # @return [AssemblyAI::Lemur::LemurTaskResponse, AssemblyAI::Lemur::LemurSummaryResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse, AssemblyAI::Lemur::LemurActionItemsResponse]
+    # @return [AssemblyAI::Lemur::LemurStringResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse]
     # @example
     #  api = AssemblyAI::Client.new(
     #    environment: AssemblyAI::Environment::DEFAULT,
