@@ -2,7 +2,7 @@
 
 module AssemblyAI
   module Gemconfig
-    VERSION = "1.0.0-beta.13"
+    VERSION = "1.0.0-beta.14"
     AUTHORS = [""].freeze
     EMAIL = "support@assemblyai.com"
     SUMMARY = "AssemblyAI Ruby SDK"
