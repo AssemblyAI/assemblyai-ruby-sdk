@@ -33,7 +33,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
@@ -84,7 +83,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
@@ -136,7 +134,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
@@ -187,7 +184,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
@@ -294,7 +290,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
@@ -347,7 +342,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
@@ -401,7 +395,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
@@ -454,7 +447,6 @@ module AssemblyAI
     #  Use either transcript_ids or input_text as input into LeMUR.
     # @param context [String, Hash{String => Object}] Context to provide the model. This can be a string or a free-form JSON value.
     # @param final_model [AssemblyAI::Lemur::LemurModel] The model that is used for the final prompt after compression is performed.
-    #  Defaults to "default".
     # @param max_output_size [Integer] Max output size in tokens, up to 4000
     # @param temperature [Float] The temperature to use for the model.
     #  Higher values result in answers that are more creative, lower values are more
