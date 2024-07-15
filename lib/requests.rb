@@ -2,6 +2,7 @@
 
 require_relative "environment"
 require_relative "user_agent"
+require_relative "gemconfig"
 require "faraday"
 require "faraday/retry"
 require "async/http/faraday"
