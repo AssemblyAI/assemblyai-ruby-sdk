@@ -2,8 +2,8 @@
 
 module AssemblyAI
   module Gemconfig
-    VERSION = "1.0.0-beta.16"
-    AUTHORS = [""].freeze
+    VERSION = "1.0.0"
+    AUTHORS = ["AssemblyAI"].freeze
     EMAIL = "support@assemblyai.com"
     SUMMARY = "AssemblyAI Ruby SDK"
     DESCRIPTION = "The AssemblyAI Ruby SDK provides an easy-to-use interface for interacting with the AssemblyAI API, which supports async, audio intelligence models, as well as the latest LeMUR models.
