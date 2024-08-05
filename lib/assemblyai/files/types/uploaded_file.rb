@@ -31,7 +31,8 @@ module AssemblyAI
       # @return [AssemblyAI::Files::UploadedFile]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        upload_url = struct["upload_url"]
+        parsed_json = JSON.parse(json_object)
+        upload_url = parsed_json["upload_url"]
         new(upload_url: upload_url, additional_properties: struct)
       end
 

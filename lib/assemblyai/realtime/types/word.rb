@@ -43,10 +43,11 @@ module AssemblyAI
       # @return [AssemblyAI::Realtime::Word]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        start = struct["start"]
-        end_ = struct["end"]
-        confidence = struct["confidence"]
-        text = struct["text"]
+        parsed_json = JSON.parse(json_object)
+        start = parsed_json["start"]
+        end_ = parsed_json["end"]
+        confidence = parsed_json["confidence"]
+        text = parsed_json["text"]
         new(
           start: start,
           end_: end_,

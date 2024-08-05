@@ -3,6 +3,7 @@
 require_relative "../../requests"
 require_relative "types/lemur_base_params_context"
 require_relative "types/lemur_model"
+require "ostruct"
 require_relative "types/lemur_task_response"
 require_relative "types/lemur_summary_response"
 require_relative "types/lemur_question"
@@ -38,23 +39,32 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param prompt [String] Your text to prompt the model to produce a desired output, including any context
     #  you want to pass into the model.
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Lemur::LemurTaskResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.task(prompt: "List all the locations affected by wildfires.")
     def task(prompt:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-             temperature: nil, request_options: nil)
+             temperature: nil, additional_properties: nil, _field_set: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
         req.body = {
           **(request_options&.additional_body_parameters || {}),
           transcript_ids: transcript_ids,
@@ -63,6 +73,8 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
+          additional_properties: additional_properties,
+          _field_set: _field_set,
           prompt: prompt
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/task"
@@ -88,23 +100,32 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param answer_format [String] How you want the summary to be returned. This can be any text. Examples: "TLDR",
     #  "bullet points"
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Lemur::LemurSummaryResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.summary
     def summary(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                temperature: nil, answer_format: nil, request_options: nil)
+                temperature: nil, additional_properties: nil, _field_set: nil, answer_format: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
         req.body = {
           **(request_options&.additional_body_parameters || {}),
           transcript_ids: transcript_ids,
@@ -113,6 +134,8 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
+          additional_properties: additional_properties,
+          _field_set: _field_set,
           answer_format: answer_format
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/summary"
@@ -139,6 +162,8 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param questions [Array<Hash>] A list of questions to askRequest of type Array<AssemblyAI::Lemur::LemurQuestion>, as a Hash
     #   * :question (String)
     #   * :context (Hash)
@@ -148,17 +173,24 @@ module AssemblyAI
     # @return [AssemblyAI::Lemur::LemurQuestionAnswerResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.question_answer(questions: [{ question: "Where are there wildfires?", answer_format: "List of countries in ISO 3166-1 alpha-2 format", answer_options: ["US", "CA"] }, { question: "Is global warming affecting wildfires?", answer_options: ["yes", "no"] }])
     def question_answer(questions:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                        temperature: nil, request_options: nil)
+                        temperature: nil, additional_properties: nil, _field_set: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
         req.body = {
           **(request_options&.additional_body_parameters || {}),
           transcript_ids: transcript_ids,
@@ -167,6 +199,8 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
+          additional_properties: additional_properties,
+          _field_set: _field_set,
           questions: questions
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/question-answer"
@@ -189,23 +223,32 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param answer_format [String] How you want the action items to be returned. This can be any text.
     #  Defaults to "Bullet Points".
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Lemur::LemurActionItemsResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.action_items(answer_format: "Bullet Points")
     def action_items(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                     temperature: nil, answer_format: nil, request_options: nil)
+                     temperature: nil, additional_properties: nil, _field_set: nil, answer_format: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
         req.body = {
           **(request_options&.additional_body_parameters || {}),
           transcript_ids: transcript_ids,
@@ -214,6 +257,8 @@ module AssemblyAI
           final_model: final_model,
           max_output_size: max_output_size,
           temperature: temperature,
+          additional_properties: additional_properties,
+          _field_set: _field_set,
           answer_format: answer_format
         }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/action-items"
@@ -229,8 +274,8 @@ module AssemblyAI
     # @return [AssemblyAI::Lemur::LemurStringResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.get_response(request_id: "request_id")
@@ -238,7 +283,17 @@ module AssemblyAI
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
       end
       AssemblyAI::Lemur::LemurResponse.from_json(json_object: response.body)
@@ -254,8 +309,8 @@ module AssemblyAI
     # @return [AssemblyAI::Lemur::PurgeLemurRequestDataResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.purge_request_data(request_id: "request_id")
@@ -263,7 +318,17 @@ module AssemblyAI
       response = @request_client.conn.delete do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
       end
       AssemblyAI::Lemur::PurgeLemurRequestDataResponse.from_json(json_object: response.body)
@@ -295,24 +360,33 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param prompt [String] Your text to prompt the model to produce a desired output, including any context
     #  you want to pass into the model.
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Lemur::LemurTaskResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.task(prompt: "List all the locations affected by wildfires.")
     def task(prompt:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-             temperature: nil, request_options: nil)
+             temperature: nil, additional_properties: nil, _field_set: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
           req.body = {
             **(request_options&.additional_body_parameters || {}),
             transcript_ids: transcript_ids,
@@ -321,6 +395,8 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
+            additional_properties: additional_properties,
+            _field_set: _field_set,
             prompt: prompt
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/task"
@@ -347,24 +423,33 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param answer_format [String] How you want the summary to be returned. This can be any text. Examples: "TLDR",
     #  "bullet points"
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Lemur::LemurSummaryResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.summary
     def summary(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                temperature: nil, answer_format: nil, request_options: nil)
+                temperature: nil, additional_properties: nil, _field_set: nil, answer_format: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
           req.body = {
             **(request_options&.additional_body_parameters || {}),
             transcript_ids: transcript_ids,
@@ -373,6 +458,8 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
+            additional_properties: additional_properties,
+            _field_set: _field_set,
             answer_format: answer_format
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/summary"
@@ -400,6 +487,8 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param questions [Array<Hash>] A list of questions to askRequest of type Array<AssemblyAI::Lemur::LemurQuestion>, as a Hash
     #   * :question (String)
     #   * :context (Hash)
@@ -409,18 +498,25 @@ module AssemblyAI
     # @return [AssemblyAI::Lemur::LemurQuestionAnswerResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.question_answer(questions: [{ question: "Where are there wildfires?", answer_format: "List of countries in ISO 3166-1 alpha-2 format", answer_options: ["US", "CA"] }, { question: "Is global warming affecting wildfires?", answer_options: ["yes", "no"] }])
     def question_answer(questions:, transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                        temperature: nil, request_options: nil)
+                        temperature: nil, additional_properties: nil, _field_set: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
           req.body = {
             **(request_options&.additional_body_parameters || {}),
             transcript_ids: transcript_ids,
@@ -429,6 +525,8 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
+            additional_properties: additional_properties,
+            _field_set: _field_set,
             questions: questions
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/question-answer"
@@ -452,24 +550,33 @@ module AssemblyAI
     #  Higher values result in answers that are more creative, lower values are more
     #  conservative.
     #  Can be any value between 0.0 and 1.0 inclusive.
+    # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
+    # @param _field_set [Object]
     # @param answer_format [String] How you want the action items to be returned. This can be any text.
     #  Defaults to "Bullet Points".
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Lemur::LemurActionItemsResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.action_items(answer_format: "Bullet Points")
     def action_items(transcript_ids: nil, input_text: nil, context: nil, final_model: nil, max_output_size: nil,
-                     temperature: nil, answer_format: nil, request_options: nil)
+                     temperature: nil, additional_properties: nil, _field_set: nil, answer_format: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
           req.body = {
             **(request_options&.additional_body_parameters || {}),
             transcript_ids: transcript_ids,
@@ -478,6 +585,8 @@ module AssemblyAI
             final_model: final_model,
             max_output_size: max_output_size,
             temperature: temperature,
+            additional_properties: additional_properties,
+            _field_set: _field_set,
             answer_format: answer_format
           }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/generate/action-items"
@@ -494,8 +603,8 @@ module AssemblyAI
     # @return [AssemblyAI::Lemur::LemurStringResponse, AssemblyAI::Lemur::LemurQuestionAnswerResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.get_response(request_id: "request_id")
@@ -504,7 +613,17 @@ module AssemblyAI
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
         end
         AssemblyAI::Lemur::LemurResponse.from_json(json_object: response.body)
@@ -521,8 +640,8 @@ module AssemblyAI
     # @return [AssemblyAI::Lemur::PurgeLemurRequestDataResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.lemur.purge_request_data(request_id: "request_id")
@@ -531,7 +650,17 @@ module AssemblyAI
         response = @request_client.conn.delete do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/lemur/v3/#{request_id}"
         end
         AssemblyAI::Lemur::PurgeLemurRequestDataResponse.from_json(json_object: response.body)

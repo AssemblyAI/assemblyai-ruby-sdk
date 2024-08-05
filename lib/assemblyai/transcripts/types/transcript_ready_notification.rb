@@ -37,8 +37,9 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::TranscriptReadyNotification]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        transcript_id = struct["transcript_id"]
-        status = struct["status"]
+        parsed_json = JSON.parse(json_object)
+        transcript_id = parsed_json["transcript_id"]
+        status = parsed_json["status"]
         new(
           transcript_id: transcript_id,
           status: status,

@@ -452,95 +452,95 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        id = struct["id"]
-        language_model = struct["language_model"]
-        acoustic_model = struct["acoustic_model"]
-        status = struct["status"]
-        language_code = struct["language_code"]
-        audio_url = struct["audio_url"]
-        text = struct["text"]
-        words = parsed_json["words"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::TranscriptWord.from_json(json_object: v)
+        id = parsed_json["id"]
+        language_model = parsed_json["language_model"]
+        acoustic_model = parsed_json["acoustic_model"]
+        status = parsed_json["status"]
+        language_code = parsed_json["language_code"]
+        audio_url = parsed_json["audio_url"]
+        text = parsed_json["text"]
+        words = parsed_json["words"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::TranscriptWord.from_json(json_object: item)
         end
-        utterances = parsed_json["utterances"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::TranscriptUtterance.from_json(json_object: v)
+        utterances = parsed_json["utterances"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::TranscriptUtterance.from_json(json_object: item)
         end
-        confidence = struct["confidence"]
-        audio_duration = struct["audio_duration"]
-        punctuate = struct["punctuate"]
-        format_text = struct["format_text"]
-        dual_channel = struct["dual_channel"]
-        speech_model = struct["speech_model"]
-        webhook_url = struct["webhook_url"]
-        webhook_status_code = struct["webhook_status_code"]
-        webhook_auth = struct["webhook_auth"]
-        webhook_auth_header_name = struct["webhook_auth_header_name"]
-        speed_boost = struct["speed_boost"]
-        auto_highlights = struct["auto_highlights"]
+        confidence = parsed_json["confidence"]
+        audio_duration = parsed_json["audio_duration"]
+        punctuate = parsed_json["punctuate"]
+        format_text = parsed_json["format_text"]
+        dual_channel = parsed_json["dual_channel"]
+        speech_model = parsed_json["speech_model"]
+        webhook_url = parsed_json["webhook_url"]
+        webhook_status_code = parsed_json["webhook_status_code"]
+        webhook_auth = parsed_json["webhook_auth"]
+        webhook_auth_header_name = parsed_json["webhook_auth_header_name"]
+        speed_boost = parsed_json["speed_boost"]
+        auto_highlights = parsed_json["auto_highlights"]
         if parsed_json["auto_highlights_result"].nil?
           auto_highlights_result = nil
         else
           auto_highlights_result = parsed_json["auto_highlights_result"].to_json
           auto_highlights_result = AssemblyAI::Transcripts::AutoHighlightsResult.from_json(json_object: auto_highlights_result)
         end
-        audio_start_from = struct["audio_start_from"]
-        audio_end_at = struct["audio_end_at"]
-        word_boost = struct["word_boost"]
-        boost_param = struct["boost_param"]
-        filter_profanity = struct["filter_profanity"]
-        redact_pii = struct["redact_pii"]
-        redact_pii_audio = struct["redact_pii_audio"]
-        redact_pii_audio_quality = struct["redact_pii_audio_quality"]
-        redact_pii_policies = struct["redact_pii_policies"]
-        redact_pii_sub = struct["redact_pii_sub"]
-        speaker_labels = struct["speaker_labels"]
-        speakers_expected = struct["speakers_expected"]
-        content_safety = struct["content_safety"]
+        audio_start_from = parsed_json["audio_start_from"]
+        audio_end_at = parsed_json["audio_end_at"]
+        word_boost = parsed_json["word_boost"]
+        boost_param = parsed_json["boost_param"]
+        filter_profanity = parsed_json["filter_profanity"]
+        redact_pii = parsed_json["redact_pii"]
+        redact_pii_audio = parsed_json["redact_pii_audio"]
+        redact_pii_audio_quality = parsed_json["redact_pii_audio_quality"]
+        redact_pii_policies = parsed_json["redact_pii_policies"]
+        redact_pii_sub = parsed_json["redact_pii_sub"]
+        speaker_labels = parsed_json["speaker_labels"]
+        speakers_expected = parsed_json["speakers_expected"]
+        content_safety = parsed_json["content_safety"]
         if parsed_json["content_safety_labels"].nil?
           content_safety_labels = nil
         else
           content_safety_labels = parsed_json["content_safety_labels"].to_json
           content_safety_labels = AssemblyAI::Transcripts::ContentSafetyLabelsResult.from_json(json_object: content_safety_labels)
         end
-        iab_categories = struct["iab_categories"]
+        iab_categories = parsed_json["iab_categories"]
         if parsed_json["iab_categories_result"].nil?
           iab_categories_result = nil
         else
           iab_categories_result = parsed_json["iab_categories_result"].to_json
           iab_categories_result = AssemblyAI::Transcripts::TopicDetectionModelResult.from_json(json_object: iab_categories_result)
         end
-        language_detection = struct["language_detection"]
-        custom_spelling = parsed_json["custom_spelling"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::TranscriptCustomSpelling.from_json(json_object: v)
+        language_detection = parsed_json["language_detection"]
+        custom_spelling = parsed_json["custom_spelling"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::TranscriptCustomSpelling.from_json(json_object: item)
         end
-        auto_chapters = struct["auto_chapters"]
-        chapters = parsed_json["chapters"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::Chapter.from_json(json_object: v)
+        auto_chapters = parsed_json["auto_chapters"]
+        chapters = parsed_json["chapters"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::Chapter.from_json(json_object: item)
         end
-        summarization = struct["summarization"]
-        summary_type = struct["summary_type"]
-        summary_model = struct["summary_model"]
-        summary = struct["summary"]
-        custom_topics = struct["custom_topics"]
-        topics = struct["topics"]
-        disfluencies = struct["disfluencies"]
-        sentiment_analysis = struct["sentiment_analysis"]
-        sentiment_analysis_results = parsed_json["sentiment_analysis_results"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::SentimentAnalysisResult.from_json(json_object: v)
+        summarization = parsed_json["summarization"]
+        summary_type = parsed_json["summary_type"]
+        summary_model = parsed_json["summary_model"]
+        summary = parsed_json["summary"]
+        custom_topics = parsed_json["custom_topics"]
+        topics = parsed_json["topics"]
+        disfluencies = parsed_json["disfluencies"]
+        sentiment_analysis = parsed_json["sentiment_analysis"]
+        sentiment_analysis_results = parsed_json["sentiment_analysis_results"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::SentimentAnalysisResult.from_json(json_object: item)
         end
-        entity_detection = struct["entity_detection"]
-        entities = parsed_json["entities"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::Entity.from_json(json_object: v)
+        entity_detection = parsed_json["entity_detection"]
+        entities = parsed_json["entities"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::Entity.from_json(json_object: item)
         end
-        speech_threshold = struct["speech_threshold"]
-        throttled = struct["throttled"]
-        error = struct["error"]
+        speech_threshold = parsed_json["speech_threshold"]
+        throttled = parsed_json["throttled"]
+        error = parsed_json["error"]
         new(
           id: id,
           language_model: language_model,

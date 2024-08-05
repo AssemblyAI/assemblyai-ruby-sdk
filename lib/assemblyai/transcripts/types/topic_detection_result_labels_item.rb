@@ -37,8 +37,9 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::TopicDetectionResultLabelsItem]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        relevance = struct["relevance"]
-        label = struct["label"]
+        parsed_json = JSON.parse(json_object)
+        relevance = parsed_json["relevance"]
+        label = parsed_json["label"]
         new(
           relevance: relevance,
           label: label,

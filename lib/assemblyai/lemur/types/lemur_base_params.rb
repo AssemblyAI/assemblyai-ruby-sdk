@@ -78,17 +78,17 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        transcript_ids = struct["transcript_ids"]
-        input_text = struct["input_text"]
+        transcript_ids = parsed_json["transcript_ids"]
+        input_text = parsed_json["input_text"]
         if parsed_json["context"].nil?
           context = nil
         else
           context = parsed_json["context"].to_json
           context = AssemblyAI::Lemur::LemurBaseParamsContext.from_json(json_object: context)
         end
-        final_model = struct["final_model"]
-        max_output_size = struct["max_output_size"]
-        temperature = struct["temperature"]
+        final_model = parsed_json["final_model"]
+        max_output_size = parsed_json["max_output_size"]
+        temperature = parsed_json["temperature"]
         new(
           transcript_ids: transcript_ids,
           input_text: input_text,

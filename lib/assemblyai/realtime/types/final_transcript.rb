@@ -83,16 +83,16 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        message_type = struct["message_type"]
-        punctuated = struct["punctuated"]
-        text_formatted = struct["text_formatted"]
-        audio_start = struct["audio_start"]
-        audio_end = struct["audio_end"]
-        confidence = struct["confidence"]
-        text = struct["text"]
-        words = parsed_json["words"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Realtime::Word.from_json(json_object: v)
+        message_type = parsed_json["message_type"]
+        punctuated = parsed_json["punctuated"]
+        text_formatted = parsed_json["text_formatted"]
+        audio_start = parsed_json["audio_start"]
+        audio_end = parsed_json["audio_end"]
+        confidence = parsed_json["confidence"]
+        text = parsed_json["text"]
+        words = parsed_json["words"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Realtime::Word.from_json(json_object: item)
         end
         created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
         new(

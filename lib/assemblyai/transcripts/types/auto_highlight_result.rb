@@ -47,12 +47,12 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        count = struct["count"]
-        rank = struct["rank"]
-        text = struct["text"]
-        timestamps = parsed_json["timestamps"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::Timestamp.from_json(json_object: v)
+        count = parsed_json["count"]
+        rank = parsed_json["rank"]
+        text = parsed_json["text"]
+        timestamps = parsed_json["timestamps"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::Timestamp.from_json(json_object: item)
         end
         new(
           count: count,

@@ -46,10 +46,11 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::WordSearchMatch]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        text = struct["text"]
-        count = struct["count"]
-        timestamps = struct["timestamps"]
-        indexes = struct["indexes"]
+        parsed_json = JSON.parse(json_object)
+        text = parsed_json["text"]
+        count = parsed_json["count"]
+        timestamps = parsed_json["timestamps"]
+        indexes = parsed_json["indexes"]
         new(
           text: text,
           count: count,
