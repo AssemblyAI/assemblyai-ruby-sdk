@@ -31,7 +31,8 @@ module AssemblyAI
       # @return [AssemblyAI::Realtime::TerminateSession]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        terminate_session = struct["terminate_session"]
+        parsed_json = JSON.parse(json_object)
+        terminate_session = parsed_json["terminate_session"]
         new(terminate_session: terminate_session, additional_properties: struct)
       end
 

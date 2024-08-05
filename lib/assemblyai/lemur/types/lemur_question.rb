@@ -58,15 +58,15 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        question = struct["question"]
+        question = parsed_json["question"]
         if parsed_json["context"].nil?
           context = nil
         else
           context = parsed_json["context"].to_json
           context = AssemblyAI::Lemur::LemurQuestionContext.from_json(json_object: context)
         end
-        answer_format = struct["answer_format"]
-        answer_options = struct["answer_options"]
+        answer_format = parsed_json["answer_format"]
+        answer_options = parsed_json["answer_options"]
         new(
           question: question,
           context: context,

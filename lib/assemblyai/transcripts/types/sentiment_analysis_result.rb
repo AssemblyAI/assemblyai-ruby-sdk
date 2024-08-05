@@ -66,12 +66,13 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::SentimentAnalysisResult]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        text = struct["text"]
-        start = struct["start"]
-        end_ = struct["end"]
-        sentiment = struct["sentiment"]
-        confidence = struct["confidence"]
-        speaker = struct["speaker"]
+        parsed_json = JSON.parse(json_object)
+        text = parsed_json["text"]
+        start = parsed_json["start"]
+        end_ = parsed_json["end"]
+        sentiment = parsed_json["sentiment"]
+        confidence = parsed_json["confidence"]
+        speaker = parsed_json["speaker"]
         new(
           text: text,
           start: start,

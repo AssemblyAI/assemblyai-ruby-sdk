@@ -45,10 +45,10 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        text = struct["text"]
-        labels = parsed_json["labels"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::TopicDetectionResultLabelsItem.from_json(json_object: v)
+        text = parsed_json["text"]
+        labels = parsed_json["labels"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::TopicDetectionResultLabelsItem.from_json(json_object: item)
         end
         if parsed_json["timestamp"].nil?
           timestamp = nil

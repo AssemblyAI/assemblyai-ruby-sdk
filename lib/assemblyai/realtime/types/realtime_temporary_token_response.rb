@@ -31,7 +31,8 @@ module AssemblyAI
       # @return [AssemblyAI::Realtime::RealtimeTemporaryTokenResponse]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        token = struct["token"]
+        parsed_json = JSON.parse(json_object)
+        token = parsed_json["token"]
         new(token: token, additional_properties: struct)
       end
 

@@ -41,8 +41,8 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        message_type = struct["message_type"]
-        session_id = struct["session_id"]
+        message_type = parsed_json["message_type"]
+        session_id = parsed_json["session_id"]
         expires_at = (DateTime.parse(parsed_json["expires_at"]) unless parsed_json["expires_at"].nil?)
         new(
           message_type: message_type,

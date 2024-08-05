@@ -17,7 +17,7 @@ module AssemblyAI
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin
           struct.is_a?(String) != false || raise("Passed value for field struct is not the expected type, validation failed.")
-          return json_object unless json_object.nil?
+          return struct unless struct.nil?
 
           return nil
         rescue StandardError
@@ -25,7 +25,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::TerminateSession.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::TerminateSession.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::TerminateSession.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -33,7 +33,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::ForceEndUtterance.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::ForceEndUtterance.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::ForceEndUtterance.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -41,8 +41,8 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::ConfigureEndUtteranceSilenceThreshold.validate_raw(obj: struct)
-          unless json_object.nil?
-            return AssemblyAI::Realtime::ConfigureEndUtteranceSilenceThreshold.from_json(json_object: json_object)
+          unless struct.nil?
+            return AssemblyAI::Realtime::ConfigureEndUtteranceSilenceThreshold.from_json(json_object: struct)
           end
 
           return nil

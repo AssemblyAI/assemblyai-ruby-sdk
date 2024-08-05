@@ -34,7 +34,8 @@ module AssemblyAI
       # @return [AssemblyAI::Realtime::ConfigureEndUtteranceSilenceThreshold]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        end_utterance_silence_threshold = struct["end_utterance_silence_threshold"]
+        parsed_json = JSON.parse(json_object)
+        end_utterance_silence_threshold = parsed_json["end_utterance_silence_threshold"]
         new(end_utterance_silence_threshold: end_utterance_silence_threshold, additional_properties: struct)
       end
 
