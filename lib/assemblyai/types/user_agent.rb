@@ -33,7 +33,7 @@ module AssemblyAI
     # @param user_agent2 [AssemblyAI::UserAgent]
     # @return [AssemblyAI::UserAgent]
     def self.merge(user_agent1, user_agent2)
-      merged_user_agent = UserAgent.new
+      merged_user_agent = AssemblyAI::UserAgent.new
 
       user_agent1&.user_agent_items&.each do |key, item|
         merged_user_agent.add_item(key, item)
@@ -62,8 +62,8 @@ module AssemblyAI
     attr_reader :user_agent
 
     def initialize
-      @user_agent = UserAgent.new
-      @user_agent.add_item("sdk", UserAgentItem.new(name: "Ruby", version: AssemblyAI::Gemconfig::VERSION))
+      @user_agent = AssemblyAI::UserAgent.new
+      @user_agent.add_item("sdk", AssemblyAI::UserAgentItem.new(name: "Ruby", version: AssemblyAI::Gemconfig::VERSION))
     end
   end
 end

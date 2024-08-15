@@ -3,6 +3,7 @@
 require_relative "environment"
 require_relative "types_export"
 require_relative "requests"
+require_relative "assemblyai/types/user_agent"
 require_relative "assemblyai/files/client"
 require_relative "assemblyai/transcripts/client"
 require_relative "assemblyai/transcripts/polling_client"
