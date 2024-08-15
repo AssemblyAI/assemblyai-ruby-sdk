@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "environment"
-require_relative "user_agent"
+require_relative "assemblyai/types/user_agent"
 require_relative "gemconfig"
 require "faraday"
 require "faraday/retry"

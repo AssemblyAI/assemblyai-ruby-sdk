@@ -11,6 +11,18 @@ class TestAssemblyAI < Minitest::Test
     ENV.fetch("ASSEMBLYAI_API_KEY")
   end
 
+  # @return [String] AssemblyAI Base URL
+  def base_url
+    ENV.key?("ASSEMBLYAI_BASE_URL") ? ENV.fetch("ASSEMBLYAI_BASE_URL") : AssemblyAI::Environment::DEFAULT
+  end
+
+  def client
+    AssemblyAI::Client.new(
+      api_key: api_key,
+      environment: base_url
+    )
+  end
+
   # @return [String] Transcript ID
   def transcript_id
     ENV.fetch("TEST_TRANSCRIPT_ID")
@@ -22,20 +34,17 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_upload_file_with_file
-    client = AssemblyAI::Client.new(api_key: api_key)
     file = File.new("./test/gore-short.wav")
     uploaded_file = client.files.upload(file: file)
     assert !uploaded_file.upload_url.nil?
   end
 
   def test_upload_file_with_path
-    client = AssemblyAI::Client.new(api_key: api_key)
     uploaded_file = client.files.upload(file: "./test/gore-short.wav")
     assert !uploaded_file.upload_url.nil?
   end
 
   def test_upload_file_with_base64_string
-    client = AssemblyAI::Client.new(api_key: api_key)
     uploaded_file = client.files.upload(file: File.read("./test/gore-short.wav"))
     assert !uploaded_file.upload_url.nil?
   end
@@ -46,7 +55,6 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_pagination
-    client = AssemblyAI::Client.new(api_key: api_key)
     transcript_list = client.transcripts.list
 
     count = 0
@@ -69,15 +77,12 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_transcribe
-    client = AssemblyAI::Client.new(api_key: api_key)
     transcript = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
     assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
   end
 
   def test_submit
     # Transcribe
-    client = AssemblyAI::Client.new(api_key: api_key)
-
     transcript_submission = client.transcripts.submit(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
     assert !transcript_submission.id.nil?
     gotten_transcript = client.transcripts.get(transcript_id: transcript_submission.id)
@@ -85,8 +90,6 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_polling
-    client = AssemblyAI::Client.new(api_key: api_key)
-
     transcript = client.transcripts.submit(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
     assert !transcript.id.nil?
 
@@ -95,7 +98,6 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_lemur
-    client = AssemblyAI::Client.new(api_key: api_key)
     assert !client.lemur.summary(transcript_ids: transcript_ids).response.nil?
 
     qa_response = client.lemur.question_answer(
