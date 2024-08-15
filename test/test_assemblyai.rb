@@ -13,7 +13,7 @@ class TestAssemblyAI < Minitest::Test
 
   # @return [String] AssemblyAI Base URL
   def base_url
-    ENV.fetch("ASSEMBLYAI_BASE_URL") || AssemblyAI::Environment::DEFAULT
+    ENV.key?("ASSEMBLYAI_BASE_URL") ? ENV.fetch("ASSEMBLYAI_BASE_URL") : AssemblyAI::Environment::DEFAULT
   end
 
   def client
