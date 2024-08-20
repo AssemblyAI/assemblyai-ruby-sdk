@@ -26,7 +26,7 @@ module AssemblyAI
         if file.is_a? String
           begin
             path = Pathname.new(file)
-          rescue RuntimeError
+          rescue StandardError
             file_data = file
           end
           unless path.nil?
