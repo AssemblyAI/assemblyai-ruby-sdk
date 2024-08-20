@@ -3,6 +3,7 @@
 require_relative "../../requests"
 require_relative "types/uploaded_file"
 require "async"
+require "pathname"
 
 module AssemblyAI
   class FilesClient
@@ -25,7 +26,7 @@ module AssemblyAI
         if file.is_a? String
           begin
             path = Pathname.new(file)
-          rescue StandardError
+          rescue RuntimeError
             file_data = file
           end
           unless path.nil?
