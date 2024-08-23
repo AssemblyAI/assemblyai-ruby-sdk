@@ -2,9 +2,9 @@
 
 require_relative "transcript_status"
 require_relative "transcript_language_code"
+require_relative "speech_model"
 require_relative "transcript_word"
 require_relative "transcript_utterance"
-require_relative "speech_model"
 require_relative "auto_highlights_result"
 require_relative "redact_pii_audio_quality"
 require_relative "pii_policy"
@@ -24,10 +24,8 @@ module AssemblyAI
     class Transcript
       # @return [String] The unique identifier of your transcript
       attr_reader :id
-      # @return [String] The language model that was used for the transcript
-      attr_reader :language_model
-      # @return [String] The acoustic model that was used for the transcript
-      attr_reader :acoustic_model
+      # @return [String] The URL of the media that was transcribed
+      attr_reader :audio_url
       # @return [AssemblyAI::Transcripts::TranscriptStatus] The status of your transcript. Possible values are queued, processing,
       #  completed, or error.
       attr_reader :status
@@ -36,8 +34,19 @@ module AssemblyAI
       #  Languages](https://www.assemblyai.com/docs/concepts/supported-languages).
       #  The default value is 'en_us'.
       attr_reader :language_code
-      # @return [String] The URL of the media that was transcribed
-      attr_reader :audio_url
+      # @return [Boolean] Whether [Automatic language
+      #  /www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection)
+      #  is enabled, either true or false
+      attr_reader :language_detection
+      # @return [Float] The confidence threshold for the automatically detected language.
+      #  An error will be returned if the language confidence is below this threshold.
+      #  Defaults to 0.
+      attr_reader :language_confidence_threshold
+      # @return [Float] The confidence score for the detected language, between 0.0 (low confidence) and
+      #  1.0 (high confidence)
+      attr_reader :language_confidence
+      # @return [AssemblyAI::Transcripts::SpeechModel]
+      attr_reader :speech_model
       # @return [String] The textual transcript of your media file
       attr_reader :text
       # @return [Array<AssemblyAI::Transcripts::TranscriptWord>] An array of temporally-sequential word objects, one for each word in the
@@ -61,12 +70,12 @@ module AssemblyAI
       attr_reader :punctuate
       # @return [Boolean] Whether Text Formatting is enabled, either true or false
       attr_reader :format_text
+      # @return [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
+      attr_reader :disfluencies
       # @return [Boolean] Whether [Dual channel
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  was enabled in the transcription request, either true or false
       attr_reader :dual_channel
-      # @return [AssemblyAI::Transcripts::SpeechModel]
-      attr_reader :speech_model
       # @return [String] The URL to which we send webhook requests.
       #  We sends two different types of webhook requests.
       #  One request when a transcript is completed or failed, and one request when the
@@ -140,10 +149,6 @@ module AssemblyAI
       attr_reader :iab_categories
       # @return [AssemblyAI::Transcripts::TopicDetectionModelResult]
       attr_reader :iab_categories_result
-      # @return [Boolean] Whether [Automatic language
-      #  /www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection)
-      #  is enabled, either true or false
-      attr_reader :language_detection
       # @return [Array<AssemblyAI::Transcripts::TranscriptCustomSpelling>] Customize how words are spelled and formatted using to and from values
       attr_reader :custom_spelling
       # @return [Boolean] Whether [Auto Chapters](https://www.assemblyai.com/docs/models/auto-chapters) is
@@ -168,8 +173,6 @@ module AssemblyAI
       attr_reader :custom_topics
       # @return [Array<String>] The list of custom topics provided if custom topics is enabled
       attr_reader :topics
-      # @return [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
-      attr_reader :disfluencies
       # @return [Boolean] Whether [Sentiment
       #  Analysis](https://www.assemblyai.com/docs/models/sentiment-analysis) is enabled,
       #  can be true or false
@@ -196,6 +199,10 @@ module AssemblyAI
       attr_reader :throttled
       # @return [String] Error message of why the transcript failed
       attr_reader :error
+      # @return [String] The language model that was used for the transcript
+      attr_reader :language_model
+      # @return [String] The acoustic model that was used for the transcript
+      attr_reader :acoustic_model
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
       # @return [Object]
@@ -205,15 +212,22 @@ module AssemblyAI
       OMIT = Object.new
 
       # @param id [String] The unique identifier of your transcript
-      # @param language_model [String] The language model that was used for the transcript
-      # @param acoustic_model [String] The acoustic model that was used for the transcript
+      # @param audio_url [String] The URL of the media that was transcribed
       # @param status [AssemblyAI::Transcripts::TranscriptStatus] The status of your transcript. Possible values are queued, processing,
       #  completed, or error.
       # @param language_code [AssemblyAI::Transcripts::TranscriptLanguageCode] The language of your audio file.
       #  Possible values are found in [Supported
       #  Languages](https://www.assemblyai.com/docs/concepts/supported-languages).
       #  The default value is 'en_us'.
-      # @param audio_url [String] The URL of the media that was transcribed
+      # @param language_detection [Boolean] Whether [Automatic language
+      #  /www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection)
+      #  is enabled, either true or false
+      # @param language_confidence_threshold [Float] The confidence threshold for the automatically detected language.
+      #  An error will be returned if the language confidence is below this threshold.
+      #  Defaults to 0.
+      # @param language_confidence [Float] The confidence score for the detected language, between 0.0 (low confidence) and
+      #  1.0 (high confidence)
+      # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
       # @param text [String] The textual transcript of your media file
       # @param words [Array<AssemblyAI::Transcripts::TranscriptWord>] An array of temporally-sequential word objects, one for each word in the
       #  transcript.
@@ -230,10 +244,10 @@ module AssemblyAI
       # @param audio_duration [Integer] The duration of this transcript object's media file, in seconds
       # @param punctuate [Boolean] Whether Automatic Punctuation is enabled, either true or false
       # @param format_text [Boolean] Whether Text Formatting is enabled, either true or false
+      # @param disfluencies [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
       # @param dual_channel [Boolean] Whether [Dual channel
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  was enabled in the transcription request, either true or false
-      # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
       # @param webhook_url [String] The URL to which we send webhook requests.
       #  We sends two different types of webhook requests.
       #  One request when a transcript is completed or failed, and one request when the
@@ -284,9 +298,6 @@ module AssemblyAI
       #  Detection](https://www.assemblyai.com/docs/models/topic-detection) is enabled,
       #  can be true or false
       # @param iab_categories_result [AssemblyAI::Transcripts::TopicDetectionModelResult]
-      # @param language_detection [Boolean] Whether [Automatic language
-      #  /www.assemblyai.com/docs/models/speech-recognition#automatic-language-detection)
-      #  is enabled, either true or false
       # @param custom_spelling [Array<AssemblyAI::Transcripts::TranscriptCustomSpelling>] Customize how words are spelled and formatted using to and from values
       # @param auto_chapters [Boolean] Whether [Auto Chapters](https://www.assemblyai.com/docs/models/auto-chapters) is
       #  enabled, can be true or false
@@ -302,7 +313,6 @@ module AssemblyAI
       #  [Summarization](https://www.assemblyai.com/docs/models/summarization) is enabled
       # @param custom_topics [Boolean] Whether custom topics is enabled, either true or false
       # @param topics [Array<String>] The list of custom topics provided if custom topics is enabled
-      # @param disfluencies [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
       # @param sentiment_analysis [Boolean] Whether [Sentiment
       #  Analysis](https://www.assemblyai.com/docs/models/sentiment-analysis) is enabled,
       #  can be true or false
@@ -322,16 +332,20 @@ module AssemblyAI
       # @param throttled [Boolean] True while a request is throttled and false when a request is no longer
       #  throttled
       # @param error [String] Error message of why the transcript failed
+      # @param language_model [String] The language model that was used for the transcript
+      # @param acoustic_model [String] The acoustic model that was used for the transcript
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::Transcript]
-      def initialize(id:, language_model:, acoustic_model:, status:, audio_url:, webhook_auth:, auto_highlights:, redact_pii:, summarization:, language_code: OMIT, text: OMIT,
-                     words: OMIT, utterances: OMIT, confidence: OMIT, audio_duration: OMIT, punctuate: OMIT, format_text: OMIT, dual_channel: OMIT, speech_model: OMIT, webhook_url: OMIT, webhook_status_code: OMIT, webhook_auth_header_name: OMIT, speed_boost: OMIT, auto_highlights_result: OMIT, audio_start_from: OMIT, audio_end_at: OMIT, word_boost: OMIT, boost_param: OMIT, filter_profanity: OMIT, redact_pii_audio: OMIT, redact_pii_audio_quality: OMIT, redact_pii_policies: OMIT, redact_pii_sub: OMIT, speaker_labels: OMIT, speakers_expected: OMIT, content_safety: OMIT, content_safety_labels: OMIT, iab_categories: OMIT, iab_categories_result: OMIT, language_detection: OMIT, custom_spelling: OMIT, auto_chapters: OMIT, chapters: OMIT, summary_type: OMIT, summary_model: OMIT, summary: OMIT, custom_topics: OMIT, topics: OMIT, disfluencies: OMIT, sentiment_analysis: OMIT, sentiment_analysis_results: OMIT, entity_detection: OMIT, entities: OMIT, speech_threshold: OMIT, throttled: OMIT, error: OMIT, additional_properties: nil)
+      def initialize(id:, audio_url:, status:, webhook_auth:, auto_highlights:, redact_pii:, summarization:, language_model:, acoustic_model:, language_code: OMIT, language_detection: OMIT,
+                     language_confidence_threshold: OMIT, language_confidence: OMIT, speech_model: OMIT, text: OMIT, words: OMIT, utterances: OMIT, confidence: OMIT, audio_duration: OMIT, punctuate: OMIT, format_text: OMIT, disfluencies: OMIT, dual_channel: OMIT, webhook_url: OMIT, webhook_status_code: OMIT, webhook_auth_header_name: OMIT, speed_boost: OMIT, auto_highlights_result: OMIT, audio_start_from: OMIT, audio_end_at: OMIT, word_boost: OMIT, boost_param: OMIT, filter_profanity: OMIT, redact_pii_audio: OMIT, redact_pii_audio_quality: OMIT, redact_pii_policies: OMIT, redact_pii_sub: OMIT, speaker_labels: OMIT, speakers_expected: OMIT, content_safety: OMIT, content_safety_labels: OMIT, iab_categories: OMIT, iab_categories_result: OMIT, custom_spelling: OMIT, auto_chapters: OMIT, chapters: OMIT, summary_type: OMIT, summary_model: OMIT, summary: OMIT, custom_topics: OMIT, topics: OMIT, sentiment_analysis: OMIT, sentiment_analysis_results: OMIT, entity_detection: OMIT, entities: OMIT, speech_threshold: OMIT, throttled: OMIT, error: OMIT, additional_properties: nil)
         @id = id
-        @language_model = language_model
-        @acoustic_model = acoustic_model
+        @audio_url = audio_url
         @status = status
         @language_code = language_code if language_code != OMIT
-        @audio_url = audio_url
+        @language_detection = language_detection if language_detection != OMIT
+        @language_confidence_threshold = language_confidence_threshold if language_confidence_threshold != OMIT
+        @language_confidence = language_confidence if language_confidence != OMIT
+        @speech_model = speech_model if speech_model != OMIT
         @text = text if text != OMIT
         @words = words if words != OMIT
         @utterances = utterances if utterances != OMIT
@@ -339,8 +353,8 @@ module AssemblyAI
         @audio_duration = audio_duration if audio_duration != OMIT
         @punctuate = punctuate if punctuate != OMIT
         @format_text = format_text if format_text != OMIT
+        @disfluencies = disfluencies if disfluencies != OMIT
         @dual_channel = dual_channel if dual_channel != OMIT
-        @speech_model = speech_model if speech_model != OMIT
         @webhook_url = webhook_url if webhook_url != OMIT
         @webhook_status_code = webhook_status_code if webhook_status_code != OMIT
         @webhook_auth = webhook_auth
@@ -364,7 +378,6 @@ module AssemblyAI
         @content_safety_labels = content_safety_labels if content_safety_labels != OMIT
         @iab_categories = iab_categories if iab_categories != OMIT
         @iab_categories_result = iab_categories_result if iab_categories_result != OMIT
-        @language_detection = language_detection if language_detection != OMIT
         @custom_spelling = custom_spelling if custom_spelling != OMIT
         @auto_chapters = auto_chapters if auto_chapters != OMIT
         @chapters = chapters if chapters != OMIT
@@ -374,7 +387,6 @@ module AssemblyAI
         @summary = summary if summary != OMIT
         @custom_topics = custom_topics if custom_topics != OMIT
         @topics = topics if topics != OMIT
-        @disfluencies = disfluencies if disfluencies != OMIT
         @sentiment_analysis = sentiment_analysis if sentiment_analysis != OMIT
         @sentiment_analysis_results = sentiment_analysis_results if sentiment_analysis_results != OMIT
         @entity_detection = entity_detection if entity_detection != OMIT
@@ -382,14 +394,18 @@ module AssemblyAI
         @speech_threshold = speech_threshold if speech_threshold != OMIT
         @throttled = throttled if throttled != OMIT
         @error = error if error != OMIT
+        @language_model = language_model
+        @acoustic_model = acoustic_model
         @additional_properties = additional_properties
         @_field_set = {
           "id": id,
-          "language_model": language_model,
-          "acoustic_model": acoustic_model,
+          "audio_url": audio_url,
           "status": status,
           "language_code": language_code,
-          "audio_url": audio_url,
+          "language_detection": language_detection,
+          "language_confidence_threshold": language_confidence_threshold,
+          "language_confidence": language_confidence,
+          "speech_model": speech_model,
           "text": text,
           "words": words,
           "utterances": utterances,
@@ -397,8 +413,8 @@ module AssemblyAI
           "audio_duration": audio_duration,
           "punctuate": punctuate,
           "format_text": format_text,
+          "disfluencies": disfluencies,
           "dual_channel": dual_channel,
-          "speech_model": speech_model,
           "webhook_url": webhook_url,
           "webhook_status_code": webhook_status_code,
           "webhook_auth": webhook_auth,
@@ -422,7 +438,6 @@ module AssemblyAI
           "content_safety_labels": content_safety_labels,
           "iab_categories": iab_categories,
           "iab_categories_result": iab_categories_result,
-          "language_detection": language_detection,
           "custom_spelling": custom_spelling,
           "auto_chapters": auto_chapters,
           "chapters": chapters,
@@ -432,14 +447,15 @@ module AssemblyAI
           "summary": summary,
           "custom_topics": custom_topics,
           "topics": topics,
-          "disfluencies": disfluencies,
           "sentiment_analysis": sentiment_analysis,
           "sentiment_analysis_results": sentiment_analysis_results,
           "entity_detection": entity_detection,
           "entities": entities,
           "speech_threshold": speech_threshold,
           "throttled": throttled,
-          "error": error
+          "error": error,
+          "language_model": language_model,
+          "acoustic_model": acoustic_model
         }.reject do |_k, v|
           v == OMIT
         end
@@ -453,11 +469,13 @@ module AssemblyAI
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
         id = struct["id"]
-        language_model = struct["language_model"]
-        acoustic_model = struct["acoustic_model"]
+        audio_url = struct["audio_url"]
         status = struct["status"]
         language_code = struct["language_code"]
-        audio_url = struct["audio_url"]
+        language_detection = struct["language_detection"]
+        language_confidence_threshold = struct["language_confidence_threshold"]
+        language_confidence = struct["language_confidence"]
+        speech_model = struct["speech_model"]
         text = struct["text"]
         words = parsed_json["words"]&.map do |v|
           v = v.to_json
@@ -471,8 +489,8 @@ module AssemblyAI
         audio_duration = struct["audio_duration"]
         punctuate = struct["punctuate"]
         format_text = struct["format_text"]
+        disfluencies = struct["disfluencies"]
         dual_channel = struct["dual_channel"]
-        speech_model = struct["speech_model"]
         webhook_url = struct["webhook_url"]
         webhook_status_code = struct["webhook_status_code"]
         webhook_auth = struct["webhook_auth"]
@@ -511,7 +529,6 @@ module AssemblyAI
           iab_categories_result = parsed_json["iab_categories_result"].to_json
           iab_categories_result = AssemblyAI::Transcripts::TopicDetectionModelResult.from_json(json_object: iab_categories_result)
         end
-        language_detection = struct["language_detection"]
         custom_spelling = parsed_json["custom_spelling"]&.map do |v|
           v = v.to_json
           AssemblyAI::Transcripts::TranscriptCustomSpelling.from_json(json_object: v)
@@ -527,7 +544,6 @@ module AssemblyAI
         summary = struct["summary"]
         custom_topics = struct["custom_topics"]
         topics = struct["topics"]
-        disfluencies = struct["disfluencies"]
         sentiment_analysis = struct["sentiment_analysis"]
         sentiment_analysis_results = parsed_json["sentiment_analysis_results"]&.map do |v|
           v = v.to_json
@@ -541,13 +557,17 @@ module AssemblyAI
         speech_threshold = struct["speech_threshold"]
         throttled = struct["throttled"]
         error = struct["error"]
+        language_model = struct["language_model"]
+        acoustic_model = struct["acoustic_model"]
         new(
           id: id,
-          language_model: language_model,
-          acoustic_model: acoustic_model,
+          audio_url: audio_url,
           status: status,
           language_code: language_code,
-          audio_url: audio_url,
+          language_detection: language_detection,
+          language_confidence_threshold: language_confidence_threshold,
+          language_confidence: language_confidence,
+          speech_model: speech_model,
           text: text,
           words: words,
           utterances: utterances,
@@ -555,8 +575,8 @@ module AssemblyAI
           audio_duration: audio_duration,
           punctuate: punctuate,
           format_text: format_text,
+          disfluencies: disfluencies,
           dual_channel: dual_channel,
-          speech_model: speech_model,
           webhook_url: webhook_url,
           webhook_status_code: webhook_status_code,
           webhook_auth: webhook_auth,
@@ -580,7 +600,6 @@ module AssemblyAI
           content_safety_labels: content_safety_labels,
           iab_categories: iab_categories,
           iab_categories_result: iab_categories_result,
-          language_detection: language_detection,
           custom_spelling: custom_spelling,
           auto_chapters: auto_chapters,
           chapters: chapters,
@@ -590,7 +609,6 @@ module AssemblyAI
           summary: summary,
           custom_topics: custom_topics,
           topics: topics,
-          disfluencies: disfluencies,
           sentiment_analysis: sentiment_analysis,
           sentiment_analysis_results: sentiment_analysis_results,
           entity_detection: entity_detection,
@@ -598,6 +616,8 @@ module AssemblyAI
           speech_threshold: speech_threshold,
           throttled: throttled,
           error: error,
+          language_model: language_model,
+          acoustic_model: acoustic_model,
           additional_properties: struct
         )
       end
@@ -617,11 +637,13 @@ module AssemblyAI
       # @return [Void]
       def self.validate_raw(obj:)
         obj.id.is_a?(String) != false || raise("Passed value for field obj.id is not the expected type, validation failed.")
-        obj.language_model.is_a?(String) != false || raise("Passed value for field obj.language_model is not the expected type, validation failed.")
-        obj.acoustic_model.is_a?(String) != false || raise("Passed value for field obj.acoustic_model is not the expected type, validation failed.")
+        obj.audio_url.is_a?(String) != false || raise("Passed value for field obj.audio_url is not the expected type, validation failed.")
         obj.status.is_a?(AssemblyAI::Transcripts::TranscriptStatus) != false || raise("Passed value for field obj.status is not the expected type, validation failed.")
         obj.language_code&.is_a?(AssemblyAI::Transcripts::TranscriptLanguageCode) != false || raise("Passed value for field obj.language_code is not the expected type, validation failed.")
-        obj.audio_url.is_a?(String) != false || raise("Passed value for field obj.audio_url is not the expected type, validation failed.")
+        obj.language_detection&.is_a?(Boolean) != false || raise("Passed value for field obj.language_detection is not the expected type, validation failed.")
+        obj.language_confidence_threshold&.is_a?(Float) != false || raise("Passed value for field obj.language_confidence_threshold is not the expected type, validation failed.")
+        obj.language_confidence&.is_a?(Float) != false || raise("Passed value for field obj.language_confidence is not the expected type, validation failed.")
+        obj.speech_model&.is_a?(AssemblyAI::Transcripts::SpeechModel) != false || raise("Passed value for field obj.speech_model is not the expected type, validation failed.")
         obj.text&.is_a?(String) != false || raise("Passed value for field obj.text is not the expected type, validation failed.")
         obj.words&.is_a?(Array) != false || raise("Passed value for field obj.words is not the expected type, validation failed.")
         obj.utterances&.is_a?(Array) != false || raise("Passed value for field obj.utterances is not the expected type, validation failed.")
@@ -629,8 +651,8 @@ module AssemblyAI
         obj.audio_duration&.is_a?(Integer) != false || raise("Passed value for field obj.audio_duration is not the expected type, validation failed.")
         obj.punctuate&.is_a?(Boolean) != false || raise("Passed value for field obj.punctuate is not the expected type, validation failed.")
         obj.format_text&.is_a?(Boolean) != false || raise("Passed value for field obj.format_text is not the expected type, validation failed.")
+        obj.disfluencies&.is_a?(Boolean) != false || raise("Passed value for field obj.disfluencies is not the expected type, validation failed.")
         obj.dual_channel&.is_a?(Boolean) != false || raise("Passed value for field obj.dual_channel is not the expected type, validation failed.")
-        obj.speech_model&.is_a?(AssemblyAI::Transcripts::SpeechModel) != false || raise("Passed value for field obj.speech_model is not the expected type, validation failed.")
         obj.webhook_url&.is_a?(String) != false || raise("Passed value for field obj.webhook_url is not the expected type, validation failed.")
         obj.webhook_status_code&.is_a?(Integer) != false || raise("Passed value for field obj.webhook_status_code is not the expected type, validation failed.")
         obj.webhook_auth.is_a?(Boolean) != false || raise("Passed value for field obj.webhook_auth is not the expected type, validation failed.")
@@ -654,7 +676,6 @@ module AssemblyAI
         obj.content_safety_labels.nil? || AssemblyAI::Transcripts::ContentSafetyLabelsResult.validate_raw(obj: obj.content_safety_labels)
         obj.iab_categories&.is_a?(Boolean) != false || raise("Passed value for field obj.iab_categories is not the expected type, validation failed.")
         obj.iab_categories_result.nil? || AssemblyAI::Transcripts::TopicDetectionModelResult.validate_raw(obj: obj.iab_categories_result)
-        obj.language_detection&.is_a?(Boolean) != false || raise("Passed value for field obj.language_detection is not the expected type, validation failed.")
         obj.custom_spelling&.is_a?(Array) != false || raise("Passed value for field obj.custom_spelling is not the expected type, validation failed.")
         obj.auto_chapters&.is_a?(Boolean) != false || raise("Passed value for field obj.auto_chapters is not the expected type, validation failed.")
         obj.chapters&.is_a?(Array) != false || raise("Passed value for field obj.chapters is not the expected type, validation failed.")
@@ -664,7 +685,6 @@ module AssemblyAI
         obj.summary&.is_a?(String) != false || raise("Passed value for field obj.summary is not the expected type, validation failed.")
         obj.custom_topics&.is_a?(Boolean) != false || raise("Passed value for field obj.custom_topics is not the expected type, validation failed.")
         obj.topics&.is_a?(Array) != false || raise("Passed value for field obj.topics is not the expected type, validation failed.")
-        obj.disfluencies&.is_a?(Boolean) != false || raise("Passed value for field obj.disfluencies is not the expected type, validation failed.")
         obj.sentiment_analysis&.is_a?(Boolean) != false || raise("Passed value for field obj.sentiment_analysis is not the expected type, validation failed.")
         obj.sentiment_analysis_results&.is_a?(Array) != false || raise("Passed value for field obj.sentiment_analysis_results is not the expected type, validation failed.")
         obj.entity_detection&.is_a?(Boolean) != false || raise("Passed value for field obj.entity_detection is not the expected type, validation failed.")
@@ -672,6 +692,8 @@ module AssemblyAI
         obj.speech_threshold&.is_a?(Float) != false || raise("Passed value for field obj.speech_threshold is not the expected type, validation failed.")
         obj.throttled&.is_a?(Boolean) != false || raise("Passed value for field obj.throttled is not the expected type, validation failed.")
         obj.error&.is_a?(String) != false || raise("Passed value for field obj.error is not the expected type, validation failed.")
+        obj.language_model.is_a?(String) != false || raise("Passed value for field obj.language_model is not the expected type, validation failed.")
+        obj.acoustic_model.is_a?(String) != false || raise("Passed value for field obj.acoustic_model is not the expected type, validation failed.")
       end
     end
   end
