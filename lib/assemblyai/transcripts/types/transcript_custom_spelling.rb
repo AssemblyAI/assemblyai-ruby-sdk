@@ -37,8 +37,9 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::TranscriptCustomSpelling]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        from = struct["from"]
-        to = struct["to"]
+        parsed_json = JSON.parse(json_object)
+        from = parsed_json["from"]
+        to = parsed_json["to"]
         new(
           from: from,
           to: to,

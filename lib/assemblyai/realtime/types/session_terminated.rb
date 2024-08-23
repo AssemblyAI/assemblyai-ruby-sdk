@@ -31,7 +31,8 @@ module AssemblyAI
       # @return [AssemblyAI::Realtime::SessionTerminated]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        message_type = struct["message_type"]
+        parsed_json = JSON.parse(json_object)
+        message_type = parsed_json["message_type"]
         new(message_type: message_type, additional_properties: struct)
       end
 

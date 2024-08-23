@@ -32,7 +32,8 @@ module AssemblyAI
       # @return [AssemblyAI::Realtime::ForceEndUtterance]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        force_end_utterance = struct["force_end_utterance"]
+        parsed_json = JSON.parse(json_object)
+        force_end_utterance = parsed_json["force_end_utterance"]
         new(force_end_utterance: force_end_utterance, additional_properties: struct)
       end
 

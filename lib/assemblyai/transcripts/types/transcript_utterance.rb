@@ -62,15 +62,15 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        confidence = struct["confidence"]
-        start = struct["start"]
-        end_ = struct["end"]
-        text = struct["text"]
-        words = parsed_json["words"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::TranscriptWord.from_json(json_object: v)
+        confidence = parsed_json["confidence"]
+        start = parsed_json["start"]
+        end_ = parsed_json["end"]
+        text = parsed_json["text"]
+        words = parsed_json["words"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::TranscriptWord.from_json(json_object: item)
         end
-        speaker = struct["speaker"]
+        speaker = parsed_json["speaker"]
         new(
           confidence: confidence,
           start: start,

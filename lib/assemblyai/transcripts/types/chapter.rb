@@ -48,11 +48,12 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::Chapter]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        gist = struct["gist"]
-        headline = struct["headline"]
-        summary = struct["summary"]
-        start = struct["start"]
-        end_ = struct["end"]
+        parsed_json = JSON.parse(json_object)
+        gist = parsed_json["gist"]
+        headline = parsed_json["headline"]
+        summary = parsed_json["summary"]
+        start = parsed_json["start"]
+        end_ = parsed_json["end"]
         new(
           gist: gist,
           headline: headline,
