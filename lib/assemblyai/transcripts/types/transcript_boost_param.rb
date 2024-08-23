@@ -2,7 +2,7 @@
 
 module AssemblyAI
   class Transcripts
-    # The word boost parameter value
+    # How much to boost specified words
     class TranscriptBoostParam
       LOW = "low"
       DEFAULT = "default"
