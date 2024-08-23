@@ -49,6 +49,11 @@ module AssemblyAI
     def get_url(request_options: nil)
       request_options&.base_url || @default_environment || @base_url
     end
+
+    # @return [Hash]
+    def get_headers
+      @additional_headers || {}
+    end
   end
 
   class AsyncRequestClient
@@ -92,6 +97,11 @@ module AssemblyAI
     # @return [String]
     def get_url(request_options: nil)
       request_options&.base_url || @default_environment || @base_url
+    end
+
+    # @return [Hash]
+    def get_headers
+      @additional_headers || {}
     end
   end
 
