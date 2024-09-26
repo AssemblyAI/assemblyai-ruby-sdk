@@ -156,7 +156,7 @@ module AssemblyAI
     #    base_url: "https://api.example.com",
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.transcripts.submit(audio_url: "https://github.com/AssemblyAI-Examples/audio-examples/raw/main/20230607_me_canadian_wildfires.mp3")
+    #  api.transcripts.submit(audio_url: "https://assembly.ai/wildfires.mp3")
     def submit(audio_url:, language_code: nil, language_detection: nil, language_confidence_threshold: nil, speech_model: nil,
                punctuate: nil, format_text: nil, disfluencies: nil, dual_channel: nil, webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, custom_spelling: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, request_options: nil)
       response = @request_client.conn.post do |req|
@@ -503,7 +503,7 @@ module AssemblyAI
     #    base_url: "https://api.example.com",
     #    api_key: "YOUR_API_KEY"
     #  )
-    #  api.transcripts.submit(audio_url: "https://github.com/AssemblyAI-Examples/audio-examples/raw/main/20230607_me_canadian_wildfires.mp3")
+    #  api.transcripts.submit(audio_url: "https://assembly.ai/wildfires.mp3")
     def submit(audio_url:, language_code: nil, language_detection: nil, language_confidence_threshold: nil, speech_model: nil,
                punctuate: nil, format_text: nil, disfluencies: nil, dual_channel: nil, webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, custom_spelling: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, request_options: nil)
       Async do

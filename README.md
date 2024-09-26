@@ -50,7 +50,7 @@ You can now use the `client` object to interact with the AssemblyAI API.
 
 ```ruby
 transcript = client.transcripts.transcribe(
-  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a',
+  audio_url: 'https://assembly.ai/espn.m4a',
 )
 ```
 
@@ -60,7 +60,7 @@ If you don't want to wait until the transcript is ready, you can use `submit`:
 
 ```ruby
 transcript = client.transcripts.submit(
-  audio_url: 'https://storage.googleapis.com/aai-web-samples/espn-bears.m4a'
+  audio_url: 'https://assembly.ai/espn.m4a'
 )
 ```
 

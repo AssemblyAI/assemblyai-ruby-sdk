@@ -77,20 +77,20 @@ class TestAssemblyAI < Minitest::Test
   end
 
   def test_transcribe
-    transcript = client.transcripts.transcribe(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
+    transcript = client.transcripts.transcribe(audio_url: "https://assembly.ai/espn.m4a")
     assert transcript.status == AssemblyAI::Transcripts::TranscriptStatus::COMPLETED
   end
 
   def test_submit
     # Transcribe
-    transcript_submission = client.transcripts.submit(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
+    transcript_submission = client.transcripts.submit(audio_url: "https://assembly.ai/espn.m4a")
     assert !transcript_submission.id.nil?
     gotten_transcript = client.transcripts.get(transcript_id: transcript_submission.id)
     assert gotten_transcript.id == transcript_submission.id
   end
 
   def test_polling
-    transcript = client.transcripts.submit(audio_url: "https://storage.googleapis.com/aai-web-samples/espn-bears.m4a")
+    transcript = client.transcripts.submit(audio_url: "https://assembly.ai/espn.m4a")
     assert !transcript.id.nil?
 
     transcript = client.transcripts.wait_until_ready(transcript_id: transcript.id)
