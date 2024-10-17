@@ -35,7 +35,7 @@ module AssemblyAI
     #  Transcripts are sorted from newest to oldest. The previous URL always points to
     #  a page with older transcripts.
     #
-    # @param limit [Long] Maximum amount of transcripts to retrieve
+    # @param limit [Integer] Maximum amount of transcripts to retrieve
     # @param status [AssemblyAI::Transcripts::TranscriptStatus] Filter by transcript status
     # @param created_on [String] Only get transcripts created on this date
     # @param before_id [String] Get transcripts that were created before this transcript ID
@@ -83,12 +83,16 @@ module AssemblyAI
     # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
     # @param format_text [Boolean] Enable Text Formatting, can be true or false
     # @param disfluencies [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
+    # @param multichannel [Boolean] Enable
+    #  ://www.assemblyai.com/docs/models/speech-recognition#multichannel-transcription)
+    #  transcription, can be true or false.
     # @param dual_channel [Boolean] Enable [Dual
     #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
     #  transcription, can be true or false.
-    # @param webhook_url [String] The URL to which we send webhook requests. We sends two different types of
-    #  webhook requests. One request when a transcript is completed or failed, and one
-    #  request when the redacted audio is ready if redact_pii_audio is enabled.
+    # @param webhook_url [String] The URL to which we send webhook requests.
+    #  We sends two different types of webhook requests.
+    #  One request when a transcript is completed or failed, and one request when the
+    #  redacted audio is ready if redact_pii_audio is enabled.
     # @param webhook_auth_header_name [String] The header name to be sent with the transcript completed or failed webhook
     #  requests
     # @param webhook_auth_header_value [String] The header value to send back with the transcript completed or failed webhook
@@ -158,7 +162,7 @@ module AssemblyAI
     #  )
     #  api.transcripts.submit(audio_url: "https://assembly.ai/wildfires.mp3")
     def submit(audio_url:, language_code: nil, language_detection: nil, language_confidence_threshold: nil, speech_model: nil,
-               punctuate: nil, format_text: nil, disfluencies: nil, dual_channel: nil, webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, custom_spelling: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, request_options: nil)
+               punctuate: nil, format_text: nil, disfluencies: nil, multichannel: nil, dual_channel: nil, webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, custom_spelling: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, request_options: nil)
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
@@ -172,6 +176,7 @@ module AssemblyAI
           punctuate: punctuate,
           format_text: format_text,
           disfluencies: disfluencies,
+          multichannel: multichannel,
           dual_channel: dual_channel,
           webhook_url: webhook_url,
           webhook_auth_header_name: webhook_auth_header_name,
@@ -380,7 +385,7 @@ module AssemblyAI
     #  Transcripts are sorted from newest to oldest. The previous URL always points to
     #  a page with older transcripts.
     #
-    # @param limit [Long] Maximum amount of transcripts to retrieve
+    # @param limit [Integer] Maximum amount of transcripts to retrieve
     # @param status [AssemblyAI::Transcripts::TranscriptStatus] Filter by transcript status
     # @param created_on [String] Only get transcripts created on this date
     # @param before_id [String] Get transcripts that were created before this transcript ID
@@ -430,12 +435,16 @@ module AssemblyAI
     # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
     # @param format_text [Boolean] Enable Text Formatting, can be true or false
     # @param disfluencies [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
+    # @param multichannel [Boolean] Enable
+    #  ://www.assemblyai.com/docs/models/speech-recognition#multichannel-transcription)
+    #  transcription, can be true or false.
     # @param dual_channel [Boolean] Enable [Dual
     #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
     #  transcription, can be true or false.
-    # @param webhook_url [String] The URL to which we send webhook requests. We sends two different types of
-    #  webhook requests. One request when a transcript is completed or failed, and one
-    #  request when the redacted audio is ready if redact_pii_audio is enabled.
+    # @param webhook_url [String] The URL to which we send webhook requests.
+    #  We sends two different types of webhook requests.
+    #  One request when a transcript is completed or failed, and one request when the
+    #  redacted audio is ready if redact_pii_audio is enabled.
     # @param webhook_auth_header_name [String] The header name to be sent with the transcript completed or failed webhook
     #  requests
     # @param webhook_auth_header_value [String] The header value to send back with the transcript completed or failed webhook
@@ -505,7 +514,7 @@ module AssemblyAI
     #  )
     #  api.transcripts.submit(audio_url: "https://assembly.ai/wildfires.mp3")
     def submit(audio_url:, language_code: nil, language_detection: nil, language_confidence_threshold: nil, speech_model: nil,
-               punctuate: nil, format_text: nil, disfluencies: nil, dual_channel: nil, webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, custom_spelling: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, request_options: nil)
+               punctuate: nil, format_text: nil, disfluencies: nil, multichannel: nil, dual_channel: nil, webhook_url: nil, webhook_auth_header_name: nil, webhook_auth_header_value: nil, auto_highlights: nil, audio_start_from: nil, audio_end_at: nil, word_boost: nil, boost_param: nil, filter_profanity: nil, redact_pii: nil, redact_pii_audio: nil, redact_pii_audio_quality: nil, redact_pii_policies: nil, redact_pii_sub: nil, speaker_labels: nil, speakers_expected: nil, content_safety: nil, content_safety_confidence: nil, iab_categories: nil, custom_spelling: nil, sentiment_analysis: nil, auto_chapters: nil, entity_detection: nil, speech_threshold: nil, summarization: nil, summary_model: nil, summary_type: nil, custom_topics: nil, topics: nil, request_options: nil)
       Async do
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
@@ -520,6 +529,7 @@ module AssemblyAI
             punctuate: punctuate,
             format_text: format_text,
             disfluencies: disfluencies,
+            multichannel: multichannel,
             dual_channel: dual_channel,
             webhook_url: webhook_url,
             webhook_auth_header_name: webhook_auth_header_name,

@@ -9,7 +9,7 @@ module AssemblyAI
       ANTHROPIC_CLAUDE3_HAIKU = "anthropic/claude-3-haiku"
       ANTHROPIC_CLAUDE3_SONNET = "anthropic/claude-3-sonnet"
       ANTHROPIC_CLAUDE2_1 = "anthropic/claude-2-1"
-      ANTHROPIC_CLAUDE2 = "anthropic/claude-2"
+      ANTHROPIC_CLAUDE2_0 = "anthropic/claude-2"
       DEFAULT = "default"
       ANTHROPIC_CLAUDE_INSTANT1_2 = "anthropic/claude-instant-1-2"
       BASIC = "basic"

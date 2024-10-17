@@ -8,17 +8,17 @@ require "json"
 module AssemblyAI
   class Transcripts
     class TranscriptListItem
-      # @return [String]
+      # @return [String] The unique identifier for the transcript
       attr_reader :id
-      # @return [String]
+      # @return [String] The URL to retrieve the transcript
       attr_reader :resource_url
-      # @return [AssemblyAI::Transcripts::TranscriptStatus]
+      # @return [AssemblyAI::Transcripts::TranscriptStatus] The status of the transcript
       attr_reader :status
-      # @return [DateTime]
+      # @return [DateTime] The date and time the transcript was created
       attr_reader :created
-      # @return [DateTime]
+      # @return [DateTime] The date and time the transcript was completed
       attr_reader :completed
-      # @return [String]
+      # @return [String] The URL to the audio file
       attr_reader :audio_url
       # @return [String] Error message of why the transcript failed
       attr_reader :error
@@ -30,12 +30,12 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param id [String]
-      # @param resource_url [String]
-      # @param status [AssemblyAI::Transcripts::TranscriptStatus]
-      # @param created [DateTime]
-      # @param completed [DateTime]
-      # @param audio_url [String]
+      # @param id [String] The unique identifier for the transcript
+      # @param resource_url [String] The URL to retrieve the transcript
+      # @param status [AssemblyAI::Transcripts::TranscriptStatus] The status of the transcript
+      # @param created [DateTime] The date and time the transcript was created
+      # @param completed [DateTime] The date and time the transcript was completed
+      # @param audio_url [String] The URL to the audio file
       # @param error [String] Error message of why the transcript failed
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::TranscriptListItem]

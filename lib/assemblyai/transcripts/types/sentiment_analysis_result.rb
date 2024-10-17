@@ -18,6 +18,9 @@ module AssemblyAI
       attr_reader :sentiment
       # @return [Float] The confidence score for the detected sentiment of the sentence, from 0 to 1
       attr_reader :confidence
+      # @return [String] The channel of this utterance. The left and right channels are channels 1 and 2.
+      #  Additional channels increment the channel number sequentially.
+      attr_reader :channel
       # @return [String] The speaker of the sentence if [Speaker
       #  Diarization](https://www.assemblyai.com/docs/models/speaker-diarization) is
       #  enabled, else null
@@ -35,17 +38,21 @@ module AssemblyAI
       # @param end_ [Integer] The ending time, in milliseconds, of the sentence
       # @param sentiment [AssemblyAI::Transcripts::Sentiment] The detected sentiment for the sentence, one of POSITIVE, NEUTRAL, NEGATIVE
       # @param confidence [Float] The confidence score for the detected sentiment of the sentence, from 0 to 1
+      # @param channel [String] The channel of this utterance. The left and right channels are channels 1 and 2.
+      #  Additional channels increment the channel number sequentially.
       # @param speaker [String] The speaker of the sentence if [Speaker
       #  Diarization](https://www.assemblyai.com/docs/models/speaker-diarization) is
       #  enabled, else null
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::SentimentAnalysisResult]
-      def initialize(text:, start:, end_:, sentiment:, confidence:, speaker: OMIT, additional_properties: nil)
+      def initialize(text:, start:, end_:, sentiment:, confidence:, channel: OMIT, speaker: OMIT,
+                     additional_properties: nil)
         @text = text
         @start = start
         @end_ = end_
         @sentiment = sentiment
         @confidence = confidence
+        @channel = channel if channel != OMIT
         @speaker = speaker if speaker != OMIT
         @additional_properties = additional_properties
         @_field_set = {
@@ -54,6 +61,7 @@ module AssemblyAI
           "end": end_,
           "sentiment": sentiment,
           "confidence": confidence,
+          "channel": channel,
           "speaker": speaker
         }.reject do |_k, v|
           v == OMIT
@@ -71,6 +79,7 @@ module AssemblyAI
         end_ = struct["end"]
         sentiment = struct["sentiment"]
         confidence = struct["confidence"]
+        channel = struct["channel"]
         speaker = struct["speaker"]
         new(
           text: text,
@@ -78,6 +87,7 @@ module AssemblyAI
           end_: end_,
           sentiment: sentiment,
           confidence: confidence,
+          channel: channel,
           speaker: speaker,
           additional_properties: struct
         )
@@ -102,6 +112,7 @@ module AssemblyAI
         obj.end_.is_a?(Integer) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
         obj.sentiment.is_a?(AssemblyAI::Transcripts::Sentiment) != false || raise("Passed value for field obj.sentiment is not the expected type, validation failed.")
         obj.confidence.is_a?(Float) != false || raise("Passed value for field obj.confidence is not the expected type, validation failed.")
+        obj.channel&.is_a?(String) != false || raise("Passed value for field obj.channel is not the expected type, validation failed.")
         obj.speaker&.is_a?(String) != false || raise("Passed value for field obj.speaker is not the expected type, validation failed.")
       end
     end

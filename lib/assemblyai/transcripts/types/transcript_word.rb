@@ -6,15 +6,18 @@ require "json"
 module AssemblyAI
   class Transcripts
     class TranscriptWord
-      # @return [Float]
+      # @return [Float] The confidence score for the transcript of this word
       attr_reader :confidence
-      # @return [Integer]
+      # @return [Integer] The starting time, in milliseconds, for the word
       attr_reader :start
-      # @return [Integer]
+      # @return [Integer] The ending time, in milliseconds, for the word
       attr_reader :end_
-      # @return [String]
+      # @return [String] The text of the word
       attr_reader :text
-      # @return [String] The speaker of the sentence if [Speaker
+      # @return [String] The channel of the word. The left and right channels are channels 1 and 2.
+      #  Additional channels increment the channel number sequentially.
+      attr_reader :channel
+      # @return [String] The speaker of the word if [Speaker
       #  Diarization](https://www.assemblyai.com/docs/models/speaker-diarization) is
       #  enabled, else null
       attr_reader :speaker
@@ -26,20 +29,23 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param confidence [Float]
-      # @param start [Integer]
-      # @param end_ [Integer]
-      # @param text [String]
-      # @param speaker [String] The speaker of the sentence if [Speaker
+      # @param confidence [Float] The confidence score for the transcript of this word
+      # @param start [Integer] The starting time, in milliseconds, for the word
+      # @param end_ [Integer] The ending time, in milliseconds, for the word
+      # @param text [String] The text of the word
+      # @param channel [String] The channel of the word. The left and right channels are channels 1 and 2.
+      #  Additional channels increment the channel number sequentially.
+      # @param speaker [String] The speaker of the word if [Speaker
       #  Diarization](https://www.assemblyai.com/docs/models/speaker-diarization) is
       #  enabled, else null
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::TranscriptWord]
-      def initialize(confidence:, start:, end_:, text:, speaker: OMIT, additional_properties: nil)
+      def initialize(confidence:, start:, end_:, text:, channel: OMIT, speaker: OMIT, additional_properties: nil)
         @confidence = confidence
         @start = start
         @end_ = end_
         @text = text
+        @channel = channel if channel != OMIT
         @speaker = speaker if speaker != OMIT
         @additional_properties = additional_properties
         @_field_set = {
@@ -47,6 +53,7 @@ module AssemblyAI
           "start": start,
           "end": end_,
           "text": text,
+          "channel": channel,
           "speaker": speaker
         }.reject do |_k, v|
           v == OMIT
@@ -63,12 +70,14 @@ module AssemblyAI
         start = struct["start"]
         end_ = struct["end"]
         text = struct["text"]
+        channel = struct["channel"]
         speaker = struct["speaker"]
         new(
           confidence: confidence,
           start: start,
           end_: end_,
           text: text,
+          channel: channel,
           speaker: speaker,
           additional_properties: struct
         )
@@ -92,6 +101,7 @@ module AssemblyAI
         obj.start.is_a?(Integer) != false || raise("Passed value for field obj.start is not the expected type, validation failed.")
         obj.end_.is_a?(Integer) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
         obj.text.is_a?(String) != false || raise("Passed value for field obj.text is not the expected type, validation failed.")
+        obj.channel&.is_a?(String) != false || raise("Passed value for field obj.channel is not the expected type, validation failed.")
         obj.speaker&.is_a?(String) != false || raise("Passed value for field obj.speaker is not the expected type, validation failed.")
       end
     end

@@ -7,13 +7,13 @@ require "json"
 module AssemblyAI
   class Transcripts
     class SentencesResponse
-      # @return [String]
+      # @return [String] The unique identifier for the transcript
       attr_reader :id
-      # @return [Float]
+      # @return [Float] The confidence score for the transcript
       attr_reader :confidence
-      # @return [Float]
+      # @return [Float] The duration of the audio file in seconds
       attr_reader :audio_duration
-      # @return [Array<AssemblyAI::Transcripts::TranscriptSentence>]
+      # @return [Array<AssemblyAI::Transcripts::TranscriptSentence>] An array of sentences in the transcript
       attr_reader :sentences
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
@@ -23,10 +23,10 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param id [String]
-      # @param confidence [Float]
-      # @param audio_duration [Float]
-      # @param sentences [Array<AssemblyAI::Transcripts::TranscriptSentence>]
+      # @param id [String] The unique identifier for the transcript
+      # @param confidence [Float] The confidence score for the transcript
+      # @param audio_duration [Float] The duration of the audio file in seconds
+      # @param sentences [Array<AssemblyAI::Transcripts::TranscriptSentence>] An array of sentences in the transcript
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::SentencesResponse]
       def initialize(id:, confidence:, audio_duration:, sentences:, additional_properties: nil)
