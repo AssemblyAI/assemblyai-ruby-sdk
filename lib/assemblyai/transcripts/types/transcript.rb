@@ -40,7 +40,6 @@ module AssemblyAI
       attr_reader :language_detection
       # @return [Float] The confidence threshold for the automatically detected language.
       #  An error will be returned if the language confidence is below this threshold.
-      #  Defaults to 0.
       attr_reader :language_confidence_threshold
       # @return [Float] The confidence score for the detected language, between 0.0 (low confidence) and
       #  1.0 (high confidence)
@@ -72,6 +71,13 @@ module AssemblyAI
       attr_reader :format_text
       # @return [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
       attr_reader :disfluencies
+      # @return [Boolean] Whether [Multichannel
+      #  ://www.assemblyai.com/docs/models/speech-recognition#multichannel-transcription)
+      #  was enabled in the transcription request, either true or false
+      attr_reader :multichannel
+      # @return [Integer] The number of audio channels in the audio file. This is only present when
+      #  multichannel is enabled.
+      attr_reader :audio_channels
       # @return [Boolean] Whether [Dual channel
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  was enabled in the transcription request, either true or false
@@ -224,7 +230,6 @@ module AssemblyAI
       #  is enabled, either true or false
       # @param language_confidence_threshold [Float] The confidence threshold for the automatically detected language.
       #  An error will be returned if the language confidence is below this threshold.
-      #  Defaults to 0.
       # @param language_confidence [Float] The confidence score for the detected language, between 0.0 (low confidence) and
       #  1.0 (high confidence)
       # @param speech_model [AssemblyAI::Transcripts::SpeechModel]
@@ -245,6 +250,11 @@ module AssemblyAI
       # @param punctuate [Boolean] Whether Automatic Punctuation is enabled, either true or false
       # @param format_text [Boolean] Whether Text Formatting is enabled, either true or false
       # @param disfluencies [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
+      # @param multichannel [Boolean] Whether [Multichannel
+      #  ://www.assemblyai.com/docs/models/speech-recognition#multichannel-transcription)
+      #  was enabled in the transcription request, either true or false
+      # @param audio_channels [Integer] The number of audio channels in the audio file. This is only present when
+      #  multichannel is enabled.
       # @param dual_channel [Boolean] Whether [Dual channel
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  was enabled in the transcription request, either true or false
@@ -337,7 +347,7 @@ module AssemblyAI
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::Transcript]
       def initialize(id:, audio_url:, status:, webhook_auth:, auto_highlights:, redact_pii:, summarization:, language_model:, acoustic_model:, language_code: OMIT, language_detection: OMIT,
-                     language_confidence_threshold: OMIT, language_confidence: OMIT, speech_model: OMIT, text: OMIT, words: OMIT, utterances: OMIT, confidence: OMIT, audio_duration: OMIT, punctuate: OMIT, format_text: OMIT, disfluencies: OMIT, dual_channel: OMIT, webhook_url: OMIT, webhook_status_code: OMIT, webhook_auth_header_name: OMIT, speed_boost: OMIT, auto_highlights_result: OMIT, audio_start_from: OMIT, audio_end_at: OMIT, word_boost: OMIT, boost_param: OMIT, filter_profanity: OMIT, redact_pii_audio: OMIT, redact_pii_audio_quality: OMIT, redact_pii_policies: OMIT, redact_pii_sub: OMIT, speaker_labels: OMIT, speakers_expected: OMIT, content_safety: OMIT, content_safety_labels: OMIT, iab_categories: OMIT, iab_categories_result: OMIT, custom_spelling: OMIT, auto_chapters: OMIT, chapters: OMIT, summary_type: OMIT, summary_model: OMIT, summary: OMIT, custom_topics: OMIT, topics: OMIT, sentiment_analysis: OMIT, sentiment_analysis_results: OMIT, entity_detection: OMIT, entities: OMIT, speech_threshold: OMIT, throttled: OMIT, error: OMIT, additional_properties: nil)
+                     language_confidence_threshold: OMIT, language_confidence: OMIT, speech_model: OMIT, text: OMIT, words: OMIT, utterances: OMIT, confidence: OMIT, audio_duration: OMIT, punctuate: OMIT, format_text: OMIT, disfluencies: OMIT, multichannel: OMIT, audio_channels: OMIT, dual_channel: OMIT, webhook_url: OMIT, webhook_status_code: OMIT, webhook_auth_header_name: OMIT, speed_boost: OMIT, auto_highlights_result: OMIT, audio_start_from: OMIT, audio_end_at: OMIT, word_boost: OMIT, boost_param: OMIT, filter_profanity: OMIT, redact_pii_audio: OMIT, redact_pii_audio_quality: OMIT, redact_pii_policies: OMIT, redact_pii_sub: OMIT, speaker_labels: OMIT, speakers_expected: OMIT, content_safety: OMIT, content_safety_labels: OMIT, iab_categories: OMIT, iab_categories_result: OMIT, custom_spelling: OMIT, auto_chapters: OMIT, chapters: OMIT, summary_type: OMIT, summary_model: OMIT, summary: OMIT, custom_topics: OMIT, topics: OMIT, sentiment_analysis: OMIT, sentiment_analysis_results: OMIT, entity_detection: OMIT, entities: OMIT, speech_threshold: OMIT, throttled: OMIT, error: OMIT, additional_properties: nil)
         @id = id
         @audio_url = audio_url
         @status = status
@@ -354,6 +364,8 @@ module AssemblyAI
         @punctuate = punctuate if punctuate != OMIT
         @format_text = format_text if format_text != OMIT
         @disfluencies = disfluencies if disfluencies != OMIT
+        @multichannel = multichannel if multichannel != OMIT
+        @audio_channels = audio_channels if audio_channels != OMIT
         @dual_channel = dual_channel if dual_channel != OMIT
         @webhook_url = webhook_url if webhook_url != OMIT
         @webhook_status_code = webhook_status_code if webhook_status_code != OMIT
@@ -414,6 +426,8 @@ module AssemblyAI
           "punctuate": punctuate,
           "format_text": format_text,
           "disfluencies": disfluencies,
+          "multichannel": multichannel,
+          "audio_channels": audio_channels,
           "dual_channel": dual_channel,
           "webhook_url": webhook_url,
           "webhook_status_code": webhook_status_code,
@@ -490,6 +504,8 @@ module AssemblyAI
         punctuate = struct["punctuate"]
         format_text = struct["format_text"]
         disfluencies = struct["disfluencies"]
+        multichannel = struct["multichannel"]
+        audio_channels = struct["audio_channels"]
         dual_channel = struct["dual_channel"]
         webhook_url = struct["webhook_url"]
         webhook_status_code = struct["webhook_status_code"]
@@ -576,6 +592,8 @@ module AssemblyAI
           punctuate: punctuate,
           format_text: format_text,
           disfluencies: disfluencies,
+          multichannel: multichannel,
+          audio_channels: audio_channels,
           dual_channel: dual_channel,
           webhook_url: webhook_url,
           webhook_status_code: webhook_status_code,
@@ -652,6 +670,8 @@ module AssemblyAI
         obj.punctuate&.is_a?(Boolean) != false || raise("Passed value for field obj.punctuate is not the expected type, validation failed.")
         obj.format_text&.is_a?(Boolean) != false || raise("Passed value for field obj.format_text is not the expected type, validation failed.")
         obj.disfluencies&.is_a?(Boolean) != false || raise("Passed value for field obj.disfluencies is not the expected type, validation failed.")
+        obj.multichannel&.is_a?(Boolean) != false || raise("Passed value for field obj.multichannel is not the expected type, validation failed.")
+        obj.audio_channels&.is_a?(Integer) != false || raise("Passed value for field obj.audio_channels is not the expected type, validation failed.")
         obj.dual_channel&.is_a?(Boolean) != false || raise("Passed value for field obj.dual_channel is not the expected type, validation failed.")
         obj.webhook_url&.is_a?(String) != false || raise("Passed value for field obj.webhook_url is not the expected type, validation failed.")
         obj.webhook_status_code&.is_a?(Integer) != false || raise("Passed value for field obj.webhook_status_code is not the expected type, validation failed.")

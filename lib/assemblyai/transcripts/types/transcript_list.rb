@@ -10,9 +10,9 @@ module AssemblyAI
     # A list of transcripts. Transcripts are sorted from newest to oldest. The
     #  previous URL always points to a page with older transcripts.
     class TranscriptList
-      # @return [AssemblyAI::Transcripts::PageDetails]
+      # @return [AssemblyAI::Transcripts::PageDetails] Details of the transcript page
       attr_reader :page_details
-      # @return [Array<AssemblyAI::Transcripts::TranscriptListItem>]
+      # @return [Array<AssemblyAI::Transcripts::TranscriptListItem>] An array of transcripts
       attr_reader :transcripts
       # @return [OpenStruct] Additional properties unmapped to the current class definition
       attr_reader :additional_properties
@@ -22,8 +22,8 @@ module AssemblyAI
 
       OMIT = Object.new
 
-      # @param page_details [AssemblyAI::Transcripts::PageDetails]
-      # @param transcripts [Array<AssemblyAI::Transcripts::TranscriptListItem>]
+      # @param page_details [AssemblyAI::Transcripts::PageDetails] Details of the transcript page
+      # @param transcripts [Array<AssemblyAI::Transcripts::TranscriptListItem>] An array of transcripts
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::TranscriptList]
       def initialize(page_details:, transcripts:, additional_properties: nil)

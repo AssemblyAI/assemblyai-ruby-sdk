@@ -34,13 +34,18 @@ module AssemblyAI
       attr_reader :format_text
       # @return [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
       attr_reader :disfluencies
+      # @return [Boolean] Enable
+      #  ://www.assemblyai.com/docs/models/speech-recognition#multichannel-transcription)
+      #  transcription, can be true or false.
+      attr_reader :multichannel
       # @return [Boolean] Enable [Dual
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  transcription, can be true or false.
       attr_reader :dual_channel
-      # @return [String] The URL to which we send webhook requests. We sends two different types of
-      #  webhook requests. One request when a transcript is completed or failed, and one
-      #  request when the redacted audio is ready if redact_pii_audio is enabled.
+      # @return [String] The URL to which we send webhook requests.
+      #  We sends two different types of webhook requests.
+      #  One request when a transcript is completed or failed, and one request when the
+      #  redacted audio is ready if redact_pii_audio is enabled.
       attr_reader :webhook_url
       # @return [String] The header name to be sent with the transcript completed or failed webhook
       #  requests
@@ -145,12 +150,16 @@ module AssemblyAI
       # @param punctuate [Boolean] Enable Automatic Punctuation, can be true or false
       # @param format_text [Boolean] Enable Text Formatting, can be true or false
       # @param disfluencies [Boolean] Transcribe Filler Words, like "umm", in your media file; can be true or false
+      # @param multichannel [Boolean] Enable
+      #  ://www.assemblyai.com/docs/models/speech-recognition#multichannel-transcription)
+      #  transcription, can be true or false.
       # @param dual_channel [Boolean] Enable [Dual
       #  ://www.assemblyai.com/docs/models/speech-recognition#dual-channel-transcription)
       #  transcription, can be true or false.
-      # @param webhook_url [String] The URL to which we send webhook requests. We sends two different types of
-      #  webhook requests. One request when a transcript is completed or failed, and one
-      #  request when the redacted audio is ready if redact_pii_audio is enabled.
+      # @param webhook_url [String] The URL to which we send webhook requests.
+      #  We sends two different types of webhook requests.
+      #  One request when a transcript is completed or failed, and one request when the
+      #  redacted audio is ready if redact_pii_audio is enabled.
       # @param webhook_auth_header_name [String] The header name to be sent with the transcript completed or failed webhook
       #  requests
       # @param webhook_auth_header_value [String] The header value to send back with the transcript completed or failed webhook
@@ -210,7 +219,7 @@ module AssemblyAI
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::TranscriptOptionalParams]
       def initialize(language_code: OMIT, language_detection: OMIT, language_confidence_threshold: OMIT,
-                     speech_model: OMIT, punctuate: OMIT, format_text: OMIT, disfluencies: OMIT, dual_channel: OMIT, webhook_url: OMIT, webhook_auth_header_name: OMIT, webhook_auth_header_value: OMIT, auto_highlights: OMIT, audio_start_from: OMIT, audio_end_at: OMIT, word_boost: OMIT, boost_param: OMIT, filter_profanity: OMIT, redact_pii: OMIT, redact_pii_audio: OMIT, redact_pii_audio_quality: OMIT, redact_pii_policies: OMIT, redact_pii_sub: OMIT, speaker_labels: OMIT, speakers_expected: OMIT, content_safety: OMIT, content_safety_confidence: OMIT, iab_categories: OMIT, custom_spelling: OMIT, sentiment_analysis: OMIT, auto_chapters: OMIT, entity_detection: OMIT, speech_threshold: OMIT, summarization: OMIT, summary_model: OMIT, summary_type: OMIT, custom_topics: OMIT, topics: OMIT, additional_properties: nil)
+                     speech_model: OMIT, punctuate: OMIT, format_text: OMIT, disfluencies: OMIT, multichannel: OMIT, dual_channel: OMIT, webhook_url: OMIT, webhook_auth_header_name: OMIT, webhook_auth_header_value: OMIT, auto_highlights: OMIT, audio_start_from: OMIT, audio_end_at: OMIT, word_boost: OMIT, boost_param: OMIT, filter_profanity: OMIT, redact_pii: OMIT, redact_pii_audio: OMIT, redact_pii_audio_quality: OMIT, redact_pii_policies: OMIT, redact_pii_sub: OMIT, speaker_labels: OMIT, speakers_expected: OMIT, content_safety: OMIT, content_safety_confidence: OMIT, iab_categories: OMIT, custom_spelling: OMIT, sentiment_analysis: OMIT, auto_chapters: OMIT, entity_detection: OMIT, speech_threshold: OMIT, summarization: OMIT, summary_model: OMIT, summary_type: OMIT, custom_topics: OMIT, topics: OMIT, additional_properties: nil)
         @language_code = language_code if language_code != OMIT
         @language_detection = language_detection if language_detection != OMIT
         @language_confidence_threshold = language_confidence_threshold if language_confidence_threshold != OMIT
@@ -218,6 +227,7 @@ module AssemblyAI
         @punctuate = punctuate if punctuate != OMIT
         @format_text = format_text if format_text != OMIT
         @disfluencies = disfluencies if disfluencies != OMIT
+        @multichannel = multichannel if multichannel != OMIT
         @dual_channel = dual_channel if dual_channel != OMIT
         @webhook_url = webhook_url if webhook_url != OMIT
         @webhook_auth_header_name = webhook_auth_header_name if webhook_auth_header_name != OMIT
@@ -257,6 +267,7 @@ module AssemblyAI
           "punctuate": punctuate,
           "format_text": format_text,
           "disfluencies": disfluencies,
+          "multichannel": multichannel,
           "dual_channel": dual_channel,
           "webhook_url": webhook_url,
           "webhook_auth_header_name": webhook_auth_header_name,
@@ -306,6 +317,7 @@ module AssemblyAI
         punctuate = struct["punctuate"]
         format_text = struct["format_text"]
         disfluencies = struct["disfluencies"]
+        multichannel = struct["multichannel"]
         dual_channel = struct["dual_channel"]
         webhook_url = struct["webhook_url"]
         webhook_auth_header_name = struct["webhook_auth_header_name"]
@@ -347,6 +359,7 @@ module AssemblyAI
           punctuate: punctuate,
           format_text: format_text,
           disfluencies: disfluencies,
+          multichannel: multichannel,
           dual_channel: dual_channel,
           webhook_url: webhook_url,
           webhook_auth_header_name: webhook_auth_header_name,
@@ -402,6 +415,7 @@ module AssemblyAI
         obj.punctuate&.is_a?(Boolean) != false || raise("Passed value for field obj.punctuate is not the expected type, validation failed.")
         obj.format_text&.is_a?(Boolean) != false || raise("Passed value for field obj.format_text is not the expected type, validation failed.")
         obj.disfluencies&.is_a?(Boolean) != false || raise("Passed value for field obj.disfluencies is not the expected type, validation failed.")
+        obj.multichannel&.is_a?(Boolean) != false || raise("Passed value for field obj.multichannel is not the expected type, validation failed.")
         obj.dual_channel&.is_a?(Boolean) != false || raise("Passed value for field obj.dual_channel is not the expected type, validation failed.")
         obj.webhook_url&.is_a?(String) != false || raise("Passed value for field obj.webhook_url is not the expected type, validation failed.")
         obj.webhook_auth_header_name&.is_a?(String) != false || raise("Passed value for field obj.webhook_auth_header_name is not the expected type, validation failed.")

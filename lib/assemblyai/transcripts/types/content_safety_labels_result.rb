@@ -15,7 +15,7 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::AudioIntelligenceModelStatus] The status of the Content Moderation model. Either success, or unavailable in
       #  the rare case that the model failed.
       attr_reader :status
-      # @return [Array<AssemblyAI::Transcripts::ContentSafetyLabelResult>]
+      # @return [Array<AssemblyAI::Transcripts::ContentSafetyLabelResult>] An array of results for the Content Moderation model
       attr_reader :results
       # @return [Hash{String => Float}] A summary of the Content Moderation confidence results for the entire audio file
       attr_reader :summary
@@ -31,7 +31,7 @@ module AssemblyAI
 
       # @param status [AssemblyAI::Transcripts::AudioIntelligenceModelStatus] The status of the Content Moderation model. Either success, or unavailable in
       #  the rare case that the model failed.
-      # @param results [Array<AssemblyAI::Transcripts::ContentSafetyLabelResult>]
+      # @param results [Array<AssemblyAI::Transcripts::ContentSafetyLabelResult>] An array of results for the Content Moderation model
       # @param summary [Hash{String => Float}] A summary of the Content Moderation confidence results for the entire audio file
       # @param severity_score_summary [Hash{String => AssemblyAI::Transcripts::SeverityScoreSummary}] A summary of the Content Moderation severity results for the entire audio file
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition

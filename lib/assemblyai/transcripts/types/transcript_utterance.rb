@@ -17,6 +17,9 @@ module AssemblyAI
       attr_reader :text
       # @return [Array<AssemblyAI::Transcripts::TranscriptWord>] The words in the utterance.
       attr_reader :words
+      # @return [String] The channel of this utterance. The left and right channels are channels 1 and 2.
+      #  Additional channels increment the channel number sequentially.
+      attr_reader :channel
       # @return [String] The speaker of this utterance, where each speaker is assigned a sequential
       #  capital letter - e.g. "A" for Speaker A, "B" for Speaker B, etc.
       attr_reader :speaker
@@ -33,16 +36,19 @@ module AssemblyAI
       # @param end_ [Integer] The ending time, in milliseconds, of the utterance in the audio file
       # @param text [String] The text for this utterance
       # @param words [Array<AssemblyAI::Transcripts::TranscriptWord>] The words in the utterance.
+      # @param channel [String] The channel of this utterance. The left and right channels are channels 1 and 2.
+      #  Additional channels increment the channel number sequentially.
       # @param speaker [String] The speaker of this utterance, where each speaker is assigned a sequential
       #  capital letter - e.g. "A" for Speaker A, "B" for Speaker B, etc.
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::TranscriptUtterance]
-      def initialize(confidence:, start:, end_:, text:, words:, speaker:, additional_properties: nil)
+      def initialize(confidence:, start:, end_:, text:, words:, speaker:, channel: OMIT, additional_properties: nil)
         @confidence = confidence
         @start = start
         @end_ = end_
         @text = text
         @words = words
+        @channel = channel if channel != OMIT
         @speaker = speaker
         @additional_properties = additional_properties
         @_field_set = {
@@ -51,8 +57,11 @@ module AssemblyAI
           "end": end_,
           "text": text,
           "words": words,
+          "channel": channel,
           "speaker": speaker
-        }
+        }.reject do |_k, v|
+          v == OMIT
+        end
       end
 
       # Deserialize a JSON object to an instance of TranscriptUtterance
@@ -70,6 +79,7 @@ module AssemblyAI
           v = v.to_json
           AssemblyAI::Transcripts::TranscriptWord.from_json(json_object: v)
         end
+        channel = struct["channel"]
         speaker = struct["speaker"]
         new(
           confidence: confidence,
@@ -77,6 +87,7 @@ module AssemblyAI
           end_: end_,
           text: text,
           words: words,
+          channel: channel,
           speaker: speaker,
           additional_properties: struct
         )
@@ -101,6 +112,7 @@ module AssemblyAI
         obj.end_.is_a?(Integer) != false || raise("Passed value for field obj.end_ is not the expected type, validation failed.")
         obj.text.is_a?(String) != false || raise("Passed value for field obj.text is not the expected type, validation failed.")
         obj.words.is_a?(Array) != false || raise("Passed value for field obj.words is not the expected type, validation failed.")
+        obj.channel&.is_a?(String) != false || raise("Passed value for field obj.channel is not the expected type, validation failed.")
         obj.speaker.is_a?(String) != false || raise("Passed value for field obj.speaker is not the expected type, validation failed.")
       end
     end

@@ -11,7 +11,7 @@ module AssemblyAI
     class TopicDetectionResult
       # @return [String] The text in the transcript in which a detected topic occurs
       attr_reader :text
-      # @return [Array<AssemblyAI::Transcripts::TopicDetectionResultLabelsItem>]
+      # @return [Array<AssemblyAI::Transcripts::TopicDetectionResultLabelsItem>] An array of detected topics in the text
       attr_reader :labels
       # @return [AssemblyAI::Transcripts::Timestamp]
       attr_reader :timestamp
@@ -24,7 +24,7 @@ module AssemblyAI
       OMIT = Object.new
 
       # @param text [String] The text in the transcript in which a detected topic occurs
-      # @param labels [Array<AssemblyAI::Transcripts::TopicDetectionResultLabelsItem>]
+      # @param labels [Array<AssemblyAI::Transcripts::TopicDetectionResultLabelsItem>] An array of detected topics in the text
       # @param timestamp [AssemblyAI::Transcripts::Timestamp]
       # @param additional_properties [OpenStruct] Additional properties unmapped to the current class definition
       # @return [AssemblyAI::Transcripts::TopicDetectionResult]

@@ -122,4 +122,36 @@ class TestAssemblyAI < Minitest::Test
 
     assert lemur_task.to_json == lemur_task2.to_json
   end
+
+  def test_transcribe_multichannel_audio
+    transcript = client.transcripts.transcribe(
+      audio_url: "https://assemblyai-test.s3.us-west-2.amazonaws.com/e2e_tests/en_7dot1_audio_channels.wav",
+      multichannel: true
+    )
+
+    expected_output = %w[One. Two. Three. Four. Five. Six. Seven. Eight.]
+
+    assert_equal true, transcript.multichannel
+    assert_equal expected_output.length, transcript.words.length
+    assert_equal expected_output.length, transcript.utterances.length
+
+    words = transcript.words
+    utterances = transcript.utterances
+
+    expected_output.each_with_index do |expected_word, i|
+      channel_string = (i + 1).to_s
+
+      assert_equal expected_word, words[i].text
+      assert_equal channel_string, words[i].speaker
+      assert_equal channel_string, words[i].channel
+
+      assert_equal expected_word, utterances[i].text
+      assert_equal channel_string, utterances[i].speaker
+      assert_equal channel_string, utterances[i].channel
+      assert_equal 1, utterances[i].words.length
+      assert_equal expected_word, utterances[i].words[0].text
+      assert_equal channel_string, utterances[i].words[0].speaker
+      assert_equal channel_string, utterances[i].words[0].channel
+    end
+  end
 end
