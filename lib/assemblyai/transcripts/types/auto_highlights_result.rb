@@ -43,10 +43,10 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        status = struct["status"]
-        results = parsed_json["results"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::AutoHighlightResult.from_json(json_object: v)
+        status = parsed_json["status"]
+        results = parsed_json["results"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::AutoHighlightResult.from_json(json_object: item)
         end
         new(
           status: status,

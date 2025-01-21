@@ -39,9 +39,10 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::ContentSafetyLabel]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        label = struct["label"]
-        confidence = struct["confidence"]
-        severity = struct["severity"]
+        parsed_json = JSON.parse(json_object)
+        label = parsed_json["label"]
+        confidence = parsed_json["confidence"]
+        severity = parsed_json["severity"]
         new(
           label: label,
           confidence: confidence,

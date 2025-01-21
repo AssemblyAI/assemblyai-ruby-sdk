@@ -43,11 +43,11 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        id = struct["id"]
-        total_count = struct["total_count"]
-        matches = parsed_json["matches"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::WordSearchMatch.from_json(json_object: v)
+        id = parsed_json["id"]
+        total_count = parsed_json["total_count"]
+        matches = parsed_json["matches"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::WordSearchMatch.from_json(json_object: item)
         end
         new(
           id: id,

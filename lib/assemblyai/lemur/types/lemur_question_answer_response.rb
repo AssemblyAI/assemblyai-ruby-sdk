@@ -42,11 +42,11 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        response = parsed_json["response"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Lemur::LemurQuestionAnswer.from_json(json_object: v)
+        response = parsed_json["response"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Lemur::LemurQuestionAnswer.from_json(json_object: item)
         end
-        request_id = struct["request_id"]
+        request_id = parsed_json["request_id"]
         if parsed_json["usage"].nil?
           usage = nil
         else

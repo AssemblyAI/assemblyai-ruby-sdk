@@ -39,9 +39,10 @@ module AssemblyAI
       # @return [AssemblyAI::Lemur::PurgeLemurRequestDataResponse]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        request_id = struct["request_id"]
-        request_id_to_purge = struct["request_id_to_purge"]
-        deleted = struct["deleted"]
+        parsed_json = JSON.parse(json_object)
+        request_id = parsed_json["request_id"]
+        request_id_to_purge = parsed_json["request_id_to_purge"]
+        deleted = parsed_json["deleted"]
         new(
           request_id: request_id,
           request_id_to_purge: request_id_to_purge,

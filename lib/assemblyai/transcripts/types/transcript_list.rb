@@ -46,9 +46,9 @@ module AssemblyAI
           page_details = parsed_json["page_details"].to_json
           page_details = AssemblyAI::Transcripts::PageDetails.from_json(json_object: page_details)
         end
-        transcripts = parsed_json["transcripts"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::TranscriptListItem.from_json(json_object: v)
+        transcripts = parsed_json["transcripts"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::TranscriptListItem.from_json(json_object: item)
         end
         new(
           page_details: page_details,

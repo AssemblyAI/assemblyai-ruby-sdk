@@ -36,8 +36,9 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::RedactedAudioResponse]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        status = struct["status"]
-        redacted_audio_url = struct["redacted_audio_url"]
+        parsed_json = JSON.parse(json_object)
+        status = parsed_json["status"]
+        redacted_audio_url = parsed_json["redacted_audio_url"]
         new(
           status: status,
           redacted_audio_url: redacted_audio_url,

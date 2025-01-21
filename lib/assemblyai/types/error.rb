@@ -36,8 +36,9 @@ module AssemblyAI
     # @return [AssemblyAI::Error]
     def self.from_json(json_object:)
       struct = JSON.parse(json_object, object_class: OpenStruct)
-      error = struct["error"]
-      status = struct["status"]
+      parsed_json = JSON.parse(json_object)
+      error = parsed_json["error"]
+      status = parsed_json["status"]
       new(
         error: error,
         status: status,

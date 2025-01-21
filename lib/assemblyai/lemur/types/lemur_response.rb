@@ -15,7 +15,7 @@ module AssemblyAI
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin
           AssemblyAI::Lemur::LemurStringResponse.validate_raw(obj: struct)
-          return AssemblyAI::Lemur::LemurStringResponse.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Lemur::LemurStringResponse.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -23,9 +23,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Lemur::LemurQuestionAnswerResponse.validate_raw(obj: struct)
-          unless json_object.nil?
-            return AssemblyAI::Lemur::LemurQuestionAnswerResponse.from_json(json_object: json_object)
-          end
+          return AssemblyAI::Lemur::LemurQuestionAnswerResponse.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError

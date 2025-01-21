@@ -36,8 +36,9 @@ module AssemblyAI
       # @return [AssemblyAI::Lemur::LemurQuestionAnswer]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        question = struct["question"]
-        answer = struct["answer"]
+        parsed_json = JSON.parse(json_object)
+        question = parsed_json["question"]
+        answer = parsed_json["answer"]
         new(
           question: question,
           answer: answer,

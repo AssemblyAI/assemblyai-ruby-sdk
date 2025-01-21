@@ -20,7 +20,7 @@ module AssemblyAI
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin
           AssemblyAI::Realtime::SessionBegins.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::SessionBegins.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::SessionBegins.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -28,7 +28,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::PartialTranscript.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::PartialTranscript.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::PartialTranscript.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -36,7 +36,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::FinalTranscript.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::FinalTranscript.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::FinalTranscript.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -44,7 +44,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::SessionInformation.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::SessionInformation.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::SessionInformation.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -52,7 +52,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::SessionTerminated.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::SessionTerminated.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::SessionTerminated.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -60,7 +60,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Realtime::RealtimeError.validate_raw(obj: struct)
-          return AssemblyAI::Realtime::RealtimeError.from_json(json_object: json_object) unless json_object.nil?
+          return AssemblyAI::Realtime::RealtimeError.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
