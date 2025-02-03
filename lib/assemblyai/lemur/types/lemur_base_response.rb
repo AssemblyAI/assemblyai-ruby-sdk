@@ -37,7 +37,7 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        request_id = struct["request_id"]
+        request_id = parsed_json["request_id"]
         if parsed_json["usage"].nil?
           usage = nil
         else

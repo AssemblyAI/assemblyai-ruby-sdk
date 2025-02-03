@@ -45,8 +45,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::TranscriptList]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.list
@@ -55,7 +55,11 @@ module AssemblyAI
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
         req.params = {
           **(request_options&.additional_query_parameters || {}),
           "limit": limit,
@@ -65,6 +69,9 @@ module AssemblyAI
           "after_id": after_id,
           "throttled_only": throttled_only
         }.compact
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript"
       end
       AssemblyAI::Transcripts::TranscriptList.from_json(json_object: response.body)
@@ -156,8 +163,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::Transcript]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.submit(audio_url: "https://assembly.ai/wildfires.mp3")
@@ -166,7 +173,14 @@ module AssemblyAI
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
         req.body = {
           **(request_options&.additional_body_parameters || {}),
           language_code: language_code,
@@ -222,8 +236,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::Transcript]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get(transcript_id: "transcript_id")
@@ -231,7 +245,17 @@ module AssemblyAI
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}"
       end
       AssemblyAI::Transcripts::Transcript.from_json(json_object: response.body)
@@ -244,8 +268,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::Transcript]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.delete(transcript_id: "{transcript_id}")
@@ -253,7 +277,17 @@ module AssemblyAI
       response = @request_client.conn.delete do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}"
       end
       AssemblyAI::Transcripts::Transcript.from_json(json_object: response.body)
@@ -267,15 +301,29 @@ module AssemblyAI
     # @param chars_per_caption [Integer] The maximum number of characters per caption
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [String]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.transcripts.get_subtitles(transcript_id: "transcript_id", subtitle_format: SRT)
     def get_subtitles(transcript_id:, subtitle_format:, chars_per_caption: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
         req.params = {
           **(request_options&.additional_query_parameters || {}),
           "chars_per_caption": chars_per_caption
         }.compact
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/#{subtitle_format}"
       end
       response.body
@@ -290,8 +338,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::SentencesResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get_sentences(transcript_id: "transcript_id")
@@ -299,7 +347,17 @@ module AssemblyAI
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/sentences"
       end
       AssemblyAI::Transcripts::SentencesResponse.from_json(json_object: response.body)
@@ -314,8 +372,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::ParagraphsResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get_paragraphs(transcript_id: "transcript_id")
@@ -323,7 +381,17 @@ module AssemblyAI
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/paragraphs"
       end
       AssemblyAI::Transcripts::ParagraphsResponse.from_json(json_object: response.body)
@@ -336,12 +404,26 @@ module AssemblyAI
     # @param words [String] Keywords to search for
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Transcripts::WordSearchResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.transcripts.word_search(transcript_id: "transcript_id")
     def word_search(transcript_id:, words: nil, request_options: nil)
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
         req.params = { **(request_options&.additional_query_parameters || {}), "words": words }.compact
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/word-search"
       end
       AssemblyAI::Transcripts::WordSearchResponse.from_json(json_object: response.body)
@@ -355,8 +437,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::RedactedAudioResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get_redacted_audio(transcript_id: "transcript_id")
@@ -364,7 +446,17 @@ module AssemblyAI
       response = @request_client.conn.get do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
+        unless request_options.nil? || request_options&.additional_body_parameters.nil?
+          req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+        end
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/redacted-audio"
       end
       AssemblyAI::Transcripts::RedactedAudioResponse.from_json(json_object: response.body)
@@ -395,8 +487,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::TranscriptList]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.list
@@ -406,7 +498,11 @@ module AssemblyAI
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
           req.params = {
             **(request_options&.additional_query_parameters || {}),
             "limit": limit,
@@ -416,6 +512,9 @@ module AssemblyAI
             "after_id": after_id,
             "throttled_only": throttled_only
           }.compact
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript"
         end
         AssemblyAI::Transcripts::TranscriptList.from_json(json_object: response.body)
@@ -508,8 +607,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::Transcript]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.submit(audio_url: "https://assembly.ai/wildfires.mp3")
@@ -519,7 +618,14 @@ module AssemblyAI
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
           req.body = {
             **(request_options&.additional_body_parameters || {}),
             language_code: language_code,
@@ -576,8 +682,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::Transcript]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get(transcript_id: "transcript_id")
@@ -586,7 +692,17 @@ module AssemblyAI
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}"
         end
         AssemblyAI::Transcripts::Transcript.from_json(json_object: response.body)
@@ -600,8 +716,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::Transcript]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.delete(transcript_id: "{transcript_id}")
@@ -610,7 +726,17 @@ module AssemblyAI
         response = @request_client.conn.delete do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}"
         end
         AssemblyAI::Transcripts::Transcript.from_json(json_object: response.body)
@@ -625,16 +751,30 @@ module AssemblyAI
     # @param chars_per_caption [Integer] The maximum number of characters per caption
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [String]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.transcripts.get_subtitles(transcript_id: "transcript_id", subtitle_format: SRT)
     def get_subtitles(transcript_id:, subtitle_format:, chars_per_caption: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
           req.params = {
             **(request_options&.additional_query_parameters || {}),
             "chars_per_caption": chars_per_caption
           }.compact
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/#{subtitle_format}"
         end
         response.body
@@ -650,8 +790,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::SentencesResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get_sentences(transcript_id: "transcript_id")
@@ -660,7 +800,17 @@ module AssemblyAI
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/sentences"
         end
         AssemblyAI::Transcripts::SentencesResponse.from_json(json_object: response.body)
@@ -676,8 +826,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::ParagraphsResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get_paragraphs(transcript_id: "transcript_id")
@@ -686,7 +836,17 @@ module AssemblyAI
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/paragraphs"
         end
         AssemblyAI::Transcripts::ParagraphsResponse.from_json(json_object: response.body)
@@ -700,13 +860,27 @@ module AssemblyAI
     # @param words [String] Keywords to search for
     # @param request_options [AssemblyAI::RequestOptions]
     # @return [AssemblyAI::Transcripts::WordSearchResponse]
+    # @example
+    #  api = AssemblyAI::Client.new(
+    #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
+    #    api_key: "YOUR_API_KEY"
+    #  )
+    #  api.transcripts.word_search(transcript_id: "transcript_id")
     def word_search(transcript_id:, words: nil, request_options: nil)
       Async do
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
           req.params = { **(request_options&.additional_query_parameters || {}), "words": words }.compact
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/word-search"
         end
         AssemblyAI::Transcripts::WordSearchResponse.from_json(json_object: response.body)
@@ -721,8 +895,8 @@ module AssemblyAI
     # @return [AssemblyAI::Transcripts::RedactedAudioResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.transcripts.get_redacted_audio(transcript_id: "transcript_id")
@@ -731,7 +905,17 @@ module AssemblyAI
         response = @request_client.conn.get do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
+          unless request_options.nil? || request_options&.additional_body_parameters.nil?
+            req.body = { **(request_options&.additional_body_parameters || {}) }.compact
+          end
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/transcript/#{transcript_id}/redacted-audio"
         end
         AssemblyAI::Transcripts::RedactedAudioResponse.from_json(json_object: response.body)

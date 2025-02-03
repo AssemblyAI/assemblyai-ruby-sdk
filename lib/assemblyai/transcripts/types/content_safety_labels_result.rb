@@ -57,15 +57,15 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        status = struct["status"]
-        results = parsed_json["results"]&.map do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::ContentSafetyLabelResult.from_json(json_object: v)
+        status = parsed_json["status"]
+        results = parsed_json["results"]&.map do |item|
+          item = item.to_json
+          AssemblyAI::Transcripts::ContentSafetyLabelResult.from_json(json_object: item)
         end
-        summary = struct["summary"]
-        severity_score_summary = parsed_json["severity_score_summary"]&.transform_values do |v|
-          v = v.to_json
-          AssemblyAI::Transcripts::SeverityScoreSummary.from_json(json_object: v)
+        summary = parsed_json["summary"]
+        severity_score_summary = parsed_json["severity_score_summary"]&.transform_values do |value|
+          value = value.to_json
+          AssemblyAI::Transcripts::SeverityScoreSummary.from_json(json_object: value)
         end
         new(
           status: status,

@@ -39,9 +39,10 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::SeverityScoreSummary]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        low = struct["low"]
-        medium = struct["medium"]
-        high = struct["high"]
+        parsed_json = JSON.parse(json_object)
+        low = parsed_json["low"]
+        medium = parsed_json["medium"]
+        high = parsed_json["high"]
         new(
           low: low,
           medium: medium,

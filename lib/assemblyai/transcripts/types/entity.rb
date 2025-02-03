@@ -47,10 +47,11 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::Entity]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        entity_type = struct["entity_type"]
-        text = struct["text"]
-        start = struct["start"]
-        end_ = struct["end"]
+        parsed_json = JSON.parse(json_object)
+        entity_type = parsed_json["entity_type"]
+        text = parsed_json["text"]
+        start = parsed_json["start"]
+        end_ = parsed_json["end"]
         new(
           entity_type: entity_type,
           text: text,

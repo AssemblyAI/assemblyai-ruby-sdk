@@ -36,8 +36,9 @@ module AssemblyAI
       # @return [AssemblyAI::Lemur::LemurUsage]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        input_tokens = struct["input_tokens"]
-        output_tokens = struct["output_tokens"]
+        parsed_json = JSON.parse(json_object)
+        input_tokens = parsed_json["input_tokens"]
+        output_tokens = parsed_json["output_tokens"]
         new(
           input_tokens: input_tokens,
           output_tokens: output_tokens,

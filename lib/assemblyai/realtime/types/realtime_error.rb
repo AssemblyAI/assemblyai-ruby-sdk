@@ -31,7 +31,8 @@ module AssemblyAI
       # @return [AssemblyAI::Realtime::RealtimeError]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        error = struct["error"]
+        parsed_json = JSON.parse(json_object)
+        error = parsed_json["error"]
         new(error: error, additional_properties: struct)
       end
 

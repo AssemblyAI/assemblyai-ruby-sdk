@@ -61,11 +61,12 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::PageDetails]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        limit = struct["limit"]
-        result_count = struct["result_count"]
-        current_url = struct["current_url"]
-        prev_url = struct["prev_url"]
-        next_url = struct["next_url"]
+        parsed_json = JSON.parse(json_object)
+        limit = parsed_json["limit"]
+        result_count = parsed_json["result_count"]
+        current_url = parsed_json["current_url"]
+        prev_url = parsed_json["prev_url"]
+        next_url = parsed_json["next_url"]
         new(
           limit: limit,
           result_count: result_count,

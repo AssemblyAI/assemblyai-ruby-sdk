@@ -36,8 +36,9 @@ module AssemblyAI
       # @return [AssemblyAI::Transcripts::Timestamp]
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
-        start = struct["start"]
-        end_ = struct["end"]
+        parsed_json = JSON.parse(json_object)
+        start = parsed_json["start"]
+        end_ = parsed_json["end"]
         new(
           start: start,
           end_: end_,

@@ -69,13 +69,13 @@ module AssemblyAI
       def self.from_json(json_object:)
         struct = JSON.parse(json_object, object_class: OpenStruct)
         parsed_json = JSON.parse(json_object)
-        id = struct["id"]
-        resource_url = struct["resource_url"]
-        status = struct["status"]
+        id = parsed_json["id"]
+        resource_url = parsed_json["resource_url"]
+        status = parsed_json["status"]
         created = (DateTime.parse(parsed_json["created"]) unless parsed_json["created"].nil?)
         completed = (DateTime.parse(parsed_json["completed"]) unless parsed_json["completed"].nil?)
-        audio_url = struct["audio_url"]
-        error = struct["error"]
+        audio_url = parsed_json["audio_url"]
+        error = parsed_json["error"]
         new(
           id: id,
           resource_url: resource_url,

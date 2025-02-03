@@ -16,9 +16,7 @@ module AssemblyAI
         struct = JSON.parse(json_object, object_class: OpenStruct)
         begin
           AssemblyAI::Transcripts::TranscriptReadyNotification.validate_raw(obj: struct)
-          unless json_object.nil?
-            return AssemblyAI::Transcripts::TranscriptReadyNotification.from_json(json_object: json_object)
-          end
+          return AssemblyAI::Transcripts::TranscriptReadyNotification.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError
@@ -26,9 +24,7 @@ module AssemblyAI
         end
         begin
           AssemblyAI::Transcripts::RedactedAudioResponse.validate_raw(obj: struct)
-          unless json_object.nil?
-            return AssemblyAI::Transcripts::RedactedAudioResponse.from_json(json_object: json_object)
-          end
+          return AssemblyAI::Transcripts::RedactedAudioResponse.from_json(json_object: struct) unless struct.nil?
 
           return nil
         rescue StandardError

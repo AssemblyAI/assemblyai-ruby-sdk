@@ -22,8 +22,8 @@ module AssemblyAI
     # @return [AssemblyAI::Realtime::RealtimeTemporaryTokenResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.realtime.create_temporary_token(expires_in: 480)
@@ -31,7 +31,14 @@ module AssemblyAI
       response = @request_client.conn.post do |req|
         req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
         req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-        req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+        req.headers = {
+      **(req.headers || {}),
+      **@request_client.get_headers,
+      **(request_options&.additional_headers || {})
+        }.compact
+        unless request_options.nil? || request_options&.additional_query_parameters.nil?
+          req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+        end
         req.body = { **(request_options&.additional_body_parameters || {}), expires_in: expires_in }.compact
         req.url "#{@request_client.get_url(request_options: request_options)}/v2/realtime/token"
       end
@@ -56,8 +63,8 @@ module AssemblyAI
     # @return [AssemblyAI::Realtime::RealtimeTemporaryTokenResponse]
     # @example
     #  api = AssemblyAI::Client.new(
-    #    environment: AssemblyAI::Environment::DEFAULT,
     #    base_url: "https://api.example.com",
+    #    environment: AssemblyAI::Environment::DEFAULT,
     #    api_key: "YOUR_API_KEY"
     #  )
     #  api.realtime.create_temporary_token(expires_in: 480)
@@ -66,7 +73,14 @@ module AssemblyAI
         response = @request_client.conn.post do |req|
           req.options.timeout = request_options.timeout_in_seconds unless request_options&.timeout_in_seconds.nil?
           req.headers["Authorization"] = request_options.api_key unless request_options&.api_key.nil?
-          req.headers = { **req.headers, **(request_options&.additional_headers || {}) }.compact
+          req.headers = {
+        **(req.headers || {}),
+        **@request_client.get_headers,
+        **(request_options&.additional_headers || {})
+          }.compact
+          unless request_options.nil? || request_options&.additional_query_parameters.nil?
+            req.params = { **(request_options&.additional_query_parameters || {}) }.compact
+          end
           req.body = { **(request_options&.additional_body_parameters || {}), expires_in: expires_in }.compact
           req.url "#{@request_client.get_url(request_options: request_options)}/v2/realtime/token"
         end
