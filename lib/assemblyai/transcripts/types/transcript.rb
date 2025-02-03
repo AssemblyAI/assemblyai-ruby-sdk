@@ -54,11 +54,13 @@ module AssemblyAI
       #  recognition](https://www.assemblyai.com/docs/models/speech-recognition) for more
       #  information.
       attr_reader :words
-      # @return [Array<AssemblyAI::Transcripts::TranscriptUtterance>] When dual_channel or speaker_labels is enabled, a list of turn-by-turn utterance
+      # @return [Array<AssemblyAI::Transcripts::TranscriptUtterance>] When multichannel or speaker_labels is enabled, a list of turn-by-turn utterance
       #  objects.
       #  See [Speaker
-      #  diarization](https://www.assemblyai.com/docs/models/speaker-diarization) for
-      #  more information.
+      #  diarization](https://www.assemblyai.com/docs/speech-to-text/speaker-diarization)
+      #  and [Multichannel
+      #  ssemblyai.com/docs/speech-to-text/speech-recognition#multichannel-transcription)
+      #  for more information.
       attr_reader :utterances
       # @return [Float] The confidence score for the transcript, between 0.0 (low confidence) and 1.0
       #  (high confidence)
@@ -239,11 +241,13 @@ module AssemblyAI
       #  See [Speech
       #  recognition](https://www.assemblyai.com/docs/models/speech-recognition) for more
       #  information.
-      # @param utterances [Array<AssemblyAI::Transcripts::TranscriptUtterance>] When dual_channel or speaker_labels is enabled, a list of turn-by-turn utterance
+      # @param utterances [Array<AssemblyAI::Transcripts::TranscriptUtterance>] When multichannel or speaker_labels is enabled, a list of turn-by-turn utterance
       #  objects.
       #  See [Speaker
-      #  diarization](https://www.assemblyai.com/docs/models/speaker-diarization) for
-      #  more information.
+      #  diarization](https://www.assemblyai.com/docs/speech-to-text/speaker-diarization)
+      #  and [Multichannel
+      #  ssemblyai.com/docs/speech-to-text/speech-recognition#multichannel-transcription)
+      #  for more information.
       # @param confidence [Float] The confidence score for the transcript, between 0.0 (low confidence) and 1.0
       #  (high confidence)
       # @param audio_duration [Integer] The duration of this transcript object's media file, in seconds
