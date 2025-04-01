@@ -11,6 +11,15 @@
 
 # AssemblyAI Ruby SDK
 
+> [!IMPORTANT]
+> As of April 2025, AssemblyAI Ruby SDK **has been discontinued** and will no longer be maintained.
+>
+> While the SDK will no longer be updated, any previously published releases will remain available.
+>
+> Going forward, see the [AssemblyAI API reference](https://www.assemblyai.com/docs/api-reference) for information on how to integrate with our API directly. 
+>
+> We know this is a disruptive change. If you need help with this transition, [reach out to our Support team](https://www.assemblyai.com/contact/support) and we'll help you in any way we can.
+
 The AssemblyAI Ruby SDK provides an easy-to-use interface for interacting with the AssemblyAI API, which supports async,
 audio intelligence models, as well as the latest LeMUR models.
 
